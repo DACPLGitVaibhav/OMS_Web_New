@@ -1,0 +1,384 @@
+﻿@model OMS_Web.ViewModels.Lines.LOTViewModel
+@{
+    ViewData["Title"] = "Line Order Management";
+}
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Adjust width as needed */
+    }
+
+    .row {
+        display: flex;
+        width: 100%;
+    }
+
+    .row-1, .row-2 {
+        height: 50px; /* Adjust height for rows as needed */
+        /*  border: 1px solid #ccc;  */ /* Optional: to visualize rows */
+        font-size: 13px;
+    }
+
+    .row-4 {
+        justify-content: space-between; /* To make two columns in row-4 spread across */
+    }
+
+    .column {
+        display: flex;
+        flex: 1; /* Distribute space equally for each column */
+        padding: 10px;
+        /*  border: 1px solid #ddd; */ /* Optional: to visualize columns */
+        align-items: center;
+    }
+
+    .row-4 .column {
+        width: 45%; /* Adjust width for columns in last row */
+        /* flex-direction:column; */
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .table {
+        background-color: #f6f9ff;
+    }
+</style>
+
+
+<div class="container">
+    <div class="row row-1">
+        <div class="column">
+            <div class="col-md-2" align="left" style="display:table">
+                <label asp-for="LineName" class="control-label" style="display:table-cell"></label>
+            </div>
+            <div class="col-md-8">
+                <select id="LineListId" asp-for="LineId"
+                        class="form-control" style="display:table-cell"
+                        asp-items="@(new SelectList(@ViewBag.LineList,"LineId", "LineName"))">
+                </select>
+                <span id="error-message" style="display: none; color:red;text-align:left;">
+                    Please Select Line
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-2">
+        <div class="column">
+            <label class="" style="width:50px">Status:</label>
+            <label class="col-md-2" style="text-align:left">Start</label>
+            <label class="" style="width:120px">PRG Count/Size:</label>
+            <label class="col-md-1">5/5</label>
+            <label class="" style="width:120px">LOIP Count/Size:</label>
+            <label class="">20/30</label>
+
+        </div>
+
+    </div>
+
+    <div class="row row-4">
+        <div class="col-md-6">
+            <div>
+                <label>
+                    LOT
+                </label>
+                <table class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Sequence</th>
+                            <th>Mes_VCode</th>
+                            <th>DE</th>
+                            <th>CE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="">
+                <label>LOS</label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sequence</th>
+                            <th>Mes_VCode</th>
+                            <th>DE</th>
+                            <th>CE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div>
+                <label>PRG List</label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sequence</th>
+                            <th>Mes_VCode</th>
+                            <th>DE</th>
+                            <th>CE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="">
+                <label>LOP</label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sequence</th>
+                            <th>Mes_VCode</th>
+                            <th>DE</th>
+                            <th>CE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div><div>
+                <label>LOIP List</label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sequence</th>
+                            <th>Mes_VCode</th>
+                            <th>DE</th>
+                            <th>CE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
