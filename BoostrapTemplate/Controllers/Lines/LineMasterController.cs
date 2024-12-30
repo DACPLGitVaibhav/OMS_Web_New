@@ -153,7 +153,7 @@ namespace OMS_Web.Controllers.Lines
         {
             try
             {
-                _context.Database.ExecuteSqlRaw($"Sp_UpdateLOT {lOTViewModel.LineId},{lOTViewModel.Isactive}");
+                _context.Database.ExecuteSqlRaw($"Sp_UpdateLOT2 {lOTViewModel.LineId},{lOTViewModel.Isactive}");
 
                 return Json(new { status = "LineUpdated" });
             }
