@@ -140,7 +140,7 @@ namespace OMS_Web.Controllers.Lines
             //Baretail_Log_Date = Baretail_Log_Date.Distinct().ToList();
             return Json(Baretail_Log_Date);
         }
-        //Vitthal  30/12/2024  
+        //Vitthal  30/12/2024 1:00:00
 
         public IActionResult GetLines()
         {
@@ -163,6 +163,19 @@ namespace OMS_Web.Controllers.Lines
                 return Json(result);
                 throw;
             }
+        }
+        public IActionResult StatusData()
+        {
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                ViewData["Heading"] = "Line Order Management";
+                ViewBag.LineList = _linemaster.GetAllLines();
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+            return View();
         }
     }
 }
