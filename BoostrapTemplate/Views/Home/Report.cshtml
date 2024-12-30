@@ -1,0 +1,102 @@
+﻿
+<div class="row">
+
+    <div class="col-md-3">
+        <label for="TimePeriod" class="form-label">Time Period</label>
+        <select class="form-control" id="TimePeriod">
+            <option>--Select Period--</option>
+            <option>Today</option>
+            <option>Yesterday</option>
+            <option>Custom</option>
+            <option>CurrentWeek</option>
+            <option>LastWeek</option>
+        </select>
+        <span id="spanTimePeriod" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label for="fromdate" class="form-label">From Date</label>
+        <input type="date" class="form-control" id="fromdate">
+    </div>
+    <div class="col-md-3">
+        <label for="todate" class="form-label">To Date</label>
+        <input type="date" class="form-control" id="todate">
+    </div>
+
+</div>
+
+@section Scripts{ 
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            debugger;
+          
+        });
+
+        $('#TimePeriod').on('change', function () {
+            debugger;
+            var currentSelection = $(this).val();
+           // console.log($('#TimePeriod option').val());
+            $("#fromdate").attr("disabled", true);
+            $("#todate").attr("disabled", true);
+
+            if (currentSelection == 'Today') {
+                var TodayDt = new Date().toJSON().slice(0, 10).split('-').join('-');
+
+                $("#fromdate").val(TodayDt);
+                $("#todate").val(TodayDt);
+            } else if (currentSelection == 'Yesterday') {
+                let TodayDt = new Date().toJSON().slice(0, 10).split('-').join('-');
+
+
+                let yesterday = new Date(TodayDt)
+                yesterday.setDate(yesterday.getDate() - 1)
+
+                $("#fromdate").val(yesterday.toJSON().slice(0, 10));
+                $("#todate").val(yesterday.toJSON().slice(0, 10));
+            }
+            else if (currentSelection == 'Custom') {
+                var TodayDt = new Date().toJSON().slice(0, 10).split('-').join('-');
+
+                $("#fromdate").val(TodayDt);
+                $("#todate").val(TodayDt);
+
+                $("#fromdate").attr("disabled", false);
+                $("#todate").attr("disabled", false);
+            }
+            else if (currentSelection == 'LastWeek') {
+
+                var prevMonday = new Date();
+                prevMonday.setDate(prevMonday.getDate() - (prevMonday.getDay() + 6) % 7);
+                prevMonday.setDate(prevMonday.getDate() - 7)
+
+                var prevSunday = new Date();
+                prevSunday.setDate(prevMonday.getDate() - (prevMonday.getDay() + 6) % 7);
+                prevSunday.setDate(prevMonday.getDate() + 6)
+
+                $("#fromdate").val(prevMonday.toJSON().slice(0, 10));
+                $("#todate").val(prevSunday.toJSON().slice(0, 10));
+            }
+            else if (currentSelection == 'CurrentWeek') {
+
+                var dt = new Date(); // current date of week
+                var currentWeekDay = dt.getDay();
+                var lessDays = currentWeekDay == 0 ? 6 : currentWeekDay - 1;
+                var wkStart = new Date(new Date(dt).setDate(dt.getDate() - lessDays));
+                var wkEnd = new Date(new Date(wkStart).setDate(wkStart.getDate() + 6));
+
+                $("#fromdate").val(wkStart.toJSON().slice(0, 10));
+                $("#todate").val(wkEnd.toJSON().slice(0, 10));
+            }
+
+            else if (currentSelection == '--Select Period--') {
+                $("#fromdate").attr("disabled", false);
+                $("#todate").attr("disabled", false);
+                $("#fromdate").val('');
+                $("#todate").val('');
+            }
+
+        });
+
+    </script>
+}

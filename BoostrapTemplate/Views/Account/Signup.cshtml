@@ -1,0 +1,102 @@
+﻿@model BoostrapTemplate.ViewModels.Signup.Signup_List_ViewModel
+@{
+    ViewData["Title"] = "User List";
+    ViewData["Heading"] = "Users";
+}
+<style>
+    th {
+        background-color: skyblue;
+    }
+
+    .dataTables_length {
+        margin-bottom: 10px;
+    }
+</style>
+<div>
+   
+
+
+    <input type="button" class="btn btn-info  m-1" style="float:right;" id="btn1" value="Add User" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/Account/Create','Add User','gl')" />
+
+    <div>
+        <table class="" id="tabledata">
+            <thead style="text-align:center;">
+                <tr>
+                    <th>Sr.No</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Picture</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    var srno = 1;
+                    @foreach (var item in Model.LstSignup)
+                    {
+                        var imagpath = "/images/" + item.Image;
+                        <tr>
+                            <td>@srno</td>
+                            <td>@item.UserName</td>
+                            <td>@item.Email</td>
+                            <td>@item.Mobile</td>
+                            <td>
+                                <img src="@imagpath" alt="No Image" width="100px;" height="70px;" />
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/Account/Edit?id=@item.Id','Edit User','gl')"><i class="bi-pencil" title="Edit"></i></a>
+                                <a class="btn btn-danger" onclick="return CustConfirm(@item.Id)"><i class="bi-trash" title="Remove"></i></a>
+                            </td>
+                        </tr>
+                        srno++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/Global.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tabledata').DataTable({
+                "ordering": false,
+                "pageLength": 10,
+            });
+
+            //$('#btn1').click(function () {
+            //    alert('hii');
+            //});
+
+        });
+             function CustConfirm(Id) {
+            var resp;
+                swal.fire({
+                    title: "Are you sure to Delete This Record?",
+                    type: "error",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((result) => {
+                    debugger;
+                    if (result.value) {
+
+                        resp = true;
+                        window.location.href = '@Url.Action("Delete", "account")' + '/' + Id;
+                    }
+                    else {
+                        resp = false;
+                    }
+                });
+            return resp;
+        }
+    </script>
+}

@@ -1,0 +1,516 @@
+﻿using DATA;
+using DATA.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using OMS_Web.ViewModels.DataVisulization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using DATA.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace OMS_Web.Controllers.DataVisulization
+{
+    [Authorize(Roles = "Admin")]
+    public class DataVisulizationController : Controller
+    {
+
+        private readonly ContextClass _context;
+        private readonly IOrders _orders;
+
+        public DataVisulizationController(ContextClass context, IOrders orders)
+        {
+            _context = context;
+            _orders = orders;
+        }
+
+
+        public IActionResult PreProductionOrders(string erpCode)
+        {
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+
+                var obj = _orders.GetPreOrders();
+
+                if (!string.IsNullOrEmpty(erpCode) && erpCode != "--Select All--")
+                {
+                    obj = obj.Where(x => x.Vcode == erpCode).ToList();
+                }
+
+                var variantCodes = _orders.GetVariantCodes();
+                ViewBag.V_list = new SelectList(variantCodes, "Erp_Vcode", "Erp_Vcode");
+
+
+                ViewData["Heading"] = "Pre-Production Orders Plan";
+                return View(obj);
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult TRFtoProduction([FromBody] List<PreProductionDetails> customDataArray)
+        {
+
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (customDataArray.Count != 0 || customDataArray != null)
+                    {
+                        customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
+
+                        foreach (var item in customDataArray)
+                        {
+
+                            _context.Database.ExecuteSqlRaw
+                              (
+                               "EXEC SP_InsertErpOrderDetails @ItemId, @BiwNo, @Vcode, @ModelCode, @PPSeqNo",
+                               new SqlParameter("@ItemId", item.ItemId),
+                               new SqlParameter("@BiwNo", item.BiwNo),
+                               new SqlParameter("@Vcode", item.Vcode),
+                               new SqlParameter("@ModelCode", item.ModelCode),
+                               new SqlParameter("@PPSeqNo", item.PPSeqNo)
+                              );
+
+                        }
+                        var result = new { status = "DataRecived" };
+                        return Json(result);
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+
+                    }
+
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+        [AllowAnonymous]
+        public IActionResult Index()
+        {
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                try
+                {
+                    var lineorder = (
+                          from pd in _context.productions
+                          join lm in _context.linemasters on pd.LineID equals lm.LineId
+                          join eod in _context.Orders on pd.ErpSeqNo equals eod.SeqNo
+                          join vc in _context.variantcode on eod.Vcode equals vc.Erp_Vcode
+                          select new
+                          {
+                              pd.ErpSeqNo,
+                              eod.ItemId,
+                              eod.BiwNo,
+                              vc.Mes_Vcode,
+                              // eod.Vcode,
+                              pd.Status,
+                              lm.LineName,
+                              eod.PPSeqno
+
+                          }
+                      );
+
+                    var groupedquery = lineorder
+                        .GroupBy(x => new { x.ErpSeqNo, x.ItemId, x.BiwNo, x.Mes_Vcode, x.LineName, x.PPSeqno })
+                        .Select(g => new
+                        {
+                            g.Key.ErpSeqNo,
+                            g.Key.PPSeqno,
+                            g.Key.ItemId,
+                            g.Key.BiwNo,
+                            g.Key.Mes_Vcode,
+                            LineName = g.Key.LineName,
+                            MaxStatus = g.Max(x => x.Status)
+                        })
+                        .ToList();
+
+                    var finalorder = groupedquery
+                        .GroupBy(x => new { x.ErpSeqNo, x.PPSeqno, x.ItemId, x.BiwNo, x.Mes_Vcode })
+                        .Select(g => new OrdersViewModel()
+                        {
+                            PPSeqno = g.Key.PPSeqno,
+                            ErpSeqNo = g.Key.ErpSeqNo,
+                            ItemId = g.Key.ItemId,
+                            BiwNo = g.Key.BiwNo,
+                            Vcode = g.Key.Mes_Vcode.ToString(),
+                            FF = g.FirstOrDefault(x => x.LineName == "FF").MaxStatus,
+                            FE = g.FirstOrDefault(x => x.LineName == "FE").MaxStatus,
+                            RF = g.FirstOrDefault(x => x.LineName == "RF").MaxStatus,
+                            BSRH = g.FirstOrDefault(x => x.LineName == "BSRH").MaxStatus,
+                            BSLH = g.FirstOrDefault(x => x.LineName == "BSLH").MaxStatus
+                        })
+                        .OrderByDescending(x => x.ErpSeqNo).Take(1500).ToList();
+
+
+                    //var model = new OrdersViewModel()
+                    //{
+                    //    lstorder = pivotTable
+                    //};
+
+                    ViewData["Heading"] = "Order Plan Visualization";
+                    return View(finalorder);
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+
+        }
+
+
+        public IActionResult TRFToPreProduction([FromBody] string[] ErpSeqArray)
+        {
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (ErpSeqArray != null)
+                    {
+                        foreach (var item in ErpSeqArray)
+                        {
+                            _context.Database.ExecuteSqlRaw("EXEC SP_RevertPreProduction @SeqNo", new SqlParameter("@SeqNo", item));
+
+                        }
+                        var result = new { status = "Executed" };
+                        return Json(result);
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+                    }
+
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+            }
+            catch (Exception)
+            {
+                var result = new { status = "error" };
+                return Json(result);
+                throw;
+            }
+            // return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetLineStatus()
+        {
+            bool status = _context.linemasters.All(x => x.Isactive == false);
+            return Json(status);
+
+        }
+      
+
+        public IActionResult GetOrderStatus(int ErpSeqNo)
+        {
+            bool status = _context.productions.Where(x => x.ErpSeqNo == ErpSeqNo).All(x => x.Status == 0 || x.Status == 100);
+            return Json(status);
+        }
+        [HttpGet]
+        public JsonResult ReLoadData()
+        {
+            try
+            {
+                var lineorder = (
+                      from pd in _context.productions
+                      join lm in _context.linemasters on pd.LineID equals lm.LineId
+                      join eod in _context.Orders on pd.ErpSeqNo equals eod.SeqNo
+                      join vc in _context.variantcode on eod.Vcode equals vc.Erp_Vcode
+                      select new
+                      {
+                          pd.ErpSeqNo,
+                          eod.ItemId,
+                          eod.BiwNo,
+                          vc.Mes_Vcode,
+                          // eod.Vcode,
+                          pd.Status,
+                          lm.LineName,
+                          eod.PPSeqno
+
+                      }
+                  );
+
+                var groupedquery = lineorder
+                    .GroupBy(x => new { x.ErpSeqNo, x.ItemId, x.BiwNo, x.Mes_Vcode, x.LineName, x.PPSeqno })
+                    .Select(g => new
+                    {
+                        g.Key.ErpSeqNo,
+                        g.Key.PPSeqno,
+                        g.Key.ItemId,
+                        g.Key.BiwNo,
+                        g.Key.Mes_Vcode,
+                        LineName = g.Key.LineName,
+                        MaxStatus = g.Max(x => x.Status)
+                    })
+                    .ToList();
+
+                var finalorder = groupedquery
+                    .GroupBy(x => new { x.ErpSeqNo, x.PPSeqno, x.ItemId, x.BiwNo, x.Mes_Vcode })
+                    .Select(g => new OrdersViewModel()
+                    {
+                        PPSeqno = g.Key.PPSeqno,
+                        ErpSeqNo = g.Key.ErpSeqNo,
+                        ItemId = g.Key.ItemId,
+                        BiwNo = g.Key.BiwNo,
+                        Vcode = g.Key.Mes_Vcode.ToString(),
+                        FF = g.FirstOrDefault(x => x.LineName == "FF").MaxStatus,
+                        FE = g.FirstOrDefault(x => x.LineName == "FE").MaxStatus,
+                        RF = g.FirstOrDefault(x => x.LineName == "RF").MaxStatus,
+                        BSRH = g.FirstOrDefault(x => x.LineName == "BSRH").MaxStatus,
+                        BSLH = g.FirstOrDefault(x => x.LineName == "BSLH").MaxStatus
+                    })
+                    .OrderByDescending(x => x.ErpSeqNo).Take(1500).ToList();
+
+                return Json(finalorder);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+
+        public IActionResult SetBreakPoint(OrdersViewModel ordersViewModel)
+        {
+
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    bool OrderStatus = _context.productions.Where(x => x.ErpSeqNo == ordersViewModel.ErpSeqNo).All(x => x.Status == 0 || x.Status == 100);
+                    if (OrderStatus == true)
+                    {
+
+
+                        var erpSeqNoParam = new SqlParameter("@ErpSeqNo", ordersViewModel.ErpSeqNo);
+
+                        if (ordersViewModel.FF == 0 && ordersViewModel.FE == 0 && ordersViewModel.BSRH == 0 && ordersViewModel.BSLH == 0)
+                        {
+
+                            _context.Database.ExecuteSqlRaw($"exec SP_SetBreakPoint @ErpSeqNo", erpSeqNoParam);
+
+                            var result = new { status = "SetBreakpoint" };
+
+                            return Json(result);
+                        }
+                        else if (ordersViewModel.FF == 100 && ordersViewModel.FE == 100 && ordersViewModel.BSRH == 100 && ordersViewModel.BSLH == 100)
+                        {
+                            _context.Database.ExecuteSqlRaw($"exec SP_ReleseBreakPoint @ErpSeqNo", erpSeqNoParam);
+                            var result = new { status = "ReleseBreakPoint" };
+
+                            return Json(result);
+                        }
+                        else
+                        {
+                            var result = new { status = "error" };
+
+                            return Json(result);
+                        }
+                    }
+                    else
+                    {
+                        var result = new { status = "error1" };
+                        return Json(result);
+                    }
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+                //return View();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return View();
+        }
+        //public IActionResult SetAbandoned(OrdersViewModel ordersViewModel)
+        //{
+        //    try
+        //    {
+        //        bool OrderStatus = _context.productions.Where(x => x.ErpSeqNo == ordersViewModel.ErpSeqNo).All(x => x.Status == 0 || x.Status == 101);
+        //        if (OrderStatus == true)
+        //        {
+        //            var erpSeqNoParam = new SqlParameter("@ErpSeqNo", ordersViewModel.ErpSeqNo);
+        //            if ((ordersViewModel.FF == 101 && ordersViewModel.FE == 101 && ordersViewModel.BSRH == 101 && ordersViewModel.BSLH == 101) ||
+        //                (ordersViewModel.FF == 0 && ordersViewModel.FE == 0 && ordersViewModel.BSRH == 0 && ordersViewModel.BSLH == 0)
+        //                )
+        //            {
+        //                _context.Database.ExecuteSqlRaw($"exec SP_SetAbounded @ErpSeqNo", erpSeqNoParam);
+        //                var result = new { status = "Set Abandoned" };
+        //                return Json(result);
+        //            }
+        //            else
+        //            {
+        //                var result = new { status = "error" };
+        //                return Json(result);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            var result = new { status = "error1" };
+        //            return Json(result);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+        //    return View();
+        //}
+
+
+        public IActionResult SetAbandoned([FromBody] string[] ErpSeqArray)
+        {
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (ErpSeqArray.Length != 0)
+                    {
+
+                        foreach (var item in ErpSeqArray)
+                        {
+
+                            bool OrderStatus = _context.productions.Where(x => x.ErpSeqNo == Convert.ToInt32(item)).All(x => x.Status == 0 || x.Status == 101);
+                            if (OrderStatus == true)
+                            {
+                                _context.Database.ExecuteSqlRaw("EXEC SP_SetAbounded @ErpSeqNo", new SqlParameter("@ErpSeqNo", item));
+
+                            }
+                            else
+                            {
+                                var result1 = new { status = "error1" };
+                                return Json(result1);
+                            }
+
+
+                        }
+                        var result = new { data = "Set Abandoned" };
+                        return Json(result);
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+                    }
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = new { status = "error" };
+                return Json(result);
+                throw;
+            }
+        }
+
+
+        public IActionResult SwapOrder([FromBody] string[] ErpSeqArray)
+        {
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (ErpSeqArray.Length == 2)
+                    {
+                        for (int i = 0; i < ErpSeqArray.Length; i++)
+                        {
+                            bool StatusSeqNo1 = _context.productions.Where(x => x.ErpSeqNo == Convert.ToInt32(ErpSeqArray[0])).All(x => x.Status == 0);
+                            bool StatusSeqNo2 = _context.productions.Where(x => x.ErpSeqNo == Convert.ToInt32(ErpSeqArray[1])).All(x => x.Status == 0);
+                            if (StatusSeqNo1 == true && StatusSeqNo2 == true)
+                            {
+                                _context.Database.ExecuteSqlRaw("EXEC Sp_SwapOrder @SeqNo1,@SeqNo2",
+                                  new SqlParameter("@SeqNo1", ErpSeqArray[0]),
+                                  new SqlParameter("@SeqNo2", ErpSeqArray[1])
+                                  );
+                                var result = new { data = "Executed" };
+                                return Json(result);
+
+                            }
+                            else
+                            {
+                                var result1 = new { status = "error1" };
+                                return Json(result1);
+
+                            }
+
+                        }
+
+
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+                    }
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = new { status = "error" };
+                return Json(result);
+                throw;
+            }
+
+            return View();
+        }
+
+        public IActionResult Welcome()
+        {
+            return View();
+        }
+    }
+}

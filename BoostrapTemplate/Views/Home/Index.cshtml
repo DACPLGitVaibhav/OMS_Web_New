@@ -1,0 +1,874 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .accordion-button {
+        display: flow;
+    }
+
+    button span {
+        float: right;
+    }
+</style>
+
+<!-- #region Bootstrap alert-->
+<h1>Bootstrap alert</h1>
+<button id="btnSubmit" class="btn btn-primary">
+    Submit
+</button>
+
+<br />
+<br />
+<div id="myAlert" class="alert alert-danger collapse">
+
+    <strong>Error!</strong> There is a problem submitting your form 
+    <a id="linkClose" href="#" class="close" style="float:right">&times;</a>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap tooltip-->
+<h1>Bootstrap tooltip</h1>
+<input type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip" value="Button" />
+
+<input type="button" class="btn btn-primary" id="btnPopover" title="Popover Title"
+       data-bs-content="Popover content. Popover content. Popover content."
+       data-bs-toggle="popover" data-bs-trigger="hover" value="Popover Example" data-bs-placement="bottom" />
+
+<!-- #endregion -->
+<!-- #region Bootstrap Modal-->
+<h1>Bootstrap Modal</h1>
+<input type="button" class="btn btn-primary" value="Login" data-bs-target="#Mymodal" data-bs-toggle="modal" />
+<div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="Mymodal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login Page</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="post">
+                    <div class="form-group">
+                        <label class="form-label">User Name</label>
+                        <input type="text" class="form-control" placeholder="Enter User Name" />
+                    </div>
+                    <div class="form-group  mb-2">
+                        <label class="form-label">Password</label>
+                        <input type="text" class="form-control" placeholder="Enter Password" />
+                    </div>
+                    <div class="form-group">
+                        <input type="button" name="name" value="Login" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #endregion -->
+<!-- #region Bootstrap Accordion-->
+<h1>Bootstrap Accordion</h1>
+<div class="row mb-2">
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button id="accbtn1" class="accordion-button" type="button" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Accordion Item #1   <span class="bi bi-chevron-up"></span>
+                </button>
+
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <h1>Accordin 1</h1>
+                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button id="accbtn2" class="accordion-button collapsed" type="button" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Accordion Item #2 <span class="bi bi-chevron-up"></span>
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap Collapse-->
+<h1>Bootstrap Collapse</h1>
+<div class="row mb-2">
+    <div class="col-md-5">
+        <p>
+            <a id="colbtn1" class="btn btn-primary">
+                Link Button
+            </a>
+            <button id="colbtn2" class="btn btn-primary" type="button">
+                Button
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap progress bars-->
+<h1>Bootstrap progress bars</h1>
+<div class="row mb-2">
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">10%</div>
+    </div><br />
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+    </div><br />
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+    </div><br />
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+    </div><br />
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-danger" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap labels and badges-->
+<h1>Bootstrap labels and badges</h1>
+<div class="row mb-2">
+    <h5>Example heading <span class="badge bg-info">New</span></h5>
+
+    <button type="button" class="btn btn-primary col-md-2">
+        Notifications <span class="badge bg-secondary">4</span>
+    </button>
+    &nbsp;
+    <button type="button" class="btn btn-primary position-relative col-md-2">
+        Inbox
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            99+
+            <span class="visually-hidden">unread messages</span>
+        </span>
+    </button>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap card-->
+<h1>Bootstrap card</h1>
+<div class="card bg-light mb-3" style="max-width: 18rem;">
+    <div class="card-header">This is card Header...</div>
+    <div class="card-body">
+        <h5 class="card-title">This is card title...</h5>
+        <p class="card-text">This is card body...</p>
+    </div>
+    <div class="card-footer">
+        <p class="card-text"><small class="text-muted">This is card footer...</small></p>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap  navbar component-->
+<h1>Bootstrap  navbar component</h1>
+<div class="row mb-2"><a asp-action="index2" class="btn btn-link" asp-controller="Home">Click here...</a></div>
+<!-- #endregion -->
+<!-- #region Bootstrap  Tab component-->
+<h1>Bootstrap  Tab component</h1>
+<div class="row mb-2">
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" aria-current="page" href="#homeTab">homeTab</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#contactTab">contactTab</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Country</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" data-bs-toggle="tab" href="#indiaTab">India</a></li>
+                <li><a class="dropdown-item" data-bs-toggle="tab" href="#usaTab">Australia</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="homeTab" class="tab-pane active">
+            <h3>Home</h3>
+            <p>Home page content</p>
+        </div>
+        <div id="contactTab" class="tab-pane">
+            <h3>Contact</h3>
+            <p>Contact page content</p>
+        </div>
+        <div id="indiaTab" class="tab-pane">
+            <h3>India</h3>
+            <p>India Location Details</p>
+        </div>
+        <div id="usaTab" class="tab-pane">
+            <h3>USA</h3>
+            <p>USA Location Details</p>
+        </div>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap  input groups-->
+<h1>Bootstrap  input groups</h1>
+
+<div class="row mb-2">
+    <div class="col-md-4">
+        <div class="input-group mb-3">
+            <span class="input-group-text"><span class="bi bi-search"></span></span>
+            <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <span class="input-group-text" id="basic-addon2">@@example.com</span>
+        </div>
+
+        <label for="basic-url" class="form-label">Your vanity URL</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <span class="input-group-text">.00</span>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Default</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-text" id="inputGroup-sizing-lg">Large</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+        </div><br />
+
+        <div class="input-group">
+            <span class="input-group-text">With textarea</span>
+            <textarea class="form-control" aria-label="With textarea"></textarea>
+        </div>
+        <br />
+        <div class="input-group mb-3">
+            <div class="input-group-text">
+                <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+            </div>
+            <input type="text" class="form-control" aria-label="Text input with checkbox">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-text">
+                <input class="form-check-input mt-0" type="radio" value="" aria-label="Radio button for following text input">
+            </div>
+            <input type="text" class="form-control" aria-label="Text input with radio button">
+        </div><br />
+
+        <a href="https://getbootstrap.com/docs/5.0/forms/input-group/" class="btn btn-link">for more input addon click here...</a>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap form validation states-->
+<h1>Bootstrap form validation states</h1>
+<div class="row mb-2">
+    <form class="form-horizontal">
+        <div class="form-group ">
+            <label for="validationServer03" class="form-label">City</label>
+            <input type="text" class="form-control is-valid">
+            <span class="valid-feedback">Please provide a valid city.</span>
+
+        </div>
+        <div class="form-group ">
+            <label for="validationServer033" class="form-label">City</label>
+            <input type="text" class="form-control is-invalid">
+            <span class="invalid-feedback">Please provide a valid city.</span>
+
+        </div>
+
+
+    </form>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap form controls -->
+<h1>Bootstrap form controls</h1>
+<div class="row mb-2">
+    <div class="col-md-6">
+
+        <form>
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input class="form-control" type="text" id="inputName"
+                       placeholder="Full Name" />
+            </div>
+            <div class="form-group">
+                <label for="inputDOB">Date of Birth</label>
+                <input class="form-control" type="date" id="inputDOB" />
+            </div>
+            <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input class="form-control" type="email" id="inputEmail"
+                       placeholder="Email address" />
+            </div>
+            <div class="form-group">
+                <label for="inputExperience">Work Experience</label>
+                <input class="form-control" type="number" id="inputExperience"
+                       placeholder="Total experience in years" />
+            </div>
+            <div class="form-group">
+                <label for="inputUrl">Personal Website</label>
+                <input class="form-control" type="url" id="inputUrl"
+                       placeholder="Your website address" />
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescription">Product Description</label>
+                <textarea class="form-control" id="inputDescription" rows="5"
+                          placeholder="Full Product Description"></textarea>
+            </div>
+
+
+            <div class="form-group">
+                <label>Checkbox Vertical</label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="option1">
+                        Option 1
+                    </label>
+                </div>
+
+                <div class="checkbox disabled">
+                    <label>
+                        <input type="checkbox" value="option3" disabled>
+                        Option 2
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Checkbox Horizontal</label><br />
+
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="option1">Option 1
+                </label>
+                <label class="checkbox-inline ">
+                    <input type="checkbox" value="option2">Option 2
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="option3">Option 3
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>Radio Certical</label><br />
+
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="radioGroup" id="opt1" value="1">
+                        Option 1
+                    </label>
+                </div>
+
+                <div class="radio disabled">
+                    <label>
+                        <input type="radio" name="radioGroup" id="opt3" value="3" disabled>
+                        Option 2
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label>Radio Horizontal</label><br />
+
+                <label class="radio-inline">
+                    <input type="radio" name="radioGroup" id="opt1" value="1">
+                    Option 1
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="radioGroup" id="opt2" value="2">
+                    Option 2
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="radioGroup" id="opt3" value="3" disabled>
+                    Option 3
+                </label>
+
+            </div>
+
+            <div class="form-group">
+                <label>Dropdown List</label><br />
+                <select class="form-control">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                    <option>Option 4</option>
+                    <option>Option 5</option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label>Dropdown Multiselect List</label><br />
+                <select multiple class="form-control">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                    <option>Option 4</option>
+                    <option>Option 5</option>
+                </select>
+
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Login</button>
+        </form>
+
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap forms -->
+<h1>Bootstrap forms </h1>
+<div class="row mb-2">
+    <div class="col-md-4 border border-secondary p-2">
+        <h3>Form Vertical</h3>
+        <form>
+            <div class="form-group">
+                <label for="inputUserName">Username</label>
+                <input class="form-control" placeholder="Login Username"
+                       type="text" id="inputUserName" />
+            </div>
+            <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input class="form-control" placeholder="Login Password"
+                       type="password" id="inputPassword" />
+            </div>
+            <div class="mt-2"> <button type="submit" class="btn btn-primary">Login</button></div>
+        </form>
+
+    </div>
+
+    <div class="row col-md-4 offset-1 border border-secondary p-2">
+
+        <h3>Form horizontal</h3>
+        <form class="form-horizontal">
+            <div class="row mb-2 ">
+                <label for="inputUserNamee" class="col-form-label col-sm-3 form-control-lg">Username</label>
+                <div class="col-sm-9">
+                    <input class="form-control form-control-lg" placeholder="Login Username"
+                           type="text" id="inputUserNamee" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="inputPasswordd" class="col-form-label col-sm-3">Password</label>
+                <div class="col-sm-9">
+                    <input class="form-control form-control-sm" placeholder="Login Password"
+                           type="password" id="inputPasswordd" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-9 offset-3">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </form>
+
+
+
+    </div>
+</div>
+
+
+<!-- #endregion -->
+<!-- #region Bootstrap button group -->
+<h1>Bootstrap button group  </h1>
+<div class="row mb-2">
+    <div class="btn-group">
+        <button class="btn btn-danger">Button 1</button>
+        <button class="btn btn-default">Button 2</button>
+        <button class="btn btn-info">Button 3</button>
+        <button class="btn btn-primary">Button 4</button>
+        <button class="btn btn-success">Button 5</button>
+        <button class="btn btn-warning">Button 6</button>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Bootstrap dropdown -->
+<h1>Bootstrap dropdown </h1>
+
+<div class="row mb-2">
+
+    <div class="dropdown col-md-2">
+        <a data-bs-toggle="dropdown" class="dropdown-toggle">
+            Dropdown
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu col-md-2">
+            <li><a href="#" class="dropdown-item">Action 1</a></li>
+            <li><a href="#" class="dropdown-item">Action 2</a></li>
+            <li><a href="#" class="dropdown-item">Action 3</a></li>
+        </ul>
+    </div>
+
+    <div class="dropdown col-md-2">
+        <button data-bs-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+            Dropdown
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+
+            <li><a href="#" class="dropdown-item">Action 1</a></li>
+            <li><a href="#" class="dropdown-item">Action 2</a></li>
+            <li><a href="#" class="dropdown-item">Action 3</a></li>
+        </ul>
+    </div>
+
+    <div class="dropdown col-md-2">
+        <button data-bs-toggle="dropdown" class="btn btn-info dropdown-toggle">
+            Dropdown
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li class="dropdown-header"><strong>Header 1</strong></li>
+            <li><a href="#" class="dropdown-item">Action 1</a></li>
+            <li><a href="#" class="dropdown-item disabled">Action 2</a></li>
+            <li><a href="#" class="dropdown-item">Action 3</a></li>
+            <li class="dropdown-divider"></li>
+            <li class="dropdown-header"><strong>Header 2</strong></li>
+            <li><a href="#" class="dropdown-item">Action 1</a></li>
+            <li><a href="#" class="dropdown-item disabled">Action 2</a></li>
+            <li><a href="#" class="dropdown-item">Action 3</a></li>
+        </ul>
+    </div>
+    <div class="col-md-2">
+        <div class="btn-group">
+            <button class="btn btn-primary">SQL Server</button>
+            <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" class="dropdown-item">C#</a></li>
+                <li><a href="#" class="dropdown-item">ASP.NET</a></li>
+                <li><a href="#" class="dropdown-item">ADO.NET</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- #endregion -->
+<!-- #region Bootstrap icons -->
+<h1>Bootstrap icons</h1>
+
+<div class="row mb-2">
+    <div class="mb-2">
+        <a href="https://icons.getbootstrap.com/" class="btn btn-link">Bootstrap icon link</a>
+        <button class="btn btn-primary"><span class="bi bi-search"></span> Search</button>
+        <button class="btn btn-info"><span class="bi bi-person"></span> Search</button>
+        <button class="btn btn-dark"><span class="bi bi-cake2"></span> Search</button>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region button classes -->
+<h1> button classes</h1>
+<div class="row mb-2">
+    <div class="mb-2">
+        <button type="button" class="btn" data-bs-toggle="button">Toggle button</button>
+        <button type="button" class="btn active" data-bs-toggle="button" aria-pressed="true">Active toggle button</button>
+        <button type="button" class="btn" disabled data-bs-toggle="button">Disabled toggle button</button>
+
+    </div>
+    <div class=" mb-2">
+        <button class="btn btn-primary btn-lg">Large</button>
+        <button class="btn btn-primary btn-sm">Small</button>
+    </div>
+    <div>
+        <button class="btn btn-success disabled ">btn-success</button>
+        <button class="btn btn-info">btn-info</button>
+        <button class="btn btn-warning">btn-warning</button>
+        <button class="btn btn-danger">btn-danger</button>
+        <button class="btn btn-link">btn-link</button>
+    </div>
+
+</div>
+<!-- #endregion -->
+<!-- #region table classes -->
+<h1>table classes</h1>
+<div class="row mb-2">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover ">
+            @*table-sm*@
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-info">
+                    <td>1</td>
+                    <td>John Deiare</td>
+                    <td>Male</td>
+                    <td>John@emailDomain.com</td>
+                </tr>
+                <tr class="table-danger">
+                    <td>2</td>
+                    <td>Mary</td>
+                    <td>Femlae</td>
+                    <td>mary@emailDomain.com</td>
+                </tr>
+                <tr class="table-primary">
+                    <td>3</td>
+                    <td>Ben</td>
+                    <td>Male</td>
+                    <td>Ben@emailDomain.com</td>
+                </tr>
+                <tr class="table-success">
+                    <td>4</td>
+                    <td>Sara</td>
+                    <td>Female</td>
+                    <td>sara@emailDomain.com</td>
+                </tr>
+                <tr class="table-danger">
+                    <td>5</td>
+                    <td>Sam</td>
+                    <td>Male</td>
+                    <td>sam@emailDomain.com</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region code blocks -->
+<div class="row mb-2">
+    <h1>
+        code blocks
+    </h1>
+    <h4>Visual Studio</h4>
+    <p>
+        Keyboard shorcut for commenting code
+        <kbd>CTRL</kbd> <kbd>K</kbd> and <kbd>CTRL</kbd> <kbd>C</kbd>
+    </p>
+    <hr />
+    <h4>Output</h4>
+    <samp>Hello world!</samp>
+    <hr />
+    <div>
+        var <var>fullName</var> = <var>firstName</var> + <var>lastName</var>;
+    </div> <hr />
+    <style>
+        .pre-scrollable {
+            max-height: 340px;
+            max-width: 300px;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+    </style>
+<pre class="pre-scrollable">public class Program
+{
+    public static void Main()
+    {
+        Customer customer1 = new Customer()
+        {
+            ID = 101,
+            Name = "Mark",
+            Salary = 5000
+        };
+        Customer customer2 = new Customer()
+        {
+            ID = 102,
+            Name = "Pam",
+            Salary = 7000
+        };
+        Customer customer3 = new Customer()
+        {
+            ID = 104,
+            Name = "Rob",
+            Salary = 5500
+        };
+        Customer[] arrayCustomers = new Customer[2];
+        arrayCustomers[0] = customer1;
+        arrayCustomers[1] = customer2;
+       
+        List<customer> listCustomers = new List<customer>(2);
+        listCustomers.Add(customer1);
+        listCustomers.Add(customer2);
+        listCustomers.Add(customer3);
+        Customer cust = listCustomers[0];
+        Console.WriteLine("ID = {0}, Name = {1}, Salary = {2}",
+                           cust.ID, cust.Name, cust.Salary);
+        Console.WriteLine("--------------------------------");
+       
+        for (int i = 0; i < listCustomers.Count; i++)
+        {
+            Customer customer = listCustomers[i];
+            Console.WriteLine("ID = {0}, Name = {1}, Salary = {2}",
+                     customer.ID, customer.Name, customer.Salary);
+        }
+        Console.WriteLine("--------------------------------");
+       
+        foreach (Customer c in listCustomers)
+        {
+            Console.WriteLine("ID = {0}, Name = {1}, Salary = {2}",
+                                c.ID, c.Name, c.Salary);
+        }
+        Console.WriteLine("--------------------------------");
+       
+        listCustomers.Insert(1, customer3);
+        Console.WriteLine("ID = {0}, Name = {1}, Salary = {2}",
+               listCustomers[1].ID, listCustomers[1].Name,
+               listCustomers[1].Salary);
+        Console.WriteLine("--------------------------------");
+       
+        Console.WriteLine("Index of Customer3 object in the List = "
+                           + listCustomers.IndexOf(customer3));
+        Console.WriteLine("--------------------------------");
+    }
+}</pre>
+
+
+    <p>To highlight text use <code>&lt;mark&gt;</code> tag </p>
+    <p>To underline text use <code>&lt;u&gt;</code> tag </p>
+    <p>For bold text use <code>&lt;strong&gt;</code> tag </p>
+</div>
+<!-- #endregion -->
+<!-- #region List Group -->
+<h1>
+    List Group
+</h1>
+<div class="row mb-2">
+    <div class="list-group">
+        <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">List Group Item 1 Heading</h4>
+            <p class="list-group-item-text">List Group Item 1 Text</p>
+        </a>
+        <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">List Group Item 2 Heading</h4>
+            <p class="list-group-item-text">List Group Item 2 Text</p>
+        </a>
+        <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">List Group Item 3 Heading</h4>
+            <p class="list-group-item-text">List Group Item 3 Text</p>
+        </a>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="list-group">
+        <a href="https://google.com" class="list-group-item list-group-item-danger">India</a>
+        <a class="list-group-item list-group-item-dark">Austrailia <span class="badge bg-secondary">New</span></a>
+        <a class="list-group-item list-group-item-info ">England</a>
+        <a class="list-group-item list-group-item-light active">America</a>
+    </div>
+</div>
+
+<div class="row mb-2">
+    <ul class="list-group">
+        <li class="list-group-item">India</li>
+        <li class="list-group-item">Austrailia <span class="badge bg-secondary">New</span></li>
+        <li class="list-group-item">England</li>
+        <li class="list-group-item">America</li>
+    </ul>
+
+
+</div>
+
+<!-- #endregion -->
+<!-- #region blockquotes and lists -->
+
+<h1>
+    blockquotes and lists
+</h1>
+<div class="row " style="background-color:white">
+    <blockquote>
+        <p>By failing to prepare, you are preparing to fail</p>
+        <footer class="blockquote-footer">
+            This famous quote is by
+            <cite title="Benjamin Franklin">
+                Benjamin Franklin
+            </cite>
+        </footer>
+    </blockquote>
+
+</div>
+
+
+<div class="row">
+    <ol>
+        <li>India</li>
+        <li>Austrailia</li>
+        <li>England</li>
+        <li>America</li>
+    </ol>
+</div>
+
+<div class="row">
+    <dl>
+        <dt>ASP.NET</dt>
+        <dd>Framework for developing web applications</dd>
+
+        <dt>jQuery</dt>
+        <dd>JavaScript library that works across a multitude of browsers</dd>
+
+        <dt>SQL</dt>
+        <dd>The standard language for relational database management systems</dd>
+    </dl>
+
+
+</div>
+<!-- #endregion -->
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#colbtn1').click(function () {
+                $('#collapseExample').collapse('toggle');
+            });
+
+            $('#colbtn2').click(function () {
+                $('#collapseExample').collapse('toggle');
+            });
+
+            $('#accbtn1').click(function () {
+                debugger;
+                if ($('#collapseOne').hasClass("show")) {
+                    $(this).find('span').removeClass('bi bi-chevron-down').addClass('bi bi-chevron-up');
+                } else {
+                    $(this).find('span').removeClass('bi bi-chevron-up').addClass('bi bi-chevron-down');
+                }
+                $('#collapseOne').collapse('toggle');
+            });
+            $('#accbtn2').click(function () {
+                debugger;
+                if ($('#collapseTwo').hasClass("show")) {
+                    $(this).find('span').removeClass('bi bi-chevron-down').addClass('bi bi-chevron-up');
+                } else {
+                    $(this).find('span').removeClass('bi bi-chevron-up').addClass('bi bi-chevron-down');
+                }
+                $('#collapseTwo').collapse('toggle');
+            });
+
+            $('#btnPopover').popover();
+
+            $('#btnSubmit').click(function () {
+                $('#myAlert').show('fade');
+                setTimeout(function () {
+                    $('#myAlert').hide('fade');
+                }, 2000);
+            });
+            $('#linkClose').click(function () {
+                $('#myAlert').hide('fade');
+            });           
+        });
+    </script>
+}

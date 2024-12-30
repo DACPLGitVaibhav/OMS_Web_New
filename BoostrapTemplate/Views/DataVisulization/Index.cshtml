@@ -1,0 +1,235 @@
+﻿@model IEnumerable<OMS_Web.ViewModels.DataVisulization.OrdersViewModel>
+
+@{
+    //Layout = "~/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Order Plan Visualization";
+}
+
+
+
+@*Data Table CSS*@
+<link href="~/Datatable/css/jquery.datatables.css" rel="stylesheet" />
+<link href="~/Datatable/css/jquery.datatables.min.css" rel="stylesheet" />
+<link href="~/Datatable/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/Datatable/css/datatables.bootstrap4.css" rel="stylesheet" />
+<link href="~/fontawesome-free-6.4.0-web/css/all.css" rel="stylesheet" />
+
+<link href="~/Datatable/css/select.dataTables.css" rel="stylesheet" />
+<link href="~/Datatable/css/select.dataTables.min.css" rel="stylesheet" />
+
+<style>
+    /* CSS for styling the Action buttons */
+    .brkbutton {
+        background-color: #5bc0de;
+        color: white;
+        border: medium;
+        font-weight: 500;
+        margin-left: 20px;
+    }
+
+    .swp {
+        background-color: #1b6ec2;
+        color: white;
+        border: medium;
+        font-weight: 500;
+        margin-left: 20px;
+    }
+
+    .btnAbound {
+        border: none
+    }
+</style>
+<style>
+    /* CSS for styling the page buttons */
+    .pagination {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .pagination a.current-page {
+                background-color: #337ab7;
+                color: #fff;
+            }
+
+            .pagination a:hover {
+                background-color: #337ab7;
+                color: #fff;
+            }
+
+
+    th {
+        background-color: skyblue;
+    }
+</style>
+<div class="alert alert-danger" role="alert">
+    <i class="fa-solid fa-triangle-exclamation"></i>  Problem while transferring an order, Make sure line's are in start mode, click here  @Html.ActionLink(" to Start Lines ", // <-- Link text
+    "LineOrder", // <-- Action Method Name
+    "LineMaster"// <-- Coontroller Name
+    )
+</div>
+
+<div style="margin-bottom:20px; justify-content:space-between;display:flex">
+    <div align="left">
+        <button class="" style="background-color:#777777;border:none;color:white">
+            Started
+        </button>
+        <button class="" style="background-color:#999966;border:none;color:white">
+            Received
+        </button>
+        <button class="" style="background-color:#337ab7;border:none;color:white">
+            Scheduled
+        </button>
+        <button class="" style="background-color:#5cb85c;border:none;color:white">
+            Transmitted
+        </button>
+        <button class="" style="background-color:#5bc0de;border:none;color:white">
+            Breakpoint
+        </button>
+        <button class="" style="background-color:#f0ad4e;border:none;color:white">
+            Processed
+        </button>
+        <button class="" style="background-color:#d9534f;border:none;color:white">
+            Suspended
+        </button>
+        <button class="" style="background-color:#000000;border:none;color:white">
+            Abandoned
+        </button>
+        @* <button class="" style="background-color:#660033;border:none;color:white">
+            Hold
+        </button> *@
+    </div>
+    <div id="buttonContainer" align="right" style="justify-content:space-between;display:flex;"> </div>
+
+</div>
+<div style="margin-bottom:20px;display:flex">
+    <div id="TRFBtnContainer" align="left" style="justify-content:space-between;display:flex;margin-bottom:10px;">
+    </div>
+    <div align="left" style="margin-left:5px;align-items:end;justify-content:space-between;display:flex;margin-bottom:10px;"> <h6 id="RowcountDisplay" style="color:#337ab7"></h6></div>
+
+    @*<div id="MultswpBtnContainer" align="left" style="justify-content:space-between;display:flex;margin-bottom:10px;">
+    </div>*@
+
+</div>
+<div style="margin-bottom:0px;float:right;"> <h3 id="countDisplay" style="color:#337ab7">Pending Orders:</h3></div>
+
+<div>
+    <label for="rowsPerPage">Show  :</label>
+    <select id="rowsPerPage">
+        <option value="100">100</option>
+        <option value="200">200</option>
+        <option value="500">500</option>
+    </select>
+</div>
+
+<div>
+    <table class="display compact" id="Table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                     @Html.DisplayNameFor(model => model.ErpSeqNo)
+                </th>
+                <th>
+                    Item Id
+                </th>
+                <th>
+                    BIW No
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vcode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FF)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FE)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RF)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BSRH)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BSLH)
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="data-row">
+                    <td><input type='checkbox' class='checkbox'></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ErpSeqNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BiwNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vcode)
+                    </td>
+                    <td>
+                        <button class="Chenge" data-id="@item.FF" style="color:white;border:none">0</button>
+                    </td>
+
+                    <td>
+                        <button class="Chenge" data-id="@item.FE" style="color:white;border:none">0</button>
+
+                    </td>
+                    <td>
+                        <button class="Chenge" data-id="@item.RF" style="color:white;border:none">0</button>
+
+                    </td>
+                    <td>
+                        <button class="Chenge" data-id="@item.BSRH" style="color:white;border:none">0</button>
+                    </td>
+                    <td>
+                        <button class="Chenge" data-id="@item.BSLH" style="color:white;border:none">0</button>
+
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="paginationContainer" style="text-align:right;display:flex;justify-content:flex-end;margin-bottom:5px; ">
+    <ul id="pageButtons" class="pagination">
+    </ul>
+</div>
+
+@section Scripts {
+    @*<script>document.addEventListener('contextmenu', event => event.preventDefault());</script>*@
+    <script src="~/Datatable/js/jquery.datatables.min.js"></script>
+    <script src="~/Datatable/js/jquery.datatables.js"></script>
+    <script src="~/Datatable/js/dataTables.select.js"></script>
+    <script src="~/Datatable/js/dataTables.select.min.js"></script>
+    <script src="~/ProjectJsFile/DataVisulization.js"></script>
+
+
+}

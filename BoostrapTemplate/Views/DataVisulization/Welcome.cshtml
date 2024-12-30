@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Heading"] = "Welcome";
+}
+<style>
+    b, div{
+        text-align:initial;
+    }
+</style>
+<b>
+
+    <h1>Welcome to </h1>
+    <h3>Order Management System<span id="dots"></span></h3>
+</b>
+<div>
+    <img src="/images/Robot2.jpg" style="    height: 330px;    width: 800px;" />
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            //$("#spn1").html('Connecting please wait...').css("color", "red");
+            setInterval(Proc, 700);
+        });
+       
+
+        function Proc()
+        {
+            debugger;
+            //console.log($('#dots').html());
+            if ($('#dots').html()=='...') {
+                $('#dots').empty();
+            }
+            $('#dots').append('.');
+        }
+    </script>
+
+}

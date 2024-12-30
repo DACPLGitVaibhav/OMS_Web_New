@@ -1,0 +1,145 @@
+﻿@model IEnumerable<DATA.Models.PreProductionDetails>
+@{
+    ViewData["Title"] = "Order Pre-Production";
+    //Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/Datatable/css/jquery.datatables.css" rel="stylesheet" />
+<link href="~/Datatable/css/jquery.datatables.min.css" rel="stylesheet" />
+<link href="~/Datatable/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/Datatable/css/datatables.bootstrap4.css" rel="stylesheet" />
+<link href="~/fontawesome-free-6.4.0-web/css/all.css" rel="stylesheet" />
+<link href="~/Datatable/css/select.dataTables.css" rel="stylesheet" />
+<link href="~/Datatable/css/select.dataTables.min.css" rel="stylesheet" />
+
+@*<h2 style="color:skyblue">Preproduction Orders</h2>*@
+
+<div class="row">
+
+    <div class="col-3">
+        <div class="row">
+            <div class="col-5" style="    align-content: center;">
+                <label style="color:#337ab7;display: flex;align-items: center;" class="form-label">Select Vcode</label>
+            </div>
+            <div class="col-7">
+                <form method="get">
+
+
+                    @Html.DropDownList(
+                             "erpCode",
+                             ViewBag.V_list as SelectList,
+
+                             new { @class = "form-control", id = "ErpVcodeDropdown", onchange = "this.form.submit();" }
+                             )
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-5" style="display:flex;">
+        &nbsp; <label style="color:#337ab7;display: flex;align-items: center;" class="form-label">Enter No</label>
+        <input type="number" id="fromPpseq" min="1" value="0" class="form-control" style="    height: 40px;    width: 100px;    margin: 6px;" />
+        <input type="number" id="toPpseq" min="1" value="0" class="form-control" style="    height: 40px;    width: 100px;    margin: 6px;" />
+        <input type="button" id="btnselect" value="Select Rows" class="btn btn-primary" />
+    </div>
+    <div class="col-2" id="buttonContainer" align="right" style="display:flex;">
+    </div>
+
+    <div class="col-2" style="align-content:flex-end"> <h6 id="RowcountDisplay" style="color:#337ab7"></h6></div>
+</div>
+@* <br />
+
+<div class="row" style="margin-bottom:20px;display:flex">
+</div> *@
+
+<style>
+    th {
+        background-color: skyblue;
+    }
+
+    .dataTables_length {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+
+
+<table class="display compact" id="Table">
+    <thead>
+        <tr>
+            @*<th style="width:40px;"></th>*@
+            <th style="width:42.8438px"><input style="margin-left:10px;width:25px;" type="checkbox" id="select-all-checkbox" /></th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.PPSeqNo)
+            </th>
+            <th>
+                Item ID
+            </th>
+            <th>
+                Biw No
+            </th>
+            <th>
+                VCode
+            </th>
+            <th>
+                Model Code
+            </th>
+            <th>
+                File Name
+            </th>
+            <th>
+                Import Date
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @*@{ int i = 1;}*@
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> </td>
+
+                <td id="PPSeqNo">
+                    @Html.DisplayFor(modelItem => item.PPSeqNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BiwNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vcode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModelCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateIimport)
+
+                </td>
+
+
+            </tr>
+            //i++;
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/Datatable/js/jquery.datatables.min.js"></script>
+    <script src="~/Datatable/js/jquery.datatables.js"></script>
+    <script src="~/Datatable/js/dataTables.select.js"></script>
+    <script src="~/Datatable/js/dataTables.select.min.js"></script>
+    <script src="~/ProjectJsFile/PreProduction.js"></script>
+}

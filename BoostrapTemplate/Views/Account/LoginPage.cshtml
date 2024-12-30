@@ -1,0 +1,46 @@
+﻿@model BoostrapTemplate.ViewModels.Login.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+        <div class="login-wrap p-4 p-md-5">
+            <div class="d-flex align-items-center justify-content-center">
+
+                <img src="~/images/DhruvaLogo2.png" class="cen" />
+            </div>
+            @*<h3 class="text-center mb-4">Sign In</h3>*@
+            <form asp-action="LoginPage" class="login-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="text" asp-for="Username" class="form-control" placeholder="Username">
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="password" asp-for="Password" class="form-control" placeholder="Password" id="password">
+                    <i class="bi bi-eye-slash" id="togglePassword" style="float: right;margin-right: 10px;margin-top: -38px; cursor:pointer"></i>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-primary rounded submit px-3">Login</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+    togglePassword.addEventListener('click', () => {
+        // Toggle the type attribute using
+        // getAttribure() method
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // Toggle the eye and bi-eye icon
+        this.classList.toggle('bi-eye');
+    });
+</script>

@@ -1,0 +1,98 @@
+﻿@model ViewModels.LightBill.LightBill_Create_ViewModel
+@{
+    Layout = null;
+}
+
+<form asp-action="create" enctype="multipart/form-data" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    
+    <div class="row mb-3">
+
+        <div class="col-md-6">
+            <label asp-for="CustId" class="col-form-label"></label>
+            <select asp-for="CustId" asp-items="@ViewBag.Custdetails" class="form-select" aria-label="Default select example">
+                <option selected value="">--Select Customer--</option>
+            </select>
+            <span asp-validation-for="CustId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="BillNo" class="col-form-label"></label>
+            <input asp-for="BillNo" type="text" class="col-md-4 form-control" id="Id_billno" />
+            <span asp-validation-for="BillNo" class="text-danger"></span>
+        </div>
+
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Billdate" class="col-form-label"></label>
+            <input asp-for="Billdate" type="date" class="col-md-4 form-control" id="Id_Billdate" />
+            <span asp-validation-for="Billdate" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="DueDate" class="col-form-label"></label>
+            <input asp-for="DueDate" type="date" class="col-md-4 form-control" id="Id_DueDate" />
+            <span asp-validation-for="DueDate" class="text-danger"></span>
+        </div>
+
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="DueAmount" class="col-form-label"></label>
+            <input asp-for="DueAmount" type="text" class="col-md-4 form-control" id="Id_DueAmount" />
+            <span asp-validation-for="DueAmount" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PDFupload" class="col-form-label"></label>
+            <input asp-for="PDFupload" type="file" class="col-md-4 form-control" id="Id_PDFupload" />
+            <span asp-validation-for="PDFupload" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="PrevUnit" class="col-form-label"></label>
+            <input asp-for="PrevUnit" type="text" class="col-md-4 form-control" id="Id_PrevUnit" />
+            <span asp-validation-for="PrevUnit" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="CurrUnit" class="col-form-label"></label>
+            <input asp-for="CurrUnit" type="text" class="col-md-4 form-control" id="Id_CurrUnit" />
+            <span asp-validation-for="CurrUnit" class="text-danger"></span>
+        </div>
+    
+
+    </div>
+    <div class="row">        
+        <div class="col-md-12">
+            <label asp-for="TotalUnit" class="col-form-label"></label>
+            <input asp-for="TotalUnit" type="text" class="form-control" id="Id_TotalUnit" />
+            <span asp-validation-for="TotalUnit" class="text-danger"></span>
+        </div>
+
+    </div>
+
+
+    <div class="col-md-12 modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-sm btn-info p-2" style="float:right;" value="Submit" id="btt" />
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        $("#Id_Billdate").val(today);
+        $("#Id_DueDate").val(today);
+
+    });
+
+</script>

@@ -1,0 +1,96 @@
+﻿@model BoostrapTemplate.ViewModels.Signup.Signup_Create_ViewModel
+@{
+    Layout = null;
+}
+
+
+<!-- No Labels Form -->
+<form asp-action="Create" enctype="multipart/form-data" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-12">
+        <input asp-for="UserName" type="text" class="form-control" placeholder="Your Name">
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <input asp-for="Email" type="email" class="form-control" placeholder="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <input asp-for="Mobile" type="text" class="form-control" placeholder="Mobile">
+        <span asp-validation-for="Mobile" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password">
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+    <div class="col-md-8">
+        <input asp-for="ImagePath" class="form-control" type="file" id="formFile" placeholder="Choose Pic...">
+    </div>
+    <div class="col-md-4">
+        <img style="width:100px;height:100px;border:1px solid red;border-radius:10px;padding:10px;" id="PrevImg" />
+    </div>
+    <div class="col-md-12">
+        <div class="form-check">
+            <input asp-for="Isactive" class="form-check-input" type="checkbox" id="gridCheck1" checked="checked">
+            <label class="form-check-label" for="gridCheck1">
+                Active
+            </label>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <input asp-for="CreatedDate" type="date" class="form-control" id="theDate">
+        <span asp-validation-for="CreatedDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <input asp-for="Createdtime" type="time" class="form-control">
+        <span asp-validation-for="Createdtime" class="text-danger"></span>
+    </div>
+    <div class="col-md-12 modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-sm btn-info p-2" style="float:right;" value="Submit" id="btt" />
+    </div>
+
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+
+</form><!-- End No Labels Form -->
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        $("#theDate").val(today);
+
+
+        $('#formFile').change(function (e) {
+            debugger;
+            var url = $('#formFile').val();
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+            if (formFile.files && formFile.files[0] && (ext == "gif" || ext == "jpg" || ext == "png")) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var output = document.getElementById('PrevImg');
+                    output.src = reader.result;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    });
+</script>
+

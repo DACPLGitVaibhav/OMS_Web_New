@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34031.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMS_Template", "BoostrapTemplate\OMS_Template.csproj", "{6BA15C57-36DF-4AF3-934B-2B2511244974}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DATA", "DATA\DATA.csproj", "{C848852C-F3BF-467E-9818-62F91BBB3DDB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{1B36B9C2-A6EB-43F9-8171-9F518CAE92BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BA15C57-36DF-4AF3-934B-2B2511244974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BA15C57-36DF-4AF3-934B-2B2511244974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BA15C57-36DF-4AF3-934B-2B2511244974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BA15C57-36DF-4AF3-934B-2B2511244974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C848852C-F3BF-467E-9818-62F91BBB3DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C848852C-F3BF-467E-9818-62F91BBB3DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C848852C-F3BF-467E-9818-62F91BBB3DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C848852C-F3BF-467E-9818-62F91BBB3DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B36B9C2-A6EB-43F9-8171-9F518CAE92BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B36B9C2-A6EB-43F9-8171-9F518CAE92BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B36B9C2-A6EB-43F9-8171-9F518CAE92BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B36B9C2-A6EB-43F9-8171-9F518CAE92BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D60965F5-9F6C-48E8-BB1A-F6335EF72B95}
+	EndGlobalSection
+EndGlobal

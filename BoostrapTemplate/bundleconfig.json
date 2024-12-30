@@ -1,0 +1,35 @@
+[
+  {
+    "outputFileName": "wwwroot/ProjectJsFile/DataVisulization.min.js",
+    "inputFiles": [
+      "wwwroot/ProjectJsFile/DataVisulization.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/ProjectJsFile/PreProduction.min.js",
+    "inputFiles": [
+      "wwwroot/ProjectJsFile/PreProduction.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/ProjectJsFile/BaretailLog.min.js",
+    "inputFiles": [
+      "wwwroot/ProjectJsFile/BaretailLog.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

@@ -1,0 +1,474 @@
+﻿@model OMS_Web.ViewModels.Lines.LOTViewModel
+@{
+    ViewData["Title"] = "Line Order Management";
+
+}
+@*------------------------------------Old Code---------------------*@
+@* <style>
+    .statusbutton {
+        border: none;
+        color: white;
+    }
+
+    .startbtn {
+        color: white;
+        background-color: skyblue;
+    }
+</style> *@
+
+@*<h2 style="color:skyblue; margin-bottom:40px;">Line Order Management</h2>*@
+
+
+
+
+@* <form class="row" style="margin-bottom:10px;">
+    <div class="col-md-2" align="left" style="display:table">
+        <label asp-for="LineName" class="control-label" style="display:table-cell"></label>
+    </div>
+    <div class="col-md-4">
+        <select id="LineListId" asp-for="LineId"
+                class="form-control" style="display:table-cell"
+                asp-items="@(new SelectList(@ViewBag.LineList,"LineId", "LineName"))">
+        </select>
+        <span id="error-message" style="display: none; color:red;text-align:left;">
+            Please Select Line
+        </span>
+    </div>
+
+    <div class="col-md-6">
+        <div id="StartStopBtn" style="margin-top:5px;">
+
+        </div>
+    </div>
+</form>
+
+<form class="row" style="margin-bottom:10px;">
+
+    <div class="col-md-2">  <label> Status: </label></div>
+    @*<div class="col-md-4"id="statusContainer"> <button id="btnstatus"> <span id="statusValue"></span></button> </div>
+    <div class="col-md-4" id="statusContainer"> </div>
+    <div class="col-md-6">
+
+    </div>
+</form>
+
+<form class="row">
+    <div class="col-md-2">
+        <label class="d-table-cell"> LOT Sequence: </label>
+    </div>
+    <div class="col-md-4">
+        <input id="LOTinput" class=" form-control" type="text" />
+
+        <span id="Lot-error" style="display: none; color:red;text-align:center;">
+            Please Enter LOT
+        </span>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+</form>
+
+ *@
+@*----------------------------------New Code--------------------------*@
+
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: nowrap; /* Prevents wrapping of columns */
+        align-items: center; /* Vertically aligns items */
+    }
+
+    .statusbutton {
+        border: none;
+        color: white;
+        width: 80px;
+        height: 40px; /* Set a fixed height */
+        line-height: 40px; /* Vertically center the text */
+    }
+
+    .startbtn {
+        color: white;
+        background-color: skyblue;
+        width: 80px;
+        height: 40px; /* Set a fixed height */
+        line-height: 40px; /* Vertically center the text */
+    }
+
+    .Heading {
+        font-weight: bold;
+        font-size: 30px;
+    }
+
+    .column {
+        padding: 10px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+        /* Custom widths for columns */
+        .column:first-child {
+            margin-left: 100px;
+            /* flex: 2; */ /* First column is wider */
+            width: 200px;
+            text-align: left; /* Left-align the content */
+        }
+
+        .column:nth-child(2) {
+            /*   flex: 1; */ /* Status column takes less width */
+            width: 200px;
+        }
+
+        .column:last-child {
+            /*  flex: 1.5;  */ /* Action column has slightly more width */
+            width: 100px;
+        }
+
+    hr {
+        margin: 0;
+        border: 1px solid #ddd;
+    }
+
+    /* .row:not(:last-child) {
+                margin-bottom: 10px;
+            } */
+
+    .startbtn {
+        color: white;
+        background-color: skyblue;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <!-- Heading Row -->
+    <div class="row Heading">
+        <div class="column">Line</div>
+        <div class="column">Status</div>
+        <div class="column">Action</div>
+    </div>
+    <hr />
+
+    <!-- Data Rows -->
+    <div class="row LineListId" data-value="1">
+        <div class="column">Front Flour</div>
+        <div class="column">
+            <div class="statusContainer"></div>
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Start</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="2">
+        <div class="column">Front End</div>
+        <div class="column">
+            <div class="statusContainer"></div>
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Start</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="3">
+        <div class="column">Rear Flour</div>
+        <div class="column">
+            <div class="statusContainer"></div>
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Start</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="4">
+        <div class="column">Body Side Right Hand</div>
+        <div class="column">
+            <div class="statusContainer"></div>
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Start</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="5">
+        <div class="column">Body Side Left Hand</div>
+        <div class="column">
+            <div class="statusContainer"></div>
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Start</button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+                 $(document).ready(function () {
+            $.ajax({
+                url: '/LineMaster/GetLines',
+                type: 'GET',
+                success: function (lines) {
+
+                    lines.forEach((line) => {
+                        const lineId = line.lineId; // Get the lineId
+                        const isActive = line.isactive; // Check active status
+
+                        // Find the corresponding row with data-value matching lineId
+                        const row = $(`.LineListId[data-value='${lineId}']`);
+
+                        if (row.length > 0) {
+                            const actionContainer = row.find('.StartStopBtn');
+                            const statusContainer = row.find('.statusContainer');
+
+                            // Create buttons
+                            const btnStopStart = $('<button>', {
+                                class: 'btn btn-primary',
+                                text: isActive ? 'Stop' : 'Start', // Set initial text
+                                css: {
+
+                                            backgroundColor: 'skyblue', // Set initial color
+                                    color: 'white',
+                                    width:'80px',
+                                },
+                                click: function () {
+                                    // Toggle the isActive value based on the current state
+                                    const newStatus = !line.isactive; // Toggle the status
+                                    line.isactive = newStatus; // Update the line object
+
+                                    // Send the updated status to the server via POST
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                                url: "/LineMaster/UpdateStatus", // Server endpoint for updating the status
+                                        data: {
+                                            "LineId": lineId,      // Sending LineId
+                                            "Isactive": newStatus  // Sending the updated status
+                                        },
+                                        success: function (data) {
+                                             const lineName = row.find('.column:first-child').text();
+
+
+                                            // Update button text and color based on the new status
+                                            btnStopStart.text(newStatus ? 'Stop' : 'Start');
+                                                    btnStopStart.css('backgroundColor', 'skyblue');
+
+                                            // Update the statusContainer button as well
+                                            statusContainer.empty();
+                                            const Statusbtn = $('<button>', {
+                                                class: 'statusbutton',
+                                                text: newStatus ? 'Start' : 'Stop',
+                                                css: {
+                                                    backgroundColor: newStatus ? 'green' : 'red',
+                                                    color: 'white',
+                                                },
+                                                disabled: true,
+                                            });
+                                            statusContainer.append(Statusbtn);
+                                        },
+                                        error: function (error) {
+                                            alert(`Failed to update status for Line ID ${lineId}`);
+                                            console.error(error);
+                                        }
+                                    });
+                                },
+                            });
+
+                            const Statusbtn = $('<button>', {
+                                text: isActive ? 'Start' : 'Stop',
+                                class: 'statusbutton',
+                                disabled: true,
+                                css: {
+                                    backgroundColor: isActive ? 'green' : 'red',
+                                    color: 'white',
+                                },
+                            });
+
+                            // Append the buttons to the respective containers
+                            actionContainer.empty().append(btnStopStart);
+                            statusContainer.empty().append(Statusbtn);
+                        } else {
+                            console.warn(`No row found for Line ID: ${lineId}`);
+                        }
+                    });
+                },
+                error: function () {
+                    alert('Failed to fetch lines.');
+                }
+            });
+        });
+
+    </script>
+
+    @*   OLD Code *@
+    <script type="text/javascript">
+        @*
+    $(document).ready(function () {
+    $("#LineListId").change(function () {
+
+    $("#error-message").hide();
+    $('#Lot-error').hide();
+    SelectedlineId = $(this).val();
+    if (SelectedlineId !== "0") {
+
+
+    $.ajax({
+    url: '/LineMaster/GetLine',
+    type: 'GET',
+    data: { "LineId": SelectedlineId },
+    success: function (Line) {
+
+    $('#LOTinput').val(Line.lOT_Details.lot);
+
+
+
+    var Statusbtn = $('<button>', {
+    text: 'Start',
+    class: 'statusbutton',
+    disabled: true
+    //click: function () {
+
+    //}
+    });
+
+    var btnStopStart = $('<button>', {
+    text: 'Stop',
+    class: 'startbtn',
+    click: function (event) {
+
+
+
+    var newlineid = $('#LineListId').val();
+    var newLOTValue = $('#LOTinput').val();
+    if (Line.isactive === true) {
+    var newisactive = false;
+    }
+    else {
+    var newisactive = true;
+    }
+
+    if (newlineid !== "0" && newLOTValue !== "") {
+
+    $.ajax({
+    type: "POST",
+    dataType: "json",
+    data: {
+    "LineId": newlineid,
+    "LOT": newLOTValue,
+    "Isactive": newisactive
+    },
+    url: "/LineMaster/UpdateLOT",
+    success: function (data) {
+    if (data.status == "LineUpdated") {
+
+    if (newisactive === true) {
+    alert($('#LineListId option:selected').text()+ ' Line Start ');
+    }
+    else {
+    alert($('#LineListId option:selected').text() + ' Line Stop ');
+    }
+    }
+    },
+    error: function (data) {
+    if (data.status == "Error") {
+    alert("Line Not Updated")
+    }
+    console.log(error);
+    }
+
+    });
+    }
+    else if (newlineid === "0" && newLOTValue === "") {
+    $("#error-message").show();
+    $('#Lot-error').show();
+    event.preventDefault();
+    }
+    else if (newlineid === "0") {
+
+    $("#error-message").show();
+    event.preventDefault();
+    $('#StartStopBtn').prop('disabled', false);
+    return;
+    }
+    else if (newLOTValue === "") {
+
+    $('#Lot-error').show();
+    event.preventDefault();
+    }
+
+    else {
+    $("#error-message").hide();
+    $('#Lot-error').hide();
+    }
+    }
+    });
+
+
+    if (Line.isactive === true) {
+    $('#StartStopBtn').empty().append(btnStopStart);
+    btnStopStart.text("Stop");
+    //$('#btnStop').show();
+    //$('#btnStart').hide();
+    $('#statusContainer').empty().append(Statusbtn);
+    Statusbtn.css("background-color", "green");
+    Statusbtn.text("Start");
+
+    //$('#statusContainer').show();
+    //$('#btnstatus').show();
+    //$('#statusValue').text("Start");
+    $('#LOTinput').prop('readonly', true);
+
+    }
+    else if (Line.isactive === false) {
+
+    $('#StartStopBtn').empty().append(btnStopStart);
+
+    btnStopStart.text("Start");
+    //$('#btnStart').show();
+    //$('#btnStop').hide();
+    $('#statusContainer').empty().append(Statusbtn);
+    Statusbtn.css("background-color", "red");
+    Statusbtn.text("Stop");
+
+    //$('#statusContainer').show();
+    //$('#statusValue').text("Stop");
+    $('#LOTinput').prop('readonly', false);
+    }
+    else {
+    $('#StartStopBtn').empty();
+    }
+
+
+
+
+
+
+
+
+
+    },
+    error: function () {
+    console.log(error);
+    }
+
+
+    });
+    }
+    else {
+    $("#error-message").show();
+    // $('#errormsg').text("Please Select Line");
+    }
+    });
+
+    }); *@
+    </script>
+
+}

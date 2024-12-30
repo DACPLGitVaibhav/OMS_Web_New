@@ -1,0 +1,692 @@
+﻿
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Line Chart Basic</div>
+            <div id="chart1" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header"> Line with Data Labels</div>
+            <div id="chart2" class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Area chart Basic</div>
+            <div id="chart3" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Column Charts </div>
+            <div id="chart4" class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Column with Data Labels</div>
+            <div id="chart5" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Bar Basic</div>
+            <div id="chart6" class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Grouped Bar</div>
+            <div id="chart7" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Stacked Bar</div>
+            <div id="chart8" class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Simple Pie</div>
+            <div id="chart9" class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-light">
+            <div class="card-header">Simple Donut</div>
+            <div id="chart10" class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //setInterval(function () {
+            //    LoadData();
+            //},5000 )
+            LoadData();
+            LoadData2();
+
+            // #region chart3
+
+            var options = {
+                series: [{
+                    name: "STOCK ABC",
+                    data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                }],
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+
+                title: {
+                    text: 'Fundamental Analysis of Stocks',
+                    align: 'left'
+                },
+                subtitle: {
+                    text: 'Price Movements',
+                    align: 'left'
+                },
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                xaxis: {
+                    type: 'month',
+                },
+                yaxis: {
+                    opposite: true
+                },
+                legend: {
+                    horizontalAlign: 'left'
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart3"), options);
+            chart.render();
+            //#endregion
+
+            // #region chart4
+            var options = {
+                series: [{
+                    name: 'Net Profit',
+                    data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+                }, {
+                    name: 'Revenue',
+                    data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+                }, {
+                    name: 'Free Cash Flow',
+                    data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                },
+                yaxis: {
+                    title: {
+                        text: '$ (thousands)'
+                    }
+                },
+                fill: {
+                    opacity: 1
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return "$ " + val + " thousands"
+                        }
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart4"), options);
+            chart.render();
+            //#endregion
+
+            // #region chart5
+            var options = {
+                series: [{
+                    name: 'Inflation',
+                    data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
+                }],
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 10,
+                        dataLabels: {
+                            position: 'top', // top, center, bottom
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%";
+                    },
+                    offsetY: -20,
+                    style: {
+                        fontSize: '12px',
+                        colors: ["#304758"]
+                    }
+                },
+
+                xaxis: {
+                    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    position: 'top',
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    crosshairs: {
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                colorFrom: '#D8E3F0',
+                                colorTo: '#BED1E6',
+                                stops: [0, 100],
+                                opacityFrom: 0.4,
+                                opacityTo: 0.5,
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return val + "%";
+                        }
+                    }
+
+                },
+                title: {
+                    text: 'Monthly Inflation in Argentina, 2002',
+                    floating: true,
+                    offsetY: 330,
+                    align: 'center',
+                    style: {
+                        color: '#444'
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart5"), options);
+            chart.render();
+            //#endregion
+
+            // #region chart6
+            var options = {
+                series: [{
+                    data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
+                        'United States', 'China', 'Germany'
+                    ],
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart6"), options);
+            chart.render();
+            //#endregion
+
+            // #region chart7
+            var options = {
+                series: [{
+                    data: [44, 55, 41, 64, 22, 43, 21]
+                }, {
+                    data: [53, 32, 33, 52, 13, 44, 32]
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 430
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        dataLabels: {
+                            position: 'top',
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    offsetX: -6,
+                    style: {
+                        fontSize: '12px',
+                        colors: ['#fff']
+                    }
+                },
+                stroke: {
+                    show: true,
+                    width: 1,
+                    colors: ['#fff']
+                },
+                tooltip: {
+                    shared: true,
+                    intersect: false
+                },
+                xaxis: {
+                    categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
+                },
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart7"), options);
+            chart.render();
+            //#endregion
+
+            // #region chart8
+            var options = {
+                series: [{
+                    name: 'Marine Sprite',
+                    data: [44, 55, 41, 37, 22, 43, 21]
+                }, {
+                    name: 'Striking Calf',
+                    data: [53, 32, 33, 52, 13, 43, 32]
+                }, {
+                    name: 'Tank Picture',
+                    data: [12, 17, 11, 9, 15, 11, 20]
+                }, {
+                    name: 'Bucket Slope',
+                    data: [9, 7, 5, 8, 6, 9, 4]
+                }, {
+                    name: 'Reborn Kid',
+                    data: [25, 12, 19, 32, 25, 24, 10]
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 427,
+                    stacked: true,
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        dataLabels: {
+                            total: {
+                                enabled: true,
+                                offsetX: 0,
+                                style: {
+                                    fontSize: '13px',
+                                    fontWeight: 900
+                                }
+                            }
+                        }
+                    },
+                },
+                stroke: {
+                    width: 1,
+                    colors: ['#fff']
+                },
+                title: {
+                    text: 'Fiction Books Sales'
+                },
+                xaxis: {
+                    categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+                    labels: {
+                        formatter: function (val) {
+                            return val + "K"
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: undefined
+                    },
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + "K"
+                        }
+                    }
+                },
+                fill: {
+                    opacity: 1
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'left',
+                    offsetX: 40
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart8"), options);
+            chart.render();
+            //#endregion
+
+            // #region chart9
+            var options = {
+                series: [44, 55, 13, 43, 22], //e.g (num / sum of total digit) * 100=%
+                chart: {
+                    width: 550,
+                    type: 'pie',
+                },
+                labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart9"), options);
+            chart.render();
+            //#endregion
+
+              // #region chart10
+            var options = {
+                series: [44, 55, 41, 17, 15],
+                chart: {
+                    type: 'donut',
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart10"), options);
+            chart.render();
+            //#endregion
+
+        });
+
+
+
+
+
+        function LoadData() {
+            $("#chart1").empty();
+            $.ajax({
+                url: '/Analytic/jsonBasicLine',
+                type: 'GET',
+                dataType: 'JSON',
+                data: {
+                    //"fdt": sessionStorage.getItem("fdt").toString(), //forMatDate(sessionStorage.getItem("fdt").toString()), //forMatDate($('#txtFromDate').val().toString()),
+                    //"tdt": sessionStorage.getItem("tdt").toString()  // forMatDate(sessionStorage.getItem("tdt").toString())  //forMatDate($('#txtToDate').val().toString())
+                },
+                success: function (result) {
+                    debugger;
+                    var months = [];
+                    var TotalUnits = [];
+
+                    if (result.length > 0) {
+
+
+                        for (var i = 0; i < result.length; i++) {
+
+                            months.push(result[i].month);
+                            TotalUnits.push(result[i].totalUnit);
+                            //AP.push(Number(result[i].average).toFixed(3));
+
+                            //Meters.push(result[i].eM_Name);
+                        }
+
+                        // #region chart1
+                        var options = {
+                            series: [{
+                                name: "Total units",
+                                //data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                                data: TotalUnits
+                            }],
+                            chart: {
+                                height: 350,
+                                type: 'line',
+                                zoom: {
+                                    enabled: false
+                                }
+                            },
+                            dataLabels: {
+                                enabled: false
+                            },
+                            stroke: {
+                                curve: 'straight'
+                            },
+                            title: {
+                                text: 'Product Trends by Month',
+                                align: 'left'
+                            },
+                            grid: {
+                                row: {
+                                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                    opacity: 0.5
+                                },
+                            },
+                            xaxis: {
+                                //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                                categories: months,
+                            }
+                        };
+
+                        var chart = new ApexCharts(document.querySelector("#chart1"), options);
+                        chart.render();
+                        //#endregion
+
+
+
+
+                    }
+                    else {
+                        debugger;
+                        $("#chart1").html('<div class="col-lg-12 image-container"><center><img  style= "padding-top: 10px;" src="/Image/no_data_found.jpg" alt="No Data Found" /></center></div>');
+                    }
+
+                },
+                error: function () {
+
+                }
+            });
+        }
+
+
+        function LoadData2() {
+
+            $("#chart2").empty();
+            $.ajax({
+                url: '/Analytic/jsonLinewithDataLabels',
+                type: 'GET',
+                dataType: 'JSON',
+                data: {
+                    //"fdt": sessionStorage.getItem("fdt").toString(), //forMatDate(sessionStorage.getItem("fdt").toString()), //forMatDate($('#txtFromDate').val().toString()),
+                    //"tdt": sessionStorage.getItem("tdt").toString()  // forMatDate(sessionStorage.getItem("tdt").toString())  //forMatDate($('#txtToDate').val().toString())
+                },
+                success: function (result) {
+                    debugger;
+                    var months = [];
+                    var currUnits = [];
+                    var PrevUnits = [];
+
+                    if (result.length > 0) {
+
+
+                        for (var i = 0; i < result.length; i++) {
+
+                            months.push(result[i].month);
+                            currUnits.push(result[i].currUnit);
+                            PrevUnits.push(result[i].prevUnit);
+                            //AP.push(Number(result[i].average).toFixed(3));
+
+                            //Meters.push(result[i].eM_Name);
+                        }
+
+
+                        // #region chart2
+                        var options = {
+                            series: [
+                                {
+                                    name: "Current units",
+                                    data: currUnits
+                                }
+                                , {
+                                    name: "Prev units",
+                                    data: PrevUnits
+                                }
+                            ],
+                            chart: {
+                                height: 350,
+                                type: 'line',
+                                dropShadow: {
+                                    enabled: true,
+                                    color: '#000',
+                                    top: 18,
+                                    left: 7,
+                                    blur: 10,
+                                    opacity: 0.2
+                                },
+                                toolbar: {
+                                    show: false
+                                }
+                            },
+                            colors: ['#77B6EA', '#545454'],
+                            dataLabels: {
+                                enabled: true,
+                            },
+                            stroke: {
+                                curve: 'smooth'
+                            },
+                            title: {
+                                text: 'Average High & Low Temperature',
+                                align: 'left'
+                            },
+                            grid: {
+                                borderColor: '#e7e7e7',
+                                row: {
+                                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                    opacity: 0.5
+                                },
+                            },
+                            markers: {
+                                size: 1
+                            },
+                            xaxis: {
+                                //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                                categories: months,
+                                title: {
+                                    text: 'Month'
+                                }
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'Units'
+                                }
+                                //,
+                                //min: 5,
+                                //max: 100
+                            },
+                            legend: {
+                                position: 'top',
+                                horizontalAlign: 'right',
+                                floating: true,
+                                offsetY: -25,
+                                offsetX: -5
+                            }
+                        };
+
+                        var chart = new ApexCharts(document.querySelector("#chart2"), options);
+                        chart.render();
+                        //#endregion
+                    }
+                    else {
+                        debugger;
+                        $("#chart2").html('<div class="col-lg-12 image-container"><center><img  style= "padding-top: 10px;" src="/Image/no_data_found.jpg" alt="No Data Found" /></center></div>');
+                    }
+
+                },
+                error: function () {
+
+                }
+            });
+        }
+    </script>
+}

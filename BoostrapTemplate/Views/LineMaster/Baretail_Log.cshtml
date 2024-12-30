@@ -1,0 +1,153 @@
+﻿@model IEnumerable<OMS_Web.ViewModels.Lines.LOTViewModel>
+@{
+    //Layout = "~/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Baretail Log";
+
+}
+
+
+<style>
+    /* CSS for styling the page buttons */
+    .pagination {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .pagination a.current-page {
+                background-color: #337ab7;
+                color: #fff;
+            }
+
+            .pagination a:hover {
+                background-color: #337ab7;
+                color: #fff;
+            }
+
+    .nav-tabs .nav-link.active {
+        background-color: #00BCD4;
+    }
+</style>
+
+
+<ul class="nav nav-tabs" style="margin-bottom: 15px; margin-top: 10px; font-size:large;">
+    <li class="nav-item">
+        <a class="nav-link aaa active" aria-current="page" href="#" data-id="1">Front Floor</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link aaa" href="#" data-id="2">Front End</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link aaa" href="#" data-id="3">Rear Floor</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link aaa" href="#" data-id="4">Body Side Right Hand</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link aaa" href="#" data-id="5">Body Side Left Hand</a>
+    </li>
+</ul>
+
+@*<div>
+        <label for="rowsPerPage">Show  :</label>
+        <select id="rowsPerPage">
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="500">500</option>
+        </select>
+    </div>*@
+
+<div>
+    <table class="display compact" id="Table">
+        <thead>
+            <tr>
+                <th>
+                    Sr.No
+                </th>
+                <th>
+                    Line Name
+                </th>
+                <th>
+                    Seq No
+                </th>
+                <th>
+                   Item Id
+                </th>
+                <th>
+                    BIW No
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                   Time Stamp
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr class="data-row">
+
+                <td>@i</td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.LineName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SeqNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Itemid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Biwno)
+                </td>
+                <td>
+                    <button class="Chenge" data-id="@item.StatusID" style="color: white; border: none; width: 110px;">@item.StatusID</button>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStamp)
+                </td>
+
+
+            </tr>
+ i++;
+            }
+        </tbody>
+    </table>
+</div>
+
+@*<div id="paginationContainer" style="text-align:right;display:flex;justify-content:flex-end;margin-bottom:5px; ">
+        <ul id="pageButtons" class="pagination">
+        </ul>
+    </div>*@
+
+
+
+
+
+
+@section Scripts{
+
+
+
+    <script src="~/ProjectJsFile/BaretailLog.min.js"></script>
+}

@@ -1,0 +1,98 @@
+﻿@model OMS_Template.ViewModels.OPCUA.OPCUADetails
+@{
+    ViewData["Title"] = "Connection Status";
+}
+<style>
+
+    .dot-PLC-Red {
+        height: 25px;
+        width: 25px;
+        background-color: red;
+        border-radius: 50%;
+        display: inline-block;
+        border: 3.5px solid white;
+        box-shadow: 0px 0px 5px 2px red;
+    }
+
+    .dot-PLC-Green {
+        height: 25px;
+        width: 25px;
+        background-color: green;
+        border-radius: 50%;
+        display: inline-block;
+        border: 3.5px solid white;
+        box-shadow: 0px 0px 5px 2px green;
+    }
+
+</style>
+
+<div>
+    <h3>Master PLC Status:<span id="spn1" style="position:absolute;margin-top: 6px;margin-left: 6px;" title=""></span>   </h3>
+    <div>
+        <table class="table caption-top">
+            <caption>LOT Details Master PLC v/s OMS</caption>
+            <thead style="text-align:center;">
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Line Name</th>
+                    <th>Master PLC(LOT)</th>
+                    <th>OMS(LOT)</th>
+                </tr>
+            </thead>
+            <tbody id="Table_Data" style="text-align:center;">
+                <tr><td>1</td><td>FF</td><td id="FF_Mlot">0</td><td id="FF_OMSlot">0</td> </tr>
+                <tr><td>2</td><td>FE</td><td id="FE_Mlot">0</td><td id="FE_OMSlot">0</td> </tr>
+                <tr><td>3</td><td>RF</td><td id="RF_Mlot">0</td><td id="RF_OMSlot">0</td> </tr>
+                <tr><td>4</td><td>BSRH</td><td id="BSRH_Mlot">0</td><td id="BSRH_OMSlot">0</td> </tr>
+                <tr><td>5</td><td>BSLH</td><td id="BSLH_Mlot">0</td><td id="BSLH_OMSlot">0</td> </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            
+            $("#spn1").html('Connecting please wait...').css("color", "red");
+            setInterval(ShowEmpData, 5000);            
+        });
+        function ShowEmpData() {
+
+            $.ajax({
+                url: "/opcua/status",
+                type: 'get',
+                dataType: 'JSON',
+                contentType: 'application/json;charset=utf-8',
+                success: function (result, status, xhr) {
+                    // debugger;
+                    $("#spn1").empty();
+                    $('#spn1').removeClass();
+                    result.isconnect == true ? $('#spn1').addClass('dot-PLC-Green') : $('#spn1').addClass('dot-PLC-Red');
+                    $('#FF_Mlot').html(result.mplC_FF);
+                    $('#FF_OMSlot').html(result.omS_FF);
+
+                    $('#FE_Mlot').html(result.mplC_FE);
+                    $('#FE_OMSlot').html(result.omS_FE);
+
+                    $('#RF_Mlot').html(result.mplC_RF);
+                    $('#RF_OMSlot').html(result.omS_RF);
+
+                    $('#BSRH_Mlot').html(result.mplC_BSRH);
+                    $('#BSRH_OMSlot').html(result.omS_BSRH);
+
+                    $('#BSLH_Mlot').html(result.mplC_BSLH);
+                    $('#BSLH_OMSlot').html(result.omS_BSLH);
+
+                },
+                error: function () {
+
+                }
+
+            });
+        }
+
+    </script>
+
+}
