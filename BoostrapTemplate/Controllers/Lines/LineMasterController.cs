@@ -140,7 +140,7 @@ namespace OMS_Web.Controllers.Lines
             //Baretail_Log_Date = Baretail_Log_Date.Distinct().ToList();
             return Json(Baretail_Log_Date);
         }
-        //Vitthal  30/12/2024  
+        //Vitthal  30/12/2024 1:00:00
 
         public IActionResult GetLines()
         {
