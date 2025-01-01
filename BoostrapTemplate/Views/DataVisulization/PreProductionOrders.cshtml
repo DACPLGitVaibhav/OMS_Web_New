@@ -16,12 +16,22 @@
 @*<h2 style="color:skyblue">Preproduction Orders</h2>*@
 
 @* New Code Added From Vaibhav *@
-<div class="row">
 
-    <div class="col-3">
+@if (TempData["PPseqNotFound"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>&nbsp; &nbsp;  @TempData["PPseqNotFound"]
+    </div>
+
+}
+
+
+<div class="row" id="divFilter">
+
+    <div class="col-3" style="align-self: center;">
         <div class="row">
-            <div class="col-5" style="    align-content: center;">
-                <label style="color:#337ab7;display: flex;align-items: center;" class="form-label">Select Vcode</label>
+            <div class="col-5" >
+                <label style="color:#337ab7;" class="form-label">Select Vcode</label>
             </div>
             <div class="col-7">
                 <form method="get">
@@ -142,5 +152,5 @@
     <script src="~/Datatable/js/jquery.datatables.js"></script>
     <script src="~/Datatable/js/dataTables.select.js"></script>
     <script src="~/Datatable/js/dataTables.select.min.js"></script>
-    <script src="~/ProjectJsFile/PreProduction.min.js"></script>
+    <script src="~/ProjectJsFile/PreProduction.js"></script>
 }

@@ -23,6 +23,10 @@
                 max-height: 56px !important;
                 margin-right: 6px;
             }
+
+        #AnchorModel {
+            cursor: pointer;
+        }
     </style>
 
     <meta charset="utf-8">
@@ -247,6 +251,13 @@
                     <li>
                         <a asp-action="index" asp-controller="DataVisulization">
                             <i class="bi bi-circle"></i><span>Data Visualization</span>
+                        </a>
+
+                    </li>
+
+                    <li>
+                        <a id="AnchorModel" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/DataVisulization/AutoManual','Auto/Manual Configuration.','gl')">
+                            <i class="bi bi-circle"></i><span>Auto/Manual Confg</span>
                         </a>
 
                     </li>

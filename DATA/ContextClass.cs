@@ -12,6 +12,15 @@ namespace DATA
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<AutoManualConfg>(
+                    eb =>
+                    {
+                        eb.HasNoKey();
+                    });
+        }
         public DbSet<Users> users { get; set; }
         public DbSet<LightBill> lightBills { get; set; }
         public DbSet<CustDetails> CustDetails { get; set; }
@@ -22,5 +31,6 @@ namespace DATA
         public DbSet<PreProductionDetails> PreOrders { get; set; }
         public DbSet<Baretail_Log> tbl_Baretail_Log { get; set; }
         public DbSet<LOT_details> lOT_Details { get; set; }
+        public DbSet<AutoManualConfg> autoManualConfgs { get; set; }
     }
 }

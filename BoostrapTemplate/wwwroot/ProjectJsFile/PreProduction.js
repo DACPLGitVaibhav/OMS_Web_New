@@ -1,6 +1,10 @@
-﻿
+﻿var reloadInterval;
+var totalData = [];
 $(document).ready(function () {
+   
+    startReload()
     
+
     $('#Table').DataTable({
         dom: 'Blfrtip',
         "ordering": false,
@@ -302,6 +306,114 @@ $(document).ready(function () {
    
 
 });
+
+function startReload() {
+
+    reloadTable();
+    reloadInterval = setInterval(function () {
+        reloadTable();
+    }, 5000);
+}
+function reloadTable() {
+    $.ajax({
+        url: '/DataVisulization/CheckIsAutoMode',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+
+            if (data == true) {
+                $('#divFilter').hide();
+
+                
+
+
+                $.ajax({
+                    url: '/DataVisulization/ReloadPreProOrder',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (dataToDisplay) {
+                        debugger;
+
+                        totalData = dataToDisplay
+                        //renderTable();
+
+                        const tableBody = $('#Table tbody');
+                        tableBody.empty();
+
+                        var dataToDisplay = totalData
+                        dataToDisplay.forEach(function (item) {
+
+                            tableBody.append("<tr><td></td>" +
+                                "<td id='PPSeqNo'>" + item.ppSeqNo + "</td>" +
+                                "<td>" + item.itemId + "</td>" +
+                                "<td>" + item.biwNo + "</td>" +
+                                "<td>" + item.vcode + "</td>" +
+                                "<td>" + item.modelCode + "</td>" +
+                                "<td>" + item.fileName + "</td>" +
+                                "<td>" + forDateTime(item.dateIimport) + "</td>" +
+
+                                "</tr>");
+
+                            //if (item.ppSeqNo > 20) {
+                            //    tableBody.append("<tr style='background-color:red;'><td></td>" +
+                            //        "<td id='PPSeqNo'>" + item.ppSeqNo + "</td>" +
+                            //        "<td>" + item.itemId + "</td>" +
+                            //        "<td>" + item.biwNo + "</td>" +
+                            //        "<td>" + item.vcode + "</td>" +
+                            //        "<td>" + item.modelCode + "</td>" +
+                            //        "<td>" + item.fileName + "</td>" +
+                            //        "<td>" + forDateTime(item.dateIimport) + "</td>" +
+
+                            //        "</tr>");
+                            //} else {
+                            //    tableBody.append("<tr><td></td>" +
+                            //        "<td id='PPSeqNo'>" + item.ppSeqNo + "</td>" +
+                            //        "<td>" + item.itemId + "</td>" +
+                            //        "<td>" + item.biwNo + "</td>" +
+                            //        "<td>" + item.vcode + "</td>" +
+                            //        "<td>" + item.modelCode + "</td>" +
+                            //        "<td>" + item.fileName + "</td>" +
+                            //        "<td>" + forDateTime(item.dateIimport) + "</td>" +
+
+                            //        "</tr>");
+                            //}
+
+                          
+
+                        });
+                    },
+
+                    error: function (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+
+
+            } else {
+                $('#divFilter').show();
+                clearInterval(reloadInterval);
+            }
+        },
+
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
+function forDateTime(date) {
+    var fromorTodate;
+    var d = new Date(date.split("/").reverse().join("-"));
+    var dd = `${(d.getDate())}`.padStart(2, '0');
+    var mm = `${(d.getMonth() + 1)}`.padStart(2, '0');
+    var yy = d.getFullYear();
+    var h = d.getHours();
+    var m = d.getMinutes();
+    var s = d.getSeconds();
+    fromorTodate = dd + "/" + mm + "/" + yy + " " + h + ":" + m + ":" + s;
+
+    return fromorTodate;
+}
 function preback() {
     function preback() { window.history.forward(); }
     setTimeout("preback()", 0);
