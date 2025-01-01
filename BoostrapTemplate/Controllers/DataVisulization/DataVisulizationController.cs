@@ -11,6 +11,8 @@ using DATA.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using OMS_Template.ViewModels.AutoManual;
+using System.Xml.Linq;
 
 namespace OMS_Web.Controllers.DataVisulization
 {
@@ -233,7 +235,7 @@ namespace OMS_Web.Controllers.DataVisulization
             return Json(status);
 
         }
-      
+
 
         public IActionResult GetOrderStatus(int ErpSeqNo)
         {
@@ -511,6 +513,93 @@ namespace OMS_Web.Controllers.DataVisulization
         public IActionResult Welcome()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult AutoManual()
+        {
+            AutoManualViewModel model = new AutoManualViewModel();
+
+            var data = _context.autoManualConfgs.ToList();
+            if (data.Count > 0)
+            {
+                model.PPSeqNo = data[0].PPSeqNo;
+                model.IsAutoMode = data[0].IsAutoMode;
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult AutoManual(AutoManualViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model.IsAutoMode == true)
+                    {
+                        int ppseqno = _context.PreOrders.Where(x => x.PPSeqNo == model.PPSeqNo && x.IsProduction == false).Select(x => x.PPSeqNo).Count();
+                        if (ppseqno != 0)
+                        {
+                            _context.Database.ExecuteSqlRaw
+                                        (
+                                         "EXEC SP_AutoManualConfg @PPSeqNo, @IsAutoMode",
+                                         new SqlParameter("@PPSeqNo", model.PPSeqNo),
+                                         new SqlParameter("@IsAutoMode", model.IsAutoMode)
+                                        );
+                            TempData["PPseqNotFound"] = $"Auto mode is on from PPseqNo: {model.PPSeqNo}.";
+                        }
+                        else
+                        {
+                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} Is not Found for Auto mode.";
+                        }
+                    }
+                    else
+                    {
+                        int i = 0;
+                        _context.Database.ExecuteSqlRaw
+                                       (
+                                        "EXEC SP_AutoManualConfg @PPSeqNo, @IsAutoMode",
+                                        new SqlParameter("@PPSeqNo", i),
+                                        new SqlParameter("@IsAutoMode", model.IsAutoMode)
+                                       );
+
+                        TempData["PPseqNotFound"] = $"Auto mode is off.";
+                    }
+
+                    return RedirectToAction("PreProductionOrders", "DataVisulization");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View();
+        }
+
+        public JsonResult CheckIsAutoMode()
+        {
+            try
+            {
+                var result = _context.autoManualConfgs.Where(x => x.IsAutoMode == true).FirstOrDefault();
+                if (result != null)
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(false);
+            }
+            
+        }
+        public JsonResult ReloadPreProOrder()
+        {
+            return Json(_orders.GetPreOrders());
         }
     }
 }
