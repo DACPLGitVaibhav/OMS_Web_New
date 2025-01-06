@@ -25,11 +25,11 @@ namespace Services.Services
 
             List<LineMaster> linelist = new List<LineMaster>();
             linelist =_context.linemasters.ToList();
-            linelist.Insert(0, new LineMaster()
-            {
-                LineId = 0,
-                LineName = "--Select Line--" 
-            });
+            //linelist.Insert(0, new LineMaster()
+            //{
+            //    LineId = 0,
+            //    LineName = "--Select Line--" 
+            //});
            return linelist; 
         }
 
