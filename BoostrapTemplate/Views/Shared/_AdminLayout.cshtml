@@ -483,23 +483,23 @@
                               dataType: 'json',
                               success: function (data) {
                                         $('#alertLineStatus').empty();
-                                    if(data[1].isactive==false){
+                                    if(data[0].isactive==false){
                                         $('#alertLineStatus').append( '<div class="float-right pr-5 col-1" style="    margin-left: 1px;"><span id="l1" data-toggle="tooltip" title="FF" class="dot-PLC-Red" style="color:white;text-align:center;"><b>FF</b></span></div>');
 
                                  }
-                                 if(data[2].isactive==false){
+                                 if(data[1].isactive==false){
                                       $('#alertLineStatus').append( '<div class="float-right pr-5 col-1" style="    margin-left: 20px;"><span id="l2" data-toggle="tooltip" title="FE" class="dot-PLC-Red" style="color:white;text-align:center;"><b>FE</b></span></div>');
 
                                  }
-                                 if(data[3].isactive==false){
+                                 if(data[2].isactive==false){
                                     $('#alertLineStatus').append( '<div class="float-right pr-5 col-1" style="    margin-left: 20px;"><span id="l3" data-toggle="tooltip" title="RF" class="dot-PLC-Red" style="color:white;text-align:center;"><b>RF</b></span></div>');
 
                                  }
-                                 if(data[4].isactive==false){
+                                 if(data[3].isactive==false){
                                       $('#alertLineStatus').append( '<div class="float-right pr-5 col-1" style="    margin-left: 20px;"><span id="l4" data-toggle="tooltip" title="BSRH" class="dot-PLC-Red" style="color:white;text-align:center;"><b>RH</b></span></div>');
 
                                  }
-                                  if(data[5].isactive==false){
+                                  if(data[4].isactive==false){
                                       $('#alertLineStatus').append( '<div class="float-right pr-5 col-1" style="    margin-left: 20px;"><span id="l5" data-toggle="tooltip" title="BSLH" class="dot-PLC-Red" style="color:white;text-align:center;"><b>LH</b></span></div>');
                                  }
                               }
