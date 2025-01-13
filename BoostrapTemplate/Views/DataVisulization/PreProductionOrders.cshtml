@@ -16,7 +16,17 @@
 @*<h2 style="color:skyblue">Preproduction Orders</h2>*@
 
 @* New Code Added From Vaibhav *@
-
+<style>
+    .breakpoint-ppseqno {
+        font-size: 1.5rem;
+        color: #0056b3;
+        font-weight: bold;
+        background-color: #e8f0fe;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #0056b3;
+    }
+</style>
 @if (TempData["PPseqNotFound"] != null)
 {
     <div class="alert alert-danger" role="alert">
@@ -24,13 +34,19 @@
     </div>
 
 }
-
+@if (TempData["PPSeqNo"] != null)
+{
+<div class="alert alert-info" role="alert" style="margin-bottom: 20px;">
+    <strong>Auto Mode Breakpoint PPSeqNo:</strong>
+    <span class="breakpoint-ppseqno">@TempData["PPSeqNo"]</span>
+</div>
+}
 
 <div class="row" id="divFilter">
 
     <div class="col-3" style="align-self: center;">
         <div class="row">
-            <div class="col-5" >
+            <div class="col-5">
                 <label style="color:#337ab7;" class="form-label">Select Vcode</label>
             </div>
             <div class="col-7">
@@ -63,8 +79,8 @@
 </div>
 @* <br />
 
-<div class="row" style="margin-bottom:20px;display:flex">
-</div> *@
+    <div class="row" style="margin-bottom:20px;display:flex">
+    </div> *@
 
 <style>
     th {
