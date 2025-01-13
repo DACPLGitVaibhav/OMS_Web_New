@@ -202,7 +202,7 @@ $(document).ready(function () {
                                     window.location.href = '/DataVisulization/Index';
                                 }
                                 if (data.status === "error") {
-                                    alert('Refresh Page ');
+                                    alert('Error Refresh Page ');
                                     location.reload();
                                 }
                                 if (data.status === "Unauthorized") {

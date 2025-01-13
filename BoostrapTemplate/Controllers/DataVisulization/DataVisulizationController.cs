@@ -45,8 +45,20 @@ namespace OMS_Web.Controllers.DataVisulization
                 var variantCodes = _orders.GetVariantCodes();
                 ViewBag.V_list = new SelectList(variantCodes, "Erp_Vcode", "Erp_Vcode");
 
-
+                var data = _context.autoManualConfgs.ToList();
+                
+                if (data != null)
+                {
+                    if (data[0].IsAutoMode==true)
+                    {
+                        TempData["PPSeqNo"] = data[0].PPSeqNo; //1234567789;
+                       
+                    }
+                    
+                }
                 ViewData["Heading"] = "Pre-Production Orders Plan";
+
+
                 return View(obj);
             }
             else
@@ -63,26 +75,38 @@ namespace OMS_Web.Controllers.DataVisulization
             {
                 if (User.Identity.Name == "Admin")
                 {
-                    if (customDataArray.Count != 0 || customDataArray != null)
+                    bool manual = _context.autoManualConfgs.Any(x => x.IsAutoMode == false);
+                    if (manual==true)
                     {
-                        customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
 
-                        foreach (var item in customDataArray)
+
+                        if (customDataArray.Count != 0 || customDataArray != null)
                         {
+                            customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
 
-                            _context.Database.ExecuteSqlRaw
-                              (
-                               "EXEC SP_InsertErpOrderDetails @ItemId, @BiwNo, @Vcode, @ModelCode, @PPSeqNo",
-                               new SqlParameter("@ItemId", item.ItemId),
-                               new SqlParameter("@BiwNo", item.BiwNo),
-                               new SqlParameter("@Vcode", item.Vcode),
-                               new SqlParameter("@ModelCode", item.ModelCode),
-                               new SqlParameter("@PPSeqNo", item.PPSeqNo)
-                              );
+                            foreach (var item in customDataArray)
+                            {
+
+                                _context.Database.ExecuteSqlRaw
+                                  (
+                                   "EXEC SP_InsertErpOrderDetails @ItemId, @BiwNo, @Vcode, @ModelCode, @PPSeqNo",
+                                   new SqlParameter("@ItemId", item.ItemId),
+                                   new SqlParameter("@BiwNo", item.BiwNo),
+                                   new SqlParameter("@Vcode", item.Vcode),
+                                   new SqlParameter("@ModelCode", item.ModelCode),
+                                   new SqlParameter("@PPSeqNo", item.PPSeqNo)
+                                  );
+
+                            }
+                            var result = new { status = "DataRecived" };
+                            return Json(result);
+                        }
+                        else
+                        {
+                            var result = new { status = "error" };
+                            return Json(result);
 
                         }
-                        var result = new { status = "DataRecived" };
-                        return Json(result);
                     }
                     else
                     {
@@ -90,6 +114,7 @@ namespace OMS_Web.Controllers.DataVisulization
                         return Json(result);
 
                     }
+
 
                 }
                 else
@@ -526,6 +551,7 @@ namespace OMS_Web.Controllers.DataVisulization
                 model.PPSeqNo = data[0].PPSeqNo;
                 model.IsAutoMode = data[0].IsAutoMode;
             }
+           
             return View(model);
         }
         [HttpPost]

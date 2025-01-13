@@ -2,7 +2,27 @@
 @{
     Layout = null;
 }
+<style>
+    /*/////#toggleSwitch*/
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 45px; /* Reduce gap between elements */
+    }
 
+    .form-check-label {
+        font-weight: bold;
+        font-size: 15px;
+        color: #333; /* Default color */
+        margin-left: -40px;
+    }
+
+    #toggleSwitch {
+        width: 50px; /* Adjust width of the toggle switch */
+        height: 25px; /* Adjust height of the toggle switch */
+        margin: 0 5px; /* Add small margin for proper spacing */
+    }
+</style>
 
 <form asp-action="AutoManual" enctype="multipart/form-data" class="row g-3">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -13,14 +33,21 @@
     </div>
 
     <div class="col-md-6" style="    display: inline-block;    align-self: flex-end;">
-        <div class="form-check">
+        @*<div class="form-check">
+            <input type="checkbox" checked data-toggle="toggle">
             <input class="form-check-input" type="checkbox" asp-for="IsAutoMode" id="flexCheckDefault">
             <label class="form-check-label" for="flexCheckDefault">
                 Auto/Manual
             </label>
+        </div>*@
+       
+        <div class="col-md-6 d-flex align-items-center">
+            <div class="form-check form-switch d-flex align-items-center justify-content-between w-100">
+                <label class="form-check-label" id="manualLabel" for="flexCheckDefault">Manual</label>
+                <input class="form-check-input" type="checkbox" asp-for="IsAutoMode" role="switch" id="flexCheckDefault">
+                <label class="form-check-label" id="autoLabel" for="flexCheckDefault">Auto</label>
+            </div>
         </div>
-
-
     </div>
     <div class="col-md-12 modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
