@@ -86,6 +86,35 @@ namespace OMS_Template.Controllers
             }                        
         }
 
-       
+        public async Task<IActionResult> LinemgmtDetails(int ID)
+        {
+          
+            if (ID == 1)
+            {
+                var MGMTDetails = await _opcUaClientService.ReadNodeLinemgmtFF();
+                return Json(MGMTDetails);
+            }
+            else if (ID == 2)
+            {
+                var MGMTDetails = await _opcUaClientService.ReadNodeLinemgmtFE();
+                return Json(MGMTDetails);
+            }
+            else if (ID == 3)
+            {
+                var MGMTDetails = await _opcUaClientService.ReadNodeLinemgmtRF();
+                return Json(MGMTDetails);
+            }
+            else if (ID == 4)
+            {
+                var MGMTDetails = await _opcUaClientService.ReadNodeLinemgmtBSRH();
+                return Json(MGMTDetails);
+            }
+            else if (ID == 5)
+            {
+                var MGMTDetails = await _opcUaClientService.ReadNodeLinemgmtBSLH();
+                return Json(MGMTDetails);
+            }
+            return Json("Error");
+        }
     }
 }
