@@ -83,7 +83,7 @@ $(document).ready(function () {
         SelectedRowCountToDisplay();
         
         if (table.rows('.selected').count() > 0) {
-            debugger;
+            //debugger;
             var selectedRows = table.rows('.selected').data(); // Get selected rows data
             selectedData = [];
             // Iterate through the selected rows and add them to the selectedData array
@@ -177,8 +177,8 @@ $(document).ready(function () {
             //}
 
             updateCustomDataArray();
-            console.log(selectedData);
-            console.log(customDataArray);
+           // console.log(selectedData);
+           // console.log(customDataArray);
         }
 
         if (selectedData.length > 0) {
@@ -275,7 +275,7 @@ $(document).ready(function () {
                     selectedData.push(index);
                 }
             });
-            console.log(selectedData);
+           // console.log(selectedData);
             updateCustomDataArray();
 
             if (selectedData.length === 0) {
@@ -332,7 +332,7 @@ function reloadTable() {
                     type: 'GET',
                     dataType: 'json',
                     success: function (dataToDisplay) {
-                        debugger;
+                       // debugger;
 
                         totalData = dataToDisplay
                         //renderTable();
@@ -384,7 +384,7 @@ function reloadTable() {
                     },
 
                     error: function (error) {
-                        console.error('Error fetching data:', error);
+                       // console.error('Error fetching data:', error);
                     }
                 });
 
@@ -396,7 +396,7 @@ function reloadTable() {
         },
 
         error: function (error) {
-            console.error('Error fetching data:', error);
+           // console.error('Error fetching data:', error);
         }
     });
 }

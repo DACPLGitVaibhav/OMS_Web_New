@@ -104,7 +104,7 @@ function reloadTable(rowsPerPage) {
             },
             error: function (xhr, status, error) {
                 // Handle errors
-                console.error(xhr.responseText);
+               // console.error(xhr.responseText);
             }
         });
     }
@@ -119,13 +119,13 @@ function reloadTable(rowsPerPage) {
             },
             error: function (xhr, status, error) {
                 // Handle errors
-                console.error(xhr.responseText);
+               // console.error(xhr.responseText);
             }
         });
     }
 }
 function renderTable() {
-    debugger;
+   // debugger;
     const tableBody = $('#Table tbody');
     tableBody.empty();
 
