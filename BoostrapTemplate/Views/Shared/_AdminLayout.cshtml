@@ -61,6 +61,10 @@
 
     @*SweetAlert*@
     <link href="~/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    @*SweetAlert*@
+    <link href="~/fontawesome-free-6.4.0-web/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/loader.css" rel="stylesheet" />
+
     <!-- =======================================================
     * Template Name: NiceAdmin
     * Updated: Nov 17 2023 with Bootstrap v5.3.2
@@ -284,12 +288,12 @@
 
                     </li>
 
-                    <li>
+                   @*  <li>
                         <a id="AnchorModel" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/DataVisulization/AutoManual','Auto/Manual Configuration.','gl')">
                             <i class="bi bi-circle"></i><span>Auto/Manual Confg</span>
                         </a>
 
-                    </li>
+                    </li> *@
 
                 </ul>
             </li><!-- End OMS Nav -->
@@ -464,8 +468,8 @@
     <!-- #endregion -->
     <script>
         $(function () {
-              debugger;
-
+              //debugger;
+            reload();
            var strStatus ='@message';
            if (strStatus!="" &&strStatus != null ) {
            ShowToaster(strStatus);
@@ -511,10 +515,10 @@
                       success: function (data) {
                           $('#AutoManualStatus').empty(); 
                           if (data === true) {
-                              $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-auto" title="Auto">Auto</span></div>');
+                              // $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-auto" title="Auto">Auto</span></div>');
                           }
                           if (data === false) {
-                              $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-manual" title="Manual">Manual</span></div>');
+                             // $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-manual" title="Manual">Manual</span></div>');
                           }
                       }
                   });
