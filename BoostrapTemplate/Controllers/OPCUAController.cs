@@ -86,6 +86,11 @@ namespace OMS_Template.Controllers
             }                        
         }
 
+        public async Task<JsonResult> TestOPCSession()
+        {
+            return Json(await _opcUaClientService.TestOPCSession());
+        }
+
         public async Task<IActionResult> LinemgmtDetails(int ID)
         {
           
