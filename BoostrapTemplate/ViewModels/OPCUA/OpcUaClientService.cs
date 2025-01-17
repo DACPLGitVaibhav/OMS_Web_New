@@ -78,24 +78,29 @@ public class OpcUaClientService
                 try
                 {
                     _oPCUADetails.Isconnect = true;
+                    var dataFF = DataVisulizationController.FF.ToList();
+                    var dataFE = DataVisulizationController.FE.ToList();
+                    var dataRF = DataVisulizationController.RF.ToList();
+                    var dataBSRH = DataVisulizationController.BSRH.ToList();
+                    var dataBSLH = DataVisulizationController.BSLH.ToList();
 
-                    NodeId node1 = new NodeId("ns=4;i=1006");
+                    NodeId node1 = new NodeId(dataFF[0].LOTSequence.ToString());
                     DataValue value1 = await _session.ReadValueAsync(node1);
                     _oPCUADetails.MPLC_FF = value1.Value.ToString();
 
-                    NodeId node2 = new NodeId("ns=4;i=1343");
+                    NodeId node2 = new NodeId(dataFE[0].LOTSequence.ToString());
                     DataValue value2 = await _session.ReadValueAsync(node2);
                     _oPCUADetails.MPLC_FE = value2.Value.ToString();
 
-                    NodeId node3 = new NodeId("ns=4;i=669");
+                    NodeId node3 = new NodeId(dataRF[0].LOTSequence.ToString());
                     DataValue value3 = await _session.ReadValueAsync(node3);
                     _oPCUADetails.MPLC_RF = value3.Value.ToString();
 
-                    NodeId node4 = new NodeId("ns=4;i=332");
+                    NodeId node4 = new NodeId(dataBSRH[0].LOTSequence.ToString());
                     DataValue value4 = await _session.ReadValueAsync(node4);
                     _oPCUADetails.MPLC_BSRH = value4.Value.ToString();
 
-                    NodeId node5 = new NodeId("ns=4;i=1680");
+                    NodeId node5 = new NodeId(dataBSLH[0].LOTSequence.ToString());
                     DataValue value5 = await _session.ReadValueAsync(node5);
                     _oPCUADetails.MPLC_BSLH = value5.Value.ToString();
                 }
@@ -123,6 +128,36 @@ public class OpcUaClientService
         
         return _oPCUADetails;
     }
+
+    public async Task<bool> TestOPCSession()
+    {
+        bool b = false;
+        if (_session != null)
+        {
+            if (_session.Connected)
+            {
+                try
+                {
+                    NodeId node1 = new NodeId("ns=4;i=313");
+                    DataValue value1 = await _session.ReadValueAsync(node1);
+                    b = true;
+                }
+                catch (Exception)
+                {
+                    _session.Dispose();
+                    b = await ConnectAsync();
+
+                }
+            }
+            else
+            {
+                _session.Dispose();
+                b = await ConnectAsync();
+            }
+        }
+        return b;
+    }
+
     public async Task<Line_Order_mgmt_Status_Details> ReadNodeLinemgmtFF()
     {
         
