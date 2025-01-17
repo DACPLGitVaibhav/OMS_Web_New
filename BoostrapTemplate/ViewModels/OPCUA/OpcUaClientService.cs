@@ -483,7 +483,7 @@ public class OpcUaClientService
         }
         else
         {
-            await ConnectAsync();
+            //await ConnectAsync();
         }
         
         return _LineMgmtDetails;
@@ -812,7 +812,7 @@ public class OpcUaClientService
         }
         else
         {
-            await ConnectAsync();
+            //await ConnectAsync();
         }
 
         return _LineMgmtDetails;
@@ -1141,7 +1141,7 @@ public class OpcUaClientService
         }
         else
         {
-            await ConnectAsync();
+            //await ConnectAsync();
         }
         return _LineMgmtDetails;
     }
@@ -1469,7 +1469,7 @@ public class OpcUaClientService
         }
         else
         {
-            await ConnectAsync();
+            //await ConnectAsync();
         }
         return _LineMgmtDetails;
     }
@@ -1801,7 +1801,7 @@ public class OpcUaClientService
         }
         else
         {
-            await ConnectAsync();
+            //await ConnectAsync();
         }
 
         return _LineMgmtDetails;
