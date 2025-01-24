@@ -288,12 +288,12 @@
 
                     </li>
 
-                   @*  <li>
+                    <li>
                         <a id="AnchorModel" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/DataVisulization/AutoManual','Auto/Manual Configuration.','gl')">
                             <i class="bi bi-circle"></i><span>Auto/Manual Confg</span>
                         </a>
 
-                    </li> *@
+                    </li>
 
                 </ul>
             </li><!-- End OMS Nav -->
@@ -515,11 +515,11 @@
                       success: function (data) {
                           $('#AutoManualStatus').empty(); 
                           if (data === true) {
-                              // $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-auto" title="Auto">Auto</span></div>');
+                               $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-auto" title="Auto">Auto</span></div>');
                           }
-                          if (data === false) {
-                             // $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-manual" title="Manual">Manual</span></div>');
-                          }
+                          // if (data === false) {
+                          //     $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-manual" title="Manual">Manual</span></div>');
+                          // }
                       }
                   });
               }
