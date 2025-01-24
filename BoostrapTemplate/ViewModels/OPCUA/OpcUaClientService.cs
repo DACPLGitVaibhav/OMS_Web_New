@@ -57,7 +57,7 @@ public class OpcUaClientService
             };
 
             // Create a new session with the OPC UA server asynchronously
-            _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.196.1:4840")), true, "", 15000, new UserIdentity(), null);
+            _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.1.61:4840")), true, "", 15000, new UserIdentity(), null);
 
             return true;
         }
@@ -121,7 +121,7 @@ public class OpcUaClientService
                     _oPCUADetails.OMS_BSRH = "0";
                     _oPCUADetails.OMS_BSLH = "0";
 
-                    await ConnectAsync();
+                   // await ConnectAsync();
                 }
             }
         }
@@ -138,7 +138,9 @@ public class OpcUaClientService
             {
                 try
                 {
-                    NodeId node1 = new NodeId("ns=4;i=313");
+                    var dataFF = DataVisulizationController.FF.ToList();
+
+                    NodeId node1 = new NodeId(dataFF[0].LOTSequence.ToString());
                     DataValue value1 = await _session.ReadValueAsync(node1);
                     b = true;
                 }
