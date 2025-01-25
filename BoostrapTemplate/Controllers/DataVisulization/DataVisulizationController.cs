@@ -548,8 +548,8 @@ namespace OMS_Web.Controllers.DataVisulization
                 FF = data.Where(x=>x.ID==1).ToList();
                 FE = data.Where(x => x.ID == 2).ToList();
                 RF = data.Where(x => x.ID == 3).ToList();
-                BSLH = data.Where(x => x.ID == 4).ToList();
-                BSRH = data.Where(x => x.ID == 5).ToList();
+                BSRH = data.Where(x => x.ID == 4).ToList();
+                BSLH = data.Where(x => x.ID == 5).ToList();
               
             }
             catch (Exception)

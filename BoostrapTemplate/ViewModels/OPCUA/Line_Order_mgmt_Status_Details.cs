@@ -2,8 +2,7 @@
 {
     public class Line_Order_mgmt_Status_Details
     {
-        public int LineId { get; set; }
-        public string LineName { get; set; }
+       
         public int LOT_Sequence { get; set; } = 0;
         public int LOT_Mes_Vcode { get; set; } = 0;
         public int LOS_Sequence { get; set; } = 0;
@@ -80,5 +79,7 @@
         public int LOIP_Mes_Vcode29 { get; set; } = 0;
         public int LOIP_Sequence30 { get; set; } = 0;
         public int LOIP_Mes_Vcode30 { get; set; } = 0;
+        public int LineId { get; set; }
+        public string LineName { get; set; }
     }
 }
