@@ -167,7 +167,7 @@ public class OpcUaClientService
                 {
                     var dataBSLH = DataVisulizationController.BSLH.ToList();
                     NodeId node = new NodeId(dataBSLH[0].LOTSequence?.ToString() ?? string.Empty);
-                   // NodeId node1 = new NodeId(node);
+                    // NodeId node1 = new NodeId(node);
                     DataValue value1 = await _session.ReadValueAsync(node);
                     b = true;
                 }
