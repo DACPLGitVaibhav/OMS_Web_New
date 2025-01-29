@@ -107,12 +107,13 @@
                     $("#spn1").empty();
                     $('#spn1').removeClass();
                     result == true ? $('#spn1').addClass('dot-PLC-Green') : $('#spn1').addClass('dot-PLC-Red');
-
-                    $('#FF_Mlot').html(0);
-                    $('#FE_Mlot').html(0);
-                    $('#RF_Mlot').html(0);
-                    $('#BSRH_Mlot').html(0);
-                    $('#BSLH_Mlot').html(0);
+                    if (result == false) {
+                        $('#FF_Mlot').html(0);
+                        $('#FE_Mlot').html(0);
+                        $('#RF_Mlot').html(0);
+                        $('#BSRH_Mlot').html(0);
+                        $('#BSLH_Mlot').html(0);
+                    }
                 },
                 error: function () {
 
