@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DATA.Interaces;
 using OMS_Template.ViewModels.OPCUA;
 using OMS_Web.Controllers.DataVisulization;
@@ -60,7 +61,7 @@ public class OpcUaClientService
             };
 
             // Create a new session with the OPC UA server asynchronously
-            _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.1.61:4840")), true, "", 15000, new UserIdentity(), null);
+            _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.1.65:4840")), true, "", 15000, new UserIdentity(), null);
 
             return true;
         }
@@ -80,6 +81,10 @@ public class OpcUaClientService
             {
                 try
                 {
+                    CancellationToken cancellationTokenn = CancellationToken.None;
+                    IList<NodeId> nodeIds = new List<NodeId>();
+
+
                     _oPCUADetails.Isconnect = true;
                     var dataFF = DataVisulizationController.FF.ToList();
                     var dataFE = DataVisulizationController.FE.ToList();
@@ -87,25 +92,44 @@ public class OpcUaClientService
                     var dataBSRH = DataVisulizationController.BSRH.ToList();
                     var dataBSLH = DataVisulizationController.BSLH.ToList();
 
-                    NodeId node1 = new NodeId(dataFF[0].LOTSequence.ToString());
-                    DataValue value1 = await _session.ReadValueAsync(node1);
-                    _oPCUADetails.MPLC_FF = value1.Value.ToString();
+                    NodeId node1 = new NodeId(dataFF[0].LOTSequence?.ToString() ?? string.Empty); 
+                    NodeId node2 = new NodeId(dataFE[0].LOTSequence?.ToString() ?? string.Empty);
+                    NodeId node3 = new NodeId(dataRF[0].LOTSequence?.ToString() ?? string.Empty);
+                    NodeId node4 = new NodeId(dataBSRH[0].LOTSequence?.ToString() ?? string.Empty);
+                    NodeId node5 = new NodeId(dataBSLH[0].LOTSequence?.ToString() ?? string.Empty);
+                    nodeIds.Add(node1);
+                    nodeIds.Add(node2);
+                    nodeIds.Add(node3);
+                    nodeIds.Add(node4);
+                    nodeIds.Add(node5);
+                    var v = await _session.ReadValuesAsync(nodeIds, cancellationTokenn);
+                    _oPCUADetails.MPLC_FF = v.Item1[0].Value?.ToString()??"0";
+                    _oPCUADetails.MPLC_FE = v.Item1[1].Value?.ToString()??"0";
+                    _oPCUADetails.MPLC_RF = v.Item1[2].Value?.ToString() ?? "0";
+                    _oPCUADetails.MPLC_BSRH = v.Item1[3].Value?.ToString() ?? "0";
+                    _oPCUADetails.MPLC_BSLH = v.Item1[4].Value?.ToString() ?? "0";
 
-                    NodeId node2 = new NodeId(dataFE[0].LOTSequence.ToString());
-                    DataValue value2 = await _session.ReadValueAsync(node2);
-                    _oPCUADetails.MPLC_FE = value2.Value.ToString();
+                    #region OLD CODE
+                    //NodeId node1 = new NodeId(dataFF[0].LOTSequence.ToString());
+                    //DataValue value1 = await _session.ReadValueAsync(node1);
+                    //_oPCUADetails.MPLC_FF = value1.Value.ToString();
 
-                    NodeId node3 = new NodeId(dataRF[0].LOTSequence.ToString());
-                    DataValue value3 = await _session.ReadValueAsync(node3);
-                    _oPCUADetails.MPLC_RF = value3.Value.ToString();
+                    //NodeId node2 = new NodeId(dataFE[0].LOTSequence.ToString());
+                    //DataValue value2 = await _session.ReadValueAsync(node2);
+                    //_oPCUADetails.MPLC_FE = value2.Value.ToString();
 
-                    NodeId node4 = new NodeId(dataBSRH[0].LOTSequence.ToString());
-                    DataValue value4 = await _session.ReadValueAsync(node4);
-                    _oPCUADetails.MPLC_BSRH = value4.Value.ToString();
+                    //NodeId node3 = new NodeId(dataRF[0].LOTSequence.ToString());
+                    //DataValue value3 = await _session.ReadValueAsync(node3);
+                    //_oPCUADetails.MPLC_RF = value3.Value.ToString();
 
-                    NodeId node5 = new NodeId(dataBSLH[0].LOTSequence.ToString());
-                    DataValue value5 = await _session.ReadValueAsync(node5);
-                    _oPCUADetails.MPLC_BSLH = value5.Value.ToString();
+                    //NodeId node4 = new NodeId(dataBSRH[0].LOTSequence.ToString());
+                    //DataValue value4 = await _session.ReadValueAsync(node4);
+                    //_oPCUADetails.MPLC_BSRH = value4.Value.ToString();
+
+                    //NodeId node5 = new NodeId(dataBSLH[0].LOTSequence.ToString());
+                    //DataValue value5 = await _session.ReadValueAsync(node5);
+                    //_oPCUADetails.MPLC_BSLH = value5.Value.ToString(); 
+                    #endregion
                 }
                 catch (Exception)
                 {
@@ -118,11 +142,11 @@ public class OpcUaClientService
                     _oPCUADetails.MPLC_BSRH = "0";
                     _oPCUADetails.MPLC_BSLH = "0";
 
-                    _oPCUADetails.OMS_FF = "0";
-                    _oPCUADetails.OMS_FE = "0";
-                    _oPCUADetails.OMS_RF = "0";
-                    _oPCUADetails.OMS_BSRH = "0";
-                    _oPCUADetails.OMS_BSLH = "0";
+                    //_oPCUADetails.OMS_FF = "0";
+                    //_oPCUADetails.OMS_FE = "0";
+                    //_oPCUADetails.OMS_RF = "0";
+                    //_oPCUADetails.OMS_BSRH = "0";
+                    //_oPCUADetails.OMS_BSLH = "0";
 
                    // await ConnectAsync();
                 }
@@ -141,22 +165,28 @@ public class OpcUaClientService
             {
                 try
                 {
-                    var dataFF = DataVisulizationController.FF.ToList();
-
-                    NodeId node1 = new NodeId(dataFF[0].LOTSequence.ToString());
-                    DataValue value1 = await _session.ReadValueAsync(node1);
+                    var dataBSLH = DataVisulizationController.BSLH.ToList();
+                    NodeId node = new NodeId(dataBSLH[0].LOTSequence?.ToString() ?? string.Empty);
+                    // NodeId node1 = new NodeId(node);
+                    DataValue value1 = await _session.ReadValueAsync(node);
                     b = true;
                 }
                 catch (Exception)
                 {
-                    _session.Dispose();
+                    if (_session != null)
+                    {
+                        _session.Dispose();
+                    }
                     b = await ConnectAsync();
 
                 }
             }
             else
             {
-                _session.Dispose();
+                if (_session != null)
+                {
+                    _session.Dispose();
+                }
                 b = await ConnectAsync();
             }
         }
