@@ -13,61 +13,69 @@ using Opc.Ua.Client;
 
 public class OpcUaClientService
 {
-    public Session _session;
-    public async Task<bool> ConnectAsync()
+    public Session _session=null;
+    //public OpcUaClientService( Session session)
+    //{
+    //        _session = null;
+    //}
+    public async Task ConnectAsync()
     {
         try
         {
-            Utils.SetTraceOutput(Utils.TraceOutput.Off);
-            var config = new ApplicationConfiguration()
+            if (_session == null)
             {
-                ServerConfiguration = new ServerConfiguration
+                Utils.SetTraceOutput(Utils.TraceOutput.Off);
+                var config = new ApplicationConfiguration()
                 {
-                    UserTokenPolicies = new UserTokenPolicyCollection(new[] { new UserTokenPolicy(UserTokenType.UserName) }),
-                },
-                ApplicationName = "MyConfig",
-                ApplicationType = ApplicationType.Client,
-                SecurityConfiguration = new SecurityConfiguration
+                    ServerConfiguration = new ServerConfiguration
+                    {
+                        UserTokenPolicies = new UserTokenPolicyCollection(new[] { new UserTokenPolicy(UserTokenType.UserName) }),
+                    },
+                    ApplicationName = "MyConfig",
+                    ApplicationType = ApplicationType.Client,
+                    SecurityConfiguration = new SecurityConfiguration
+                    {
+                        ApplicationCertificate = new CertificateIdentifier
+                        {
+                            StoreType = @"Windows",
+                            StorePath = @"CurrentUser\My",
+                            SubjectName = Utils.Format(@"CN={0}, DC={1}", "MyHomework", System.Net.Dns.GetHostName())
+                        },
+                        TrustedPeerCertificates = new CertificateTrustList
+                        {
+                            StoreType = @"Windows",
+                            StorePath = @"CurrentUser\TrustedPeople",
+                        },
+                        NonceLength = 32,
+                        AutoAcceptUntrustedCertificates = true
+                    },
+                    //TransportConfigurations = new TransportConfigurationCollection(),
+                    //TransportQuotas = new TransportQuotas { OperationTimeout = 15000 },
+                    ClientConfiguration = new ClientConfiguration { }
+                };
+
+                //_ = config.Validate(ApplicationType.Client);
+                //if (config.SecurityCnfiguration.AutoAcceptUntrustedCertificates)
+                //{
+                //    config.CertificateValidator.CertificateValidation += (s, e) => { e.Accept = true; };
+                //}
+
+                config.CertificateValidator = new CertificateValidator();
+                config.CertificateValidator.CertificateValidation += (s, certificateValidationEventArgs) =>
                 {
-                    ApplicationCertificate = new CertificateIdentifier
-                    {
-                        StoreType = @"Windows",
-                        StorePath = @"CurrentUser\My",
-                        SubjectName = Utils.Format(@"CN={0}, DC={1}", "MyHomework", System.Net.Dns.GetHostName())
-                    },
-                    TrustedPeerCertificates = new CertificateTrustList
-                    {
-                        StoreType = @"Windows",
-                        StorePath = @"CurrentUser\TrustedPeople",
-                    },
-                    NonceLength = 32,
-                    AutoAcceptUntrustedCertificates = true
-                },
-                //TransportConfigurations = new TransportConfigurationCollection(),
-                //TransportQuotas = new TransportQuotas { OperationTimeout = 15000 },
-                ClientConfiguration = new ClientConfiguration { }
-            };
+                    certificateValidationEventArgs.Accept = true; // Accept all certificates for testing purposes; modify this for production.
+                };
 
-            //_ = config.Validate(ApplicationType.Client);
-            //if (config.SecurityConfiguration.AutoAcceptUntrustedCertificates)
-            //{
-            //    config.CertificateValidator.CertificateValidation += (s, e) => { e.Accept = true; };
-            //}
+                // Create a new session with the OPC UA server asynchronously
+                _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.1.65:4840")), true, "", 15000, new UserIdentity(), null);
 
-            config.CertificateValidator = new CertificateValidator();
-            config.CertificateValidator.CertificateValidation += (s, certificateValidationEventArgs) =>
-            {
-                certificateValidationEventArgs.Accept = true; // Accept all certificates for testing purposes; modify this for production.
-            };
-
-            // Create a new session with the OPC UA server asynchronously
-            _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.1.65:4840")), true, "", 15000, new UserIdentity(), null);
-
-            return true;
+                
+            }
+           
         }
         catch (Exception ex)
         {
-            return false;
+           
         }
     }
 
@@ -176,8 +184,9 @@ public class OpcUaClientService
                     if (_session != null)
                     {
                         _session.Dispose();
+                        _session = null;
                     }
-                    b = await ConnectAsync();
+                   await ConnectAsync();
 
                 }
             }
@@ -186,9 +195,14 @@ public class OpcUaClientService
                 if (_session != null)
                 {
                     _session.Dispose();
+                    _session= null;
                 }
-                b = await ConnectAsync();
+              await ConnectAsync();
             }
+        }
+        else
+        {
+            await ConnectAsync();
         }
         return b;
     }
@@ -226,6 +240,12 @@ public class OpcUaClientService
                                 
                                 NodeId node = new NodeId(value);
                                 nodeIds.Add(node); 
+                            }
+                            else
+                            {
+                                // If value is null or empty, add an empty NodeId
+                                NodeId emptyNode = new NodeId(string.Empty);
+                                nodeIds.Add(emptyNode);
                             }
                         }
                     }
@@ -611,6 +631,13 @@ public class OpcUaClientService
                                 NodeId node = new NodeId(value);
                                 nodeIds.Add(node); // Add the created NodeId to the list
                             }
+                            else
+                            {
+                                // If value is null or empty, add an empty NodeId
+                                NodeId emptyNode = new NodeId(string.Empty);
+                                nodeIds.Add(emptyNode);
+                            }
+
                         }
                     }
                     var v = await _session.ReadValuesAsync(nodeIds, cancellationTokenn);
@@ -989,6 +1016,12 @@ public class OpcUaClientService
                                 NodeId node = new NodeId(value);
                                 nodeIds.Add(node);
                             }
+                            else
+                            {
+                                // If value is null or empty, add an empty NodeId
+                                NodeId emptyNode = new NodeId(string.Empty);
+                                nodeIds.Add(emptyNode);
+                            }
                         }
                     }
                     var v = await _session.ReadValuesAsync(nodeIds, cancellationTokenn);
@@ -1366,6 +1399,12 @@ public class OpcUaClientService
                                 NodeId node = new NodeId(value);
                                 nodeIds.Add(node); 
                             }
+                            else
+                            {
+                                // If value is null or empty, add an empty NodeId
+                                NodeId emptyNode = new NodeId(string.Empty);
+                                nodeIds.Add(emptyNode);
+                            }
                         }
                     }
                     var v = await _session.ReadValuesAsync(nodeIds, cancellationTokenn);
@@ -1698,7 +1737,7 @@ public class OpcUaClientService
                     //_LineMgmtDetails.LOIP_Mes_Vcode30 = Convert.ToInt32(LOIPVvalue30.Value); 
                     #endregion
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                 }
@@ -1742,6 +1781,12 @@ public class OpcUaClientService
                                 
                                 NodeId node = new NodeId(value);
                                 nodeIds.Add(node); 
+                            }
+                            else
+                            {
+                                // If value is null or empty, add an empty NodeId
+                                NodeId emptyNode = new NodeId(string.Empty);
+                                nodeIds.Add(emptyNode);
                             }
                         }
                     }

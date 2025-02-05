@@ -1,5 +1,7 @@
 ﻿using DATA.Interaces;
+using DATA.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using OMS_Template.ViewModels.OPCUA;
@@ -16,13 +18,17 @@ namespace OMS_Template.Controllers
     {
         public readonly ILOTDetials _lOTDetials;
         private readonly OpcUaClientService _opcUaClientService;
-       
-        public OPCUAController(OpcUaClientService opcUaClientService,ILOTDetials lOTDetials)
+        private readonly ILineMaster _linemaster;
+        public OPCUAController(ILineMaster lineMaster, OpcUaClientService opcUaClientService,ILOTDetials lOTDetials)
         {
+            _linemaster = lineMaster;
             _opcUaClientService = opcUaClientService;
             _lOTDetials = lOTDetials;
         }
+        public void OPCConnection()
+        {
 
+        }
         public async Task<IActionResult> Index()
         {
             await _opcUaClientService.ConnectAsync();
@@ -56,14 +62,14 @@ namespace OMS_Template.Controllers
                 _oPCUADetails.MPLC_BSRH = v.MPLC_BSRH;
                 _oPCUADetails.MPLC_BSLH = v.MPLC_BSLH;
 
-                if (_oPCUADetails.Isconnect==false)
-                {
-                    _oPCUADetails.OMS_FF = v.OMS_FF;
-                    _oPCUADetails.OMS_FE = v.OMS_FE;
-                    _oPCUADetails.OMS_RF = v.OMS_RF;
-                    _oPCUADetails.OMS_BSRH = v.OMS_BSRH;
-                    _oPCUADetails.OMS_BSLH = v.OMS_BSLH;
-                }              
+                //if (_oPCUADetails.Isconnect==false)
+                //{
+                //    _oPCUADetails.OMS_FF = v.OMS_FF;
+                //    _oPCUADetails.OMS_FE = v.OMS_FE;
+                //    _oPCUADetails.OMS_RF = v.OMS_RF;
+                //    _oPCUADetails.OMS_BSRH = v.OMS_BSRH;
+                //    _oPCUADetails.OMS_BSLH = v.OMS_BSLH;
+                //}              
 
                 return Json(_oPCUADetails);
             }
@@ -120,6 +126,21 @@ namespace OMS_Template.Controllers
                 return Json(MGMTDetails);
             }
             return Json("Error");
+        }
+
+        public async Task<IActionResult> StatusData()
+        {
+            await _opcUaClientService.ConnectAsync();
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                ViewData["Heading"] = "Line Order Management";
+                ViewBag.LineList = _linemaster.GetAllLines();
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+            return View();
         }
     }
 }
