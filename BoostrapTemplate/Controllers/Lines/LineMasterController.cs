@@ -164,18 +164,18 @@ namespace OMS_Web.Controllers.Lines
                 throw;
             }
         }
-        public IActionResult StatusData()
-        {
-            if (HttpContext.Session.GetString("Username") != null)
-            {
-                ViewData["Heading"] = "Line Order Management";
-                ViewBag.LineList = _linemaster.GetAllLines();
-            }
-            else
-            {
-                return RedirectToAction("Logout", "Account");
-            }
-            return View();
-        }
+        //public IActionResult StatusData()
+        //{
+        //    if (HttpContext.Session.GetString("Username") != null)
+        //    {
+        //        ViewData["Heading"] = "Line Order Management";
+        //        ViewBag.LineList = _linemaster.GetAllLines();
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Logout", "Account");
+        //    }
+        //    return View();
+        //}
     }
 }

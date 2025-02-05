@@ -1,6 +1,6 @@
 ﻿
 function ShowModal(URL, strModelTitle, LargeModel) {
-    debugger;
+    //debugger;
    
     if (LargeModel == 'lg') {
         $('.modal-dialog').addClass('modal-lg');
@@ -32,7 +32,7 @@ function ShowToaster(StrMessage) {
         timer: 10000,
 
     });
-    debugger;
+    //debugger;
     if (StrMessage.toString().trim().includes("Something")) {
         Toast.fire({
             type: 'error',
