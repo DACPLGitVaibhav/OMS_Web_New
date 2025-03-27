@@ -61,7 +61,7 @@ namespace BoostrapTemplate
             services.AddScoped<IOrders, OrdersServices>();
             services.AddTransient<ILOTDetials, LOTDetailsServices>();
             services.AddSingleton<OpcUaClientService>();
-           
+           services.AddScoped<IVarriantCode,VarriantCodeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

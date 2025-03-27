@@ -14,6 +14,8 @@ namespace DATA.Models
         public string Erp_Vcode { get; set; }
         public string Description { get; set; }
         public int Mes_Vcode { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
     }
 }
