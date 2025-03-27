@@ -319,7 +319,19 @@
                 </ul>
             </li><!-- End Line Nav -->
 
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-navVarriantCode" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-car-front"></i><span>Variant Code</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-navVarriantCode" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a asp-action="index" asp-controller="VarraintCode">
+                            <i class="bi bi-circle"></i><span>Add Variant</span>
+                            @* <i class="fa-solid fa-car"></i> *@
+                        </a>
+                    </li>
+                </ul>
+            </li>     <!-- End Varriant Code Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#User-navUser" data-bs-toggle="collapse" href="#">
@@ -333,23 +345,9 @@
                     </li>
                 </ul>
             </li><!-- End User Management Nav -->
-
-            @* <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-navBaretail" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-file-earmark-bar-graph"></i><span>Baretail</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="components-navBaretail" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-action="Baretail_Log" asp-controller="LineMaster">
-                            <i class="bi bi-circle"></i><span>Baretail Log</span>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li> *@
-            
-            <!-- End Baretail Log Nav -->
+           
+           
+           
 
             <!-- #region Old Menus -->
             <!--<li class="nav-heading">Pages</li>
