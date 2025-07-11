@@ -23,10 +23,15 @@ namespace Services.Services
 
         public List<PreProductionDetails> GetPreOrders()
         {
-            var obj = _context.PreOrders.OrderBy(x => x.PPSeqNo).Where(x=>x.IsProduction==false).ToList();
+            var obj = _context.PreOrders.OrderBy(x => x.PPSeqNo).Where(x=>x.IsProduction==false && (x.Status == 0 || x.Status == 1)).ToList();
             return obj;
         }
-       
+        public List<PreProductionDetails> GetDeletedOrders()
+        {
+            var obj = _context.PreOrders.OrderBy(x => x.PPSeqNo).Where(x => x.IsProduction == false && x.Status == 2).ToList();
+            return obj;
+        }
+
         #region V_Code Add
         public List<VariantCode> GetVariantCodes()
         {

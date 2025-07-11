@@ -26,6 +26,10 @@
         border-radius: 5px;
         border: 1px solid #0056b3;
     }
+    .btnAbound {
+        border: none;
+        border-radius: 5px;
+    }
 </style>
 @if (TempData["PPseqNotFound"] != null)
 {
@@ -34,13 +38,13 @@
     </div>
 
 }
-@if (TempData["PPSeqNo"] != null)
+@*@if (TempData["PPSeqNo"] != null)
 {
 <div class="alert alert-info" role="alert" style="margin-bottom: 20px;">
     <strong>Auto Mode Breakpoint PPSeqNo:</strong>
     <span class="breakpoint-ppseqno">@TempData["PPSeqNo"]</span>
 </div>
-}
+}*@
 
 <div class="row" id="divFilter">
 
@@ -72,7 +76,7 @@
         <input type="number" id="toPpseq" min="1" value="0" class="form-control" style="    height: 40px;    width: 100px;    margin: 6px;" />
         <input type="button" id="btnselect" value="Select Rows" class="btn btn-primary" />
     </div>
-    <div class="col-2" id="buttonContainer" align="right" style="display:flex;">
+    <div class="col-2 d-flex justify-content-between align-items-center gap-2" id="buttonContainer">
     </div>
 
     <div class="col-2" style="align-content:flex-end"> <h6 id="RowcountDisplay" style="color:#337ab7"></h6></div>
@@ -90,6 +94,14 @@
     .dataTables_length {
         margin-bottom: 10px;
     }
+    .status-red {
+        color: red;
+        font-weight: bold;
+    }
+    .col-status {
+        display: none;
+    }
+
 </style>
 
 
@@ -122,6 +134,9 @@
             <th>
                 Import Date
             </th>
+            <th class="col-status">
+                Status
+            </th>
 
 
         </tr>
@@ -130,34 +145,39 @@
         @*@{ int i = 1;}*@
         @foreach (var item in Model)
         {
-            <tr>
-                <td> </td>
+            var rowClass = item.Status == 1 ? "status-red" : "";
+        <tr class="@rowClass">
+            <td> </td>
 
-                <td id="PPSeqNo">
-                    @Html.DisplayFor(modelItem => item.PPSeqNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BiwNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Vcode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ModelCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FileName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateIimport)
+            <td id="PPSeqNo">
+                @Html.DisplayFor(modelItem => item.PPSeqNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BiwNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vcode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModelCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FileName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateIimport)
 
-                </td>
+            </td>
+            <td class="col-status">
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
 
 
-            </tr>
+
+        </tr>
             //i++;
         }
     </tbody>

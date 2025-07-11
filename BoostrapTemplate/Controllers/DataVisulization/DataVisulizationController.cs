@@ -46,17 +46,34 @@ namespace OMS_Web.Controllers.DataVisulization
                 ViewBag.V_list = new SelectList(variantCodes, "Erp_Vcode", "Erp_Vcode");
 
                 var data = _context.autoManualConfgs.ToList();
-                
-                if (data != null)
-                {
-                    if (data[0].IsAutoMode==true)
-                    {
-                        TempData["PPSeqNo"] = data[0].PPSeqNo; //1234567789;
-                       
-                    }
-                    
-                }
+
+                //if (data != null)
+                //{
+                //    if (data[0].IsAutoMode == true)
+                //    {
+                //        TempData["PPSeqNo"] = data[0].PPSeqNo; //1234567789;
+
+                //    }
+
+                //}
                 ViewData["Heading"] = "Pre-Production Orders Plan";
+
+
+                return View(obj);
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+        }
+
+        public IActionResult DeletedOrders()
+        {
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+
+                var obj = _orders.GetDeletedOrders();          
+                ViewData["Heading"] = "Deleted Orders";
 
 
                 return View(obj);
@@ -76,34 +93,47 @@ namespace OMS_Web.Controllers.DataVisulization
                 if (User.Identity.Name == "Admin")
                 {
                     bool manual = _context.autoManualConfgs.Any(x => x.IsAutoMode == false);
-                    if (manual==true)
+                    if (manual == true)
                     {
+                        var seqNos = customDataArray.Select(x => x.BiwNo).ToList();
 
-
-                        if (customDataArray.Count != 0 || customDataArray != null)
+                        bool isProduction = _context.PreOrders
+                            .Where(x => seqNos.Contains(x.BiwNo))
+                            .All(x => x.Status == 0 );
+                       
+                        if (isProduction)
                         {
-                            customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
-
-                            foreach (var item in customDataArray)
+                            if (customDataArray.Count != 0 || customDataArray != null)
                             {
+                                customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
 
-                                _context.Database.ExecuteSqlRaw
-                                  (
-                                   "EXEC SP_InsertErpOrderDetails @ItemId, @BiwNo, @Vcode, @ModelCode, @PPSeqNo",
-                                   new SqlParameter("@ItemId", item.ItemId),
-                                   new SqlParameter("@BiwNo", item.BiwNo),
-                                   new SqlParameter("@Vcode", item.Vcode),
-                                   new SqlParameter("@ModelCode", item.ModelCode),
-                                   new SqlParameter("@PPSeqNo", item.PPSeqNo)
-                                  );
+                                foreach (var item in customDataArray)
+                                {
+
+                                    _context.Database.ExecuteSqlRaw
+                                      (
+                                       "EXEC SP_InsertErpOrderDetails @ItemId, @BiwNo, @Vcode, @ModelCode, @PPSeqNo",
+                                       new SqlParameter("@ItemId", item.ItemId),
+                                       new SqlParameter("@BiwNo", item.BiwNo),
+                                       new SqlParameter("@Vcode", item.Vcode),
+                                       new SqlParameter("@ModelCode", item.ModelCode),
+                                       new SqlParameter("@PPSeqNo", item.PPSeqNo)
+                                      );
+
+                                }
+                                var result = new { status = "DataRecived" };
+                                return Json(result);
+                            }
+                            else
+                            {
+                                var result = new { status = "error" };
+                                return Json(result);
 
                             }
-                            var result = new { status = "DataRecived" };
-                            return Json(result);
                         }
                         else
                         {
-                            var result = new { status = "error" };
+                            var result = new { status = "Unauthorized", message = "Order Already Hold." };
                             return Json(result);
 
                         }
@@ -134,6 +164,242 @@ namespace OMS_Web.Controllers.DataVisulization
             }
 
         }
+
+        [HttpPost]
+        public IActionResult IsDeleted([FromBody] List<PreProductionDetails> customDataArray)
+        {
+
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (customDataArray.Count != 0 || customDataArray != null)
+                    {
+                        customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
+                        var ppSeqNos = customDataArray.Select(x => x.PPSeqNo).ToList();
+                        bool isAuto = _context.autoManualConfgs.Any(x => x.IsAutoMode == true);
+                        bool isProduction = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.IsProduction == true);
+                        bool isDeleted = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 2);
+                        bool isHold = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 1);
+
+                        if (!isProduction && !isAuto && !isDeleted && !isHold)
+                        {
+                            foreach (var item in customDataArray)
+                            {
+
+                                _context.Database.ExecuteSqlRaw
+                                      (
+                                       "EXEC SP_IsDeletedOrder @PPSeqNo",
+
+                                       new SqlParameter("@PPSeqNo", item.PPSeqNo)
+                                      );
+
+                            }
+                            var result = new { status = "DataDeleted" };
+                            return Json(result);
+                        }
+                        else
+                        {
+
+                            string message = "";
+
+                            if (isProduction)
+                                message += "Item(s) are already in production. Deletion not allowed. ";
+
+                            if (isAuto)
+                                message += "Please turn off Auto mode to allow deletion.";
+
+                            if (isDeleted)
+                                message += "Order(s) already Deleted.";
+                            if (isHold)
+                                message += "Please Released Order(s) first.";
+
+                            return Json(new { status = "error", message });
+                        }
+                       
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+
+                    }
+
+
+
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        [HttpPost] 
+        public IActionResult Hold([FromBody] List<PreProductionDetails> customDataArray)
+        {
+
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (customDataArray.Count != 0 || customDataArray != null)
+                    {
+                        customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
+                        var ppSeqNos = customDataArray.Select(x => x.PPSeqNo).ToList();
+                        bool isAuto = _context.autoManualConfgs.Any(x => x.IsAutoMode == true);
+                        bool isProduction = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.IsProduction == true);
+                        bool isDeleted = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 2);
+                        bool isHold = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 1);
+                        if (!isProduction && !isAuto && !isDeleted && !isHold)
+                        {
+                            foreach (var item in customDataArray)
+                            {
+
+                                _context.Database.ExecuteSqlRaw
+                                      (
+                                       "EXEC SP_HoldOrder @PPSeqNo",
+
+                                       new SqlParameter("@PPSeqNo", item.PPSeqNo)
+                                      );
+
+                            }
+                            var result = new { status = "DataHold" };
+                            return Json(result);
+                        }
+                        else
+                        {
+
+                            string message = "";
+
+                            if (isProduction)
+                                message += "Item(s) are already in production. Hold not allowed. ";
+
+                            if (isAuto)
+                                message += "Please turn off Auto mode to allow deletion.";
+
+                            if (isHold)
+                                message += "Order(s) already Hold .";
+
+                            return Json(new { status = "error", message });
+                        }
+
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+
+                    }
+
+
+
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+        [HttpPost] 
+        public IActionResult ReleaseHold([FromBody] List<PreProductionDetails> customDataArray)
+        {
+
+            try
+            {
+                if (User.Identity.Name == "Admin")
+                {
+                    if (customDataArray.Count != 0 || customDataArray != null)
+                    {
+                        customDataArray = customDataArray.OrderBy(x => x.PPSeqNo).ToList();
+                        var ppSeqNos = customDataArray.Select(x => x.PPSeqNo).ToList();
+                        bool isAuto = _context.autoManualConfgs.Any(x => x.IsAutoMode == true);
+                        bool isProduction = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.IsProduction == true);
+                        bool isReleased = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 0);
+                        if (!isProduction && !isAuto && !isReleased)
+                        {
+                            foreach (var item in customDataArray)
+                            {
+
+                                _context.Database.ExecuteSqlRaw
+                                      (
+                                       "EXEC SP_ReleaseHold @PPSeqNo",
+
+                                       new SqlParameter("@PPSeqNo", item.PPSeqNo)
+                                      );
+
+                            }
+                            var result = new { status = "Released" };
+                            return Json(result);
+                        }
+                        else
+                        {
+
+                            string message = "";
+
+                            if (isProduction)
+                                message += "Item(s) are already in production.";
+
+                            if (isAuto)
+                                message += "Please turn off Auto mode.";
+
+                            if (isReleased)
+                                message += "Order(s) already Released.";
+
+                            return Json(new { status = "error", message });
+                        }
+
+                    }
+                    else
+                    {
+                        var result = new { status = "error" };
+                        return Json(result);
+
+                    }
+
+
+
+                }
+                else
+                {
+                    // If user is not in "Admin" role, return unauthorized status code
+                    var result = new { status = "Unauthorized", message = "You are not authorized to access this resource." };
+                    return Json(result);
+                }
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
         [AllowAnonymous]
         public IActionResult Index()
         {
@@ -222,13 +488,37 @@ namespace OMS_Web.Controllers.DataVisulization
                 {
                     if (ErpSeqArray != null)
                     {
-                        foreach (var item in ErpSeqArray)
-                        {
-                            _context.Database.ExecuteSqlRaw("EXEC SP_RevertPreProduction @SeqNo", new SqlParameter("@SeqNo", item));
+                        var seqNos = ErpSeqArray.Select(x => int.Parse(x)).ToList();
 
+                        bool isAllStatusValid = _context.productions
+                            .Where(x => seqNos.Contains(x.ErpSeqNo))
+                            .All(x => x.Status == 0);
+                        bool checkautoStaus = _context.autoManualConfgs.Any(x => x.IsAutoMode ==false);
+                        if (checkautoStaus)
+                        {
+
+
+                            if (isAllStatusValid)
+                            {
+                                foreach (var item in ErpSeqArray)
+                                {
+                                    _context.Database.ExecuteSqlRaw("EXEC SP_RevertPreProduction @SeqNo", new SqlParameter("@SeqNo", item));
+
+                                }
+                                var result = new { status = "Executed" };
+                                return Json(result);
+                            }
+                            else
+                            {
+                                var result = new { status = "error" };
+                                return Json(result);
+                            }
                         }
-                        var result = new { status = "Executed" };
-                        return Json(result);
+                        else
+                        {
+                            var result = new { status = "Unauthorized", message="Stop Auto mode" };
+                            return Json(result);
+                        }
                     }
                     else
                     {
@@ -551,7 +841,7 @@ namespace OMS_Web.Controllers.DataVisulization
                 model.PPSeqNo = data[0].PPSeqNo;
                 model.IsAutoMode = data[0].IsAutoMode;
             }
-           
+
             return View(model);
         }
         [HttpPost]
@@ -563,21 +853,23 @@ namespace OMS_Web.Controllers.DataVisulization
                 {
                     if (model.IsAutoMode == true)
                     {
-                        int ppseqno = _context.PreOrders.Where(x => x.PPSeqNo == model.PPSeqNo && x.IsProduction == false).Select(x => x.PPSeqNo).Count();
-                        if (ppseqno != 0)
-                        {
+                        //int ppseqno = _context.PreOrders.Where(x => x.PPSeqNo == model.PPSeqNo && x.IsProduction == false).Select(x => x.PPSeqNo).Count();
+                        //if (ppseqno != 0)
+                        //{
+                        model.PPSeqNo = 0;
                             _context.Database.ExecuteSqlRaw
                                         (
                                          "EXEC SP_AutoManualConfg @PPSeqNo, @IsAutoMode",
                                          new SqlParameter("@PPSeqNo", model.PPSeqNo),
                                          new SqlParameter("@IsAutoMode", model.IsAutoMode)
                                         );
-                            TempData["PPseqNotFound"] = $"Auto mode is on from PPseqNo: {model.PPSeqNo}.";
-                        }
-                        else
-                        {
-                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} Is not Found for Auto mode.";
-                        }
+                        TempData["PPseqNotFound"] = $"Auto mode is on.";
+                        //    TempData["PPseqNotFound"] = $"Auto mode is on from PPseqNo: {model.PPSeqNo}.";
+                        //}
+                        //else
+                        //{
+                        //    TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} Is not Found for Auto mode.";
+                        //}
                     }
                     else
                     {
@@ -621,7 +913,7 @@ namespace OMS_Web.Controllers.DataVisulization
             {
                 return Json(false);
             }
-            
+
         }
         public JsonResult ReloadPreProOrder()
         {

@@ -261,11 +261,11 @@
         <ul class="sidebar-nav" id="sidebar-nav">
 
             @*<li class="nav-item">
-                <a class="nav-link " href="index.html">
-                    <i class="bi bi-grid"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>*@<!-- End Dashboard Nav -->
+            <a class="nav-link " href="index.html">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>*@<!-- End Dashboard Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-navOms" data-bs-toggle="collapse" href="#">
@@ -311,11 +311,29 @@
                             <i class="bi bi-circle"></i><span>Line Order mgmt Status</span>
                         </a>
                     </li>
+                    <li>
+                        <a asp-action="LOTMatch" asp-controller="LineMaster">
+                            <i class="bi bi-circle"></i><span>Update Line LOT</span>
+                        </a>
+                    </li>
 
                 </ul>
             </li><!-- End Line Nav -->
 
+            <li class="nav-item">
+                <a id="aaa" class="nav-link collapsed" data-bs-target="#components-navReport" data-bs-toggle="collapse" href="#">
 
+                    <i class="bi bi-file-earmark-bar-graph"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-navReport" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a asp-action="DeletedOrders" asp-controller="DataVisulization">
+                            <i class="bi bi-circle"></i><span>Deleted Orders</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Report Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#User-navUser" data-bs-toggle="collapse" href="#">
@@ -347,54 +365,54 @@
             <!-- #region Old Menus -->
             <!--<li class="nav-heading">Pages</li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.html">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li>-->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+            <i class="bi bi-person"></i>
+            <span>Profile</span>
+        </a>
+    </li>-->
             <!-- End Profile Page Nav -->
             <!--<li class="nav-item">
-                <a class="nav-link collapsed" href="pages-faq.html">
-                    <i class="bi bi-question-circle"></i>
-                    <span>F.A.Q</span>
-                </a>
-            </li>-->
+        <a class="nav-link collapsed" href="pages-faq.html">
+            <i class="bi bi-question-circle"></i>
+            <span>F.A.Q</span>
+        </a>
+    </li>-->
             <!-- End F.A.Q Page Nav -->
             <!--<li class="nav-item">
-                <a class="nav-link collapsed" href="pages-contact.html">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li>-->
+        <a class="nav-link collapsed" href="pages-contact.html">
+            <i class="bi bi-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </li>-->
             <!-- End Contact Page Nav -->
             <!--<li class="nav-item">
-                <a class="nav-link collapsed" href="pages-register.html">
-                    <i class="bi bi-card-list"></i>
-                    <span>Register</span>
-                </a>
-            </li>-->
+        <a class="nav-link collapsed" href="pages-register.html">
+            <i class="bi bi-card-list"></i>
+            <span>Register</span>
+        </a>
+    </li>-->
             <!-- End Register Page Nav -->
             <!--<li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.html">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
-            </li>-->
+        <a class="nav-link collapsed" href="pages-login.html">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Login</span>
+        </a>
+    </li>-->
             <!-- End Login Page Nav -->
             <!--<li class="nav-item">
-                <a class="nav-link collapsed" href="pages-error-404.html">
-                    <i class="bi bi-dash-circle"></i>
-                    <span>Error 404</span>
-                </a>
-            </li>-->
+        <a class="nav-link collapsed" href="pages-error-404.html">
+            <i class="bi bi-dash-circle"></i>
+            <span>Error 404</span>
+        </a>
+    </li>-->
             <!-- End Error 404 Page Nav -->
             <!--<li class="nav-item">
-                <a class="nav-link collapsed" href="pages-blank.html">
-                    <i class="bi bi-file-earmark"></i>
-                    <span>Blank</span>
-                </a>
-            </li>-->
+        <a class="nav-link collapsed" href="pages-blank.html">
+            <i class="bi bi-file-earmark"></i>
+            <span>Blank</span>
+        </a>
+    </li>-->
             <!-- End Blank Page Nav -->
             <!-- #endregion -->
         </ul>

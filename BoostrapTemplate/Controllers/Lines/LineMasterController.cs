@@ -40,6 +40,20 @@ namespace OMS_Web.Controllers.Lines
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult LOTMatch()
+        {
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                ViewData["Heading"] = "Line Order Management";
+                ViewBag.LineList = _linemaster.GetAllLines();
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
+            return View();
+        }
         public IActionResult GetAllLine()
         {
             return Json(_linemaster.GetAllLines());
@@ -54,9 +68,25 @@ namespace OMS_Web.Controllers.Lines
         {
             try
             {
-                _context.Database.ExecuteSqlRaw($"Sp_UpdateLOT {lOTViewModel.LineId },{lOTViewModel.Isactive},{lOTViewModel.LOT}");
+                var line = _context.linemasters.FirstOrDefault(x => x.LineId == lOTViewModel.LineId);
 
-                return Json(new { status = "LineUpdated" });
+                if (line != null && line.Isactive == false)
+                {
+                    if (lOTViewModel.LOT!=null)
+                    {
+                        _context.Database.ExecuteSqlRaw($"Sp_UpdateLOT_Match {lOTViewModel.LineId },{lOTViewModel.LOT}");
+                        return Json(new { status = "LineUpdated" });
+                    }
+                    else
+                    {
+                        return Json(new { status = "EmptyLOT" });
+                    }
+                    
+                }
+                else
+                {
+                    return Json(new { status = "Error" });
+                }
             }
             catch (Exception ex)
             {

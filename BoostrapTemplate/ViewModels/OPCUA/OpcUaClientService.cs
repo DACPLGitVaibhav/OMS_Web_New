@@ -78,23 +78,23 @@ public class OpcUaClientService
                 {
                     _oPCUADetails.Isconnect = true;
 
-                    NodeId node1 = new NodeId("ns=4;i=1006");
+                    NodeId node1 = new NodeId("ns=4;i=2221");
                     DataValue value1 = await _session.ReadValueAsync(node1);
                     _oPCUADetails.MPLC_FF = value1.Value.ToString();
 
-                    NodeId node2 = new NodeId("ns=4;i=1343");
+                    NodeId node2 = new NodeId("ns=4;i=313");
                     DataValue value2 = await _session.ReadValueAsync(node2);
                     _oPCUADetails.MPLC_FE = value2.Value.ToString();
 
-                    NodeId node3 = new NodeId("ns=4;i=669");
+                    NodeId node3 = new NodeId("ns=4;i=313");
                     DataValue value3 = await _session.ReadValueAsync(node3);
                     _oPCUADetails.MPLC_RF = value3.Value.ToString();
 
-                    NodeId node4 = new NodeId("ns=4;i=332");
+                    NodeId node4 = new NodeId("ns=4;i=313");
                     DataValue value4 = await _session.ReadValueAsync(node4);
                     _oPCUADetails.MPLC_BSRH = value4.Value.ToString();
 
-                    NodeId node5 = new NodeId("ns=4;i=1680");
+                    NodeId node5 = new NodeId("ns=4;i=313");
                     DataValue value5 = await _session.ReadValueAsync(node5);
                     _oPCUADetails.MPLC_BSLH = value5.Value.ToString();
                 }
@@ -115,7 +115,7 @@ public class OpcUaClientService
                     _oPCUADetails.OMS_BSRH = "0";
                     _oPCUADetails.OMS_BSLH = "0";
 
-                    await ConnectAsync();
+                  //  await ConnectAsync();
                 }
             }
         }
