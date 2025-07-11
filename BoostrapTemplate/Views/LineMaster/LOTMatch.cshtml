@@ -1,0 +1,271 @@
+﻿@model OMS_Web.ViewModels.Lines.LOTViewModel
+@{
+    ViewData["Title"] = "LOT Matching";
+
+}
+
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: nowrap; /* Prevents wrapping of columns */
+        align-items: center; /* Vertically aligns items */
+    }
+
+    .statusbutton {
+        border: none;
+        color: white;
+        width: 80px;
+        height: 40px; /* Set a fixed height */
+        line-height: 40px; /* Vertically center the text */
+    }
+
+    .startbtn {
+        color: white;
+        background-color: skyblue;
+        width: 80px;
+        height: 40px; /* Set a fixed height */
+        line-height: 40px; /* Vertically center the text */
+    }
+
+    .Heading {
+        font-weight: bold;
+        font-size: 30px;
+    }
+
+    .column {
+        padding: 10px;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .line-name {
+        width: 250px; /* fixed width for Line name */
+    }
+
+    .lot {
+        width: 200px; /* fixed width for LOT input */
+    }
+
+    .action {
+        width: 100px; /* fixed width for button */
+    }
+
+
+    /* Custom widths for columns */
+    .column:first-child {
+        margin-left: 100px;
+        /* flex: 2; */ /* First column is wider */
+        width: 180px;
+        text-align: left; /* Left-align the content */
+    }
+
+    .column:nth-child(2) {
+        /*   flex: 1; */ /* Status column takes less width */
+        width: 330px;
+    }
+
+    .column:last-child {
+        /*  flex: 1.5;  */ /* Action column has slightly more width */
+        width: 100px;
+    }
+
+    hr {
+        margin: 0;
+        border: 1px solid #ddd;
+    }
+
+    /* .row:not(:last-child) {
+                    margin-bottom: 10px;
+                } */
+
+    .startbtn {
+        color: white;
+        background-color: skyblue;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .statusInput {
+        width: 300px;
+    }
+
+    .statusContainer {
+        display: none;
+    }
+
+    .hiddenCol {
+        display: none !important;
+    }
+</style>
+
+<div class="container">
+    <!-- Heading Row -->
+    <div class="row Heading">
+        <div class="column line-name">Line</div>
+        <div class="column lot">LOT</div>
+        <div class="column action">Action</div>
+    </div>
+    <hr />
+
+    <!-- Data Rows -->
+    <div class="row LineListId" data-value="1">
+        <div class="column">Front Floor</div>
+
+        <div class="column">
+            <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Update</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="2">
+        <div class="column">Front End</div>
+
+        <div class="column">
+            <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Update</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="3">
+        <div class="column">Rear Floor</div>
+
+        <div class="column">
+            <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Update</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="4">
+        <div class="column">Body Side Right Hand</div>
+
+        <div class="column">
+            <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Update</button>
+        </div>
+    </div>
+
+    <div class="row LineListId" data-value="5">
+        <div class="column">Body Side Left Hand</div>
+
+        <div class="column">
+            <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        </div>
+        <div class="column StartStopBtn">
+            <button class="startbtn">Update</button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+                 $(document).ready(function () {
+            $.ajax({
+                url: '/LineMaster/GetLines',
+                type: 'GET',
+                success: function (lines) {
+
+                    lines.forEach((line) => {
+                        const lineId = line.lineId; // Get the lineId
+                        const isActive = line.isactive; // Check active status
+
+                        // Find the corresponding row with data-value matching lineId
+                        const row = $(`.LineListId[data-value='${lineId}']`);
+
+                        if (row.length > 0) {
+                            const actionContainer = row.find('.StartStopBtn');
+                            const statusContainer = row.find('.statusContainer');
+                            const inputBox = row.find('.statusInput');
+                            // Disable input if isActive true
+                            inputBox.prop('disabled', isActive === true);
+                             //Create buttons
+                            const btnStopStart = $('<button>', {
+                                class: '',
+                                text: 'Update',
+                                css: {
+                                    backgroundColor: isActive ? 'gray' : 'skyblue', // Set initial color
+                                    color: 'white',
+                                    width: '80px',
+                                    height: '40px',
+                                    border: 'none',
+                                    borderRadius: '8px', // Rounded corners
+                                    cursor: 'pointer',
+                                },
+                                disabled: isActive === true,
+                                click: function () {
+                                    // Toggle the isActive value based on the current state
+                                    const newStatus = !line.isactive; // Toggle the status
+                                   // line.isactive = newStatus; // Update the line object
+                                    const lot = row.find('.statusInput').val();
+                                    const lineName = row.find('.column:first-child').text();
+                                    // Send the updated status to the server via POST
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                        url: "/LineMaster/UpdateLOT", // Server endpoint for updating the status
+                                        data: {
+                                            "LineId": lineId,
+                                            "LOT":lot
+                                        },
+                                        success: function (data) {
+                                            if (data.status === "LineUpdated") {
+                                                alert(`Update LOT For Line ${lineName} Successfully`);
+                                                //location.reload();
+                                                inputBox.val('');
+                                            } else if (data.status === "Error") {
+                                                alert(`Line ${lineName} is started. You need to stop it to update LOT.`);
+                                                location.reload();
+                                            }
+                                            else if (data.status === "EmptyLOT") {
+                                                alert(`Enter Valid LOT.`);
+                                                location.reload();
+                                            }else {
+                                                alert(`Something went wrong: ${data.message || "Unknown error"}`);
+                                            }
+                                        },
+                                        error: function (error) {
+                                            alert(`Failed to update lot for Line ${lineName}`);
+                                            console.error(error);
+                                            location.reload();
+                                        }
+                                    });
+                                },
+                            });
+
+
+
+                            // Append the buttons to the respective containers
+                            actionContainer.empty().append(btnStopStart);
+
+                        } else {
+                            console.warn(`No row found for Line ID: ${lineId}`);
+                        }
+                    });
+                },
+                error: function () {
+                    alert('Failed to fetch lines.');
+                }
+            });
+        });
+
+    </script>
+
+
+
+}

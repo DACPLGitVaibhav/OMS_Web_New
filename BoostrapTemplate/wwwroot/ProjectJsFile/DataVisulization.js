@@ -384,6 +384,8 @@ $(document).ready(function () {
 
             }
         });
+
+        //As discuss with gandhar hide swap button on 18/06/2025
         btnSwap = $('<button/>', {
             class: 'swp',
             html: 'SWAP',
@@ -648,9 +650,9 @@ $(document).ready(function () {
             if (allZeroValues == true) {
                 $('#TRFBtnContainer').empty().append(btnTRFToPreproduction);
                 $('#buttonContainer').empty().append(buttonAbound);
-                if (selectedRowCount === 2) {
-                     $('#buttonContainer').append(btnSwap);
-                }
+                //if (selectedRowCount === 2) {
+                //     $('#buttonContainer').append(btnSwap);
+                //}
             }
             else {
                 $('#TRFBtnContainer').empty();

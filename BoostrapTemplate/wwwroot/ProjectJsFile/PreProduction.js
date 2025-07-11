@@ -98,9 +98,9 @@ $(document).ready(function () {
 
             var btntrfProdcuction = $('<button>', {
                 class: 'btn btn-primary',
-                text: 'TRF Production',
+                text: 'Transfer To Production',
                 click: function () {
-                    var confirmed = confirm('Are you sure you want to Transfer to Production this orders?');
+                    var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
                     if (confirmed) {
                         $.ajax({
                             type: 'POST',
@@ -110,7 +110,7 @@ $(document).ready(function () {
                             data: JSON.stringify(customDataArray),
                             success: function (data) {
                                 if (data.status === "DataRecived") {
-                                    alert('Production Start');
+                                    alert('Production Started');
                                     /*table.rows().deselect();*/
                                     window.location.reload();
                                     window.location.href = '/DataVisulization/Index';
@@ -184,9 +184,9 @@ $(document).ready(function () {
         if (selectedData.length > 0) {
             var btntrfProdcuction = $('<button>', {
                 class: 'btn btn-primary',
-                text: 'TRF Production',
+                text: 'Transfer To Production',
                 click: function () {
-                    var confirmed = confirm('Are you sure you want to Transfer to Production this orders?');
+                    var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
                     if (confirmed) {
                         $.ajax({
                             type: 'POST',
@@ -196,7 +196,7 @@ $(document).ready(function () {
                             data: JSON.stringify(customDataArray),
                             success: function (data) {
                                 if (data.status === "DataRecived") {
-                                    alert('Production Start');
+                                    alert('Production Started');
                                     /*table.rows().deselect();*/
                                     window.location.reload();
                                     window.location.href = '/DataVisulization/Index';
