@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OMS_Template.ViewModels.AutoManual;
 using System.Xml.Linq;
 
+
 namespace OMS_Web.Controllers.DataVisulization
 {
     [Authorize(Roles = "Admin")]
@@ -22,13 +23,17 @@ namespace OMS_Web.Controllers.DataVisulization
 
         private readonly ContextClass _context;
         private readonly IOrders _orders;
-
+        public static List<LineStatusMgmtNodes> FF;
+        public static List<LineStatusMgmtNodes> FE;
+        public static List<LineStatusMgmtNodes> RF;
+        public static List<LineStatusMgmtNodes> BSLH;
+        public static List<LineStatusMgmtNodes> BSRH;
         public DataVisulizationController(ContextClass context, IOrders orders)
         {
             _context = context;
             _orders = orders;
+           
         }
-
 
         public IActionResult PreProductionOrders(string erpCode)
         {
@@ -827,6 +832,21 @@ namespace OMS_Web.Controllers.DataVisulization
 
         public IActionResult Welcome()
         {
+            try
+            {
+                var data = _context.lineStatusMgmtNodes.ToList();
+                FF = data.Where(x=>x.ID==1).ToList();
+                FE = data.Where(x => x.ID == 2).ToList();
+                RF = data.Where(x => x.ID == 3).ToList();
+                BSRH = data.Where(x => x.ID == 4).ToList();
+                BSLH = data.Where(x => x.ID == 5).ToList();
+              
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             return View();
         }
 

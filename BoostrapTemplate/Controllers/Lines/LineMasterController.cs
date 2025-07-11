@@ -39,13 +39,12 @@ namespace OMS_Web.Controllers.Lines
             }
             return View();
         }
-
         [Authorize(Roles = "Admin")]
         public IActionResult LOTMatch()
         {
             if (HttpContext.Session.GetString("Username") != null)
             {
-                ViewData["Heading"] = "Line Order Management";
+                ViewData["Heading"] = "LOT Matching";
                 ViewBag.LineList = _linemaster.GetAllLines();
             }
             else
@@ -72,16 +71,16 @@ namespace OMS_Web.Controllers.Lines
 
                 if (line != null && line.Isactive == false)
                 {
-                    if (lOTViewModel.LOT!=null)
+                    if (lOTViewModel.LOT != null)
                     {
-                        _context.Database.ExecuteSqlRaw($"Sp_UpdateLOT_Match {lOTViewModel.LineId },{lOTViewModel.LOT}");
+                        _context.Database.ExecuteSqlRaw($"Sp_UpdateLOT_Match {lOTViewModel.LineId},{lOTViewModel.LOT}");
                         return Json(new { status = "LineUpdated" });
                     }
                     else
                     {
                         return Json(new { status = "EmptyLOT" });
                     }
-                    
+
                 }
                 else
                 {
@@ -194,18 +193,18 @@ namespace OMS_Web.Controllers.Lines
                 throw;
             }
         }
-        public IActionResult StatusData()
-        {
-            if (HttpContext.Session.GetString("Username") != null)
-            {
-                ViewData["Heading"] = "Line Order Management";
-                ViewBag.LineList = _linemaster.GetAllLines();
-            }
-            else
-            {
-                return RedirectToAction("Logout", "Account");
-            }
-            return View();
-        }
+        //public IActionResult StatusData()
+        //{
+        //    if (HttpContext.Session.GetString("Username") != null)
+        //    {
+        //        ViewData["Heading"] = "Line Order Management";
+        //        ViewBag.LineList = _linemaster.GetAllLines();
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Logout", "Account");
+        //    }
+        //    return View();
+        //}
     }
 }

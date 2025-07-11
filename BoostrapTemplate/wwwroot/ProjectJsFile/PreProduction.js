@@ -551,7 +551,7 @@ $(document).ready(function () {
                     selectedData.push(index);
                 }
             });
-            console.log(selectedData);
+           // console.log(selectedData);
             updateCustomDataArray();
             updateButtonsBasedOnStatus();
             if (selectedData.length === 0) {
@@ -660,7 +660,7 @@ function reloadTable() {
                     },
 
                     error: function (error) {
-                        console.error('Error fetching data:', error);
+                       // console.error('Error fetching data:', error);
                     }
                 });
 
@@ -672,7 +672,7 @@ function reloadTable() {
         },
 
         error: function (error) {
-            console.error('Error fetching data:', error);
+           // console.error('Error fetching data:', error);
         }
     });
 }

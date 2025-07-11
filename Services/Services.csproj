@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DATA\DATA.csproj" />
+	  <PackageReference Include="Microsoft.Build.Framework" Version="17.12.6" />
   </ItemGroup>
 
 </Project>

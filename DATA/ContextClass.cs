@@ -32,5 +32,6 @@ namespace DATA
         public DbSet<Baretail_Log> tbl_Baretail_Log { get; set; }
         public DbSet<LOT_details> lOT_Details { get; set; }
         public DbSet<AutoManualConfg> autoManualConfgs { get; set; }
+        public DbSet<LineStatusMgmtNodes> lineStatusMgmtNodes { get; set;}
     }
 }

@@ -116,7 +116,7 @@ function CheckLineStatus() {
         url: '/DataVisulization/GetLineStatus',
         dataType: 'json',
         success: function (data) {
-            debugger;
+            //debugger;
             if (data == true) {
                 $('.alert-danger').show()
             }
@@ -148,7 +148,7 @@ function reloadTable(rowsPerPage) {
         },
 
         error: function (error) {
-            console.error('Error fetching data:', error);
+           // console.error('Error fetching data:', error);
         }
     });
 }
@@ -220,7 +220,7 @@ function renderTable() {
             return count;
         }, 0);
     });
-    debugger;
+   // debugger;
     $("#countDisplay").text(`Pending Orders: ${totalCountFromTotalData}`);
     generatePageButtons();
 }
@@ -264,7 +264,7 @@ $(document).ready(function () {
 
     $('#Table tbody').on('click', 'tr', function () {
         stopReload();
-        console.log(ErpSeqArray);
+        //console.log(ErpSeqArray);
         if (event.target.type !== 'checkbox') {
             var checkbox = $(this).find('.checkbox');
             checkbox.prop('checked', !checkbox.prop('checked'));
@@ -273,7 +273,7 @@ $(document).ready(function () {
 
         selectedRowCount = $('#Table tbody tr.selected').length;
         $("#RowcountDisplay").text(`Order Selected: ${selectedRowCount}`);
-        console.log(selectedRowCount);
+      //  console.log(selectedRowCount);
 
        
         // #region transferToPre-production.
@@ -291,7 +291,7 @@ $(document).ready(function () {
                         dataType: 'json',
                         success: function (data) {
                             var linestatus = data;
-                            console.log(linestatus);
+                            //console.log(linestatus);
 
                             if (linestatus == true) {
                                 $.ajax({
@@ -386,6 +386,8 @@ $(document).ready(function () {
 
             }
         });
+
+        //As discuss with gandhar hide swap button on 18/06/2025
         btnSwap = $('<button/>', {
             class: 'swp',
             html: 'SWAP',
@@ -580,7 +582,7 @@ $(document).ready(function () {
 
 
 
-                debugger;
+               // debugger;
                 // Append the button to a div outside the table
                 if (FF === '100' && FE === '100' && RF === '100' && BSRH === '100' && BSLH === '100') {
                     $('#buttonContainer').empty().append(buttonBrkPoint);
@@ -611,7 +613,7 @@ $(document).ready(function () {
             var checkValueForAbound = true;
 
             var rows = $('#Table tbody tr.selected');
-            console.log(rows);
+            //console.log(rows);
 
             if (selectedRowCount >= 1) {
                 var selectedRows = $('#Table tbody tr.selected');
@@ -650,9 +652,9 @@ $(document).ready(function () {
             if (allZeroValues == true) {
                 $('#TRFBtnContainer').empty().append(btnTRFToPreproduction);
                 $('#buttonContainer').empty().append(buttonAbound);
-                if (selectedRowCount === 2) {
-                     $('#buttonContainer').append(btnSwap);
-                }
+                //if (selectedRowCount === 2) {
+                //     $('#buttonContainer').append(btnSwap);
+                //}
             }
             else {
                 $('#TRFBtnContainer').empty();

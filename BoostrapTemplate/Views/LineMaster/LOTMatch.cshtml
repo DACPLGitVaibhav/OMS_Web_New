@@ -1,6 +1,6 @@
 ﻿@model OMS_Web.ViewModels.Lines.LOTViewModel
 @{
-    ViewData["Title"] = "Line Order Management";
+    ViewData["Title"] = "LOT Matching";
 
 }
 
@@ -58,7 +58,7 @@
     }
 
 
-     /* Custom widths for columns */
+    /* Custom widths for columns */
     .column:first-child {
         margin-left: 100px;
         /* flex: 2; */ /* First column is wider */
@@ -82,8 +82,8 @@
     }
 
     /* .row:not(:last-child) {
-                margin-bottom: 10px;
-            } */
+                    margin-bottom: 10px;
+                } */
 
     .startbtn {
         color: white;
@@ -92,12 +92,15 @@
         padding: 5px 10px;
         cursor: pointer;
     }
+
     .statusInput {
         width: 300px;
     }
+
     .statusContainer {
         display: none;
     }
+
     .hiddenCol {
         display: none !important;
        
@@ -108,7 +111,7 @@
     <!-- Heading Row -->
     <div class="row Heading">
         <div class="column line-name">Line</div>
-        <div class="column lot">LOT</div> 
+        <div class="column lot">LOT</div>
         <div class="column action">Action</div>
     </div>
     <hr />
@@ -116,7 +119,7 @@
     <!-- Data Rows -->
     <div class="row LineListId" data-value="1">
         <div class="column">Front Floor</div>
-      
+
         <div class="column">
             <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
@@ -127,7 +130,7 @@
 
     <div class="row LineListId" data-value="2">
         <div class="column">Front End</div>
-       
+
         <div class="column">
             <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
@@ -138,7 +141,7 @@
 
     <div class="row LineListId" data-value="3">
         <div class="column">Rear Floor</div>
-       
+
         <div class="column">
             <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
@@ -149,7 +152,7 @@
 
     <div class="row LineListId" data-value="4">
         <div class="column">Body Side Right Hand</div>
-       
+
         <div class="column">
             <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
@@ -160,7 +163,7 @@
 
     <div class="row LineListId" data-value="5">
         <div class="column">Body Side Left Hand</div>
-      
+
         <div class="column">
             <input type="text" class="statusInput" placeholder="Enter LOT" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
@@ -182,7 +185,7 @@
                     lines.forEach((line) => {
                         const lineId = line.lineId; // Get the lineId
                         const isActive = line.isactive; // Check active status
-                        
+
                         // Find the corresponding row with data-value matching lineId
                         const row = $(`.LineListId[data-value='${lineId}']`);
 
@@ -195,7 +198,7 @@
                              //Create buttons
                             const btnStopStart = $('<button>', {
                                 class: '',
-                                text: 'Update', 
+                                text: 'Update',
                                 css: {
                                     backgroundColor: isActive ? 'gray' : 'skyblue', // Set initial color
                                     color: 'white',
@@ -218,13 +221,13 @@
                                         dataType: "json",
                                         url: "/LineMaster/UpdateLOT", // Server endpoint for updating the status
                                         data: {
-                                            "LineId": lineId,                                                                    
+                                            "LineId": lineId,
                                             "LOT":lot
-                                        }, 
-                                        success: function (data) {                                           
+                                        },
+                                        success: function (data) {
                                             if (data.status === "LineUpdated") {
                                                 alert(`Update LOT For Line ${lineName} Successfully`);
-                                               // location.reload();
+                                                //location.reload();
                                                 inputBox.val('');
                                             } else if (data.status === "Error") {
                                                 alert(`Line ${lineName} is started. You need to stop it to update LOT.`);
@@ -246,11 +249,11 @@
                                 },
                             });
 
-                          
+
 
                             // Append the buttons to the respective containers
                             actionContainer.empty().append(btnStopStart);
-                            
+
                         } else {
                             console.warn(`No row found for Line ID: ${lineId}`);
                         }
@@ -264,6 +267,6 @@
 
     </script>
 
-   
+
 
 }

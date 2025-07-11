@@ -1,0 +1,673 @@
+﻿@model OMS_Template.ViewModels.OPCUA.Line_Order_mgmt_Status_Details
+@{
+    ViewData["Title"] = "Line Order Management";
+}
+<head>
+
+</head>
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Adjust width as needed */
+    }
+
+    .unique-wrapper.row {
+        display: flex;
+        width: 100%;
+    }
+
+    .row-1, .row-2 {
+        height: 50px; /* Adjust height for rows as needed */
+        /*  border: 1px solid #ccc;  */ /* Optional: to visualize rows */
+        font-size: 13px;
+    }
+
+    .row-4 {
+        justify-content: space-between; /* To make two columns in row-4 spread across */
+    }
+
+    .column {
+        display: flex;
+        flex: 1; /* Distribute space equally for each column */
+        padding: 10px;
+        /*  border: 1px solid #ddd; */ /* Optional: to visualize columns */
+        align-items: center;
+    }
+
+    .row-4 .column {
+        width: 45%; /* Adjust width for columns in last row */
+        /* flex-direction:column; */
+    }
+
+    label {
+        font-weight: bold;
+    }
+    /* General label styles */
+    .label {
+        display: inline-block;
+        width: 50px; /* Adjust based on your requirement */
+        height: 30px; /* Fixed height */
+        text-align: center; /* Horizontal centering */
+        line-height: 30px; /* Vertical centering */
+        color: white;
+        font-weight: bold;
+        background-color: blue; /* Default background */
+        border-radius: 5px; /* Optional: rounded corners */
+        margin: 3px; /* Spacing between labels */
+    }
+
+    #Status {
+        display: inline-block;
+        width: 50px; /* Adjust based on your requirement */
+        height: 30px; /* Fixed height */
+        text-align: center; /* Horizontal centering */
+        line-height: 30px; /* Vertical centering */
+        color: white;
+        font-weight: bold;
+      /*   background-color: blue; */ /* Default background */
+        border-radius: 5px; /* Optional: rounded corners */
+        margin: 3px; /* Spacing between labels */
+    }
+
+    .table {
+        background-color: #f6f9ff;
+    }
+
+    #loading {
+        display: none; /* Initially hidden */
+        position: fixed; /* Fixed position to cover the entire viewport */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8); /* Light transparent background */
+        z-index: 1000; /* Ensure it appears above other content */
+        justify-content: center; /* Center the spinner horizontally */
+        align-items: center; /* Center the spinner vertically */
+        display: flex;
+    }
+</style>
+<div id="loading">
+    <i class="fas fa-spinner fa-spin fa-3x"></i> <!-- Font Awesome spinner -->
+</div>
+<div calss="unique-wrapper">
+    <div class="container">
+        <div class="row row-1">
+            <div class="column">
+                <div class="col-md-2" align="left" style="display:table">
+                    <label asp-for="LineName" class="control-label" style="display:table-cell"></label>
+                </div>
+                <div class="col-md-8">
+                    <select id="LineListId" asp-for="LineId"
+                            class="form-control" style="display:table-cell"
+                            asp-items="@(new SelectList(@ViewBag.LineList,"LineId", "LineName"))">
+                    </select>
+                    <span id="error-message" style="display: none; color:red;text-align:left;">
+                        Please Select Line
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row row-2">
+            <div class="column">
+                <label style="width:35px">PLC:</label>
+                <label class="" id="Status"></label>
+                <label class="offset-md-1 " style="width:110px">PRG Count/Size:</label>
+                <label class="label" id="PRGCount"></label>
+                <label class="offset-md-1 " style="width:110px">LOIP Count/Size:</label>
+                <label class="label" id="LOIPCount"></label>
+            </div>
+
+        </div>
+
+        <div class="row row-4">
+            <div class="col-md-6">
+                <div>
+                    <label>
+                        LOT
+                    </label>
+                    <table class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Sequence</th>
+                                <th>Mes_VCode</th>
+                                <th>DE</th>
+                                <th>CE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="LOTSequence">0</td>
+                                <td id="LOTMesVcode">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="">
+                    <label>LOS</label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sequence</th>
+                                <th>Mes_VCode</th>
+                                <th>DE</th>
+                                <th>CE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="LOSSequence">0</td>
+                                <td id="LOSMesVcode">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div>
+                    <label>PRG List</label>
+                    <table class="table PRGTable">
+                        <thead>
+                            <tr>
+                                <th>Sequence</th>
+                                <th>Mes_VCode</th>
+                                <th>DE</th>
+                                <th>CE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="PRGSequence1">0</td>
+                                <td id="PRGMesVcode1">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="PRGSequence2">0</td>
+                                <td id="PRGMesVcode2">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="PRGSequence3">0</td>
+                                <td id="PRGMesVcode3">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="PRGSequence4">0</td>
+                                <td id="PRGMesVcode4">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="PRGSequence5">0</td>
+                                <td id="PRGMesVcode5">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="">
+                    <label>LOP</label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sequence</th>
+                                <th>Mes_VCode</th>
+                                <th>DE</th>
+                                <th>CE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="LOPSequence">0</td>
+                                <td id="LOPMesVcode">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div>
+                    <label>LOIP List</label>
+                    <table class="table LOIPTable">
+                        <thead>
+                            <tr>
+                                <th>Sequence</th>
+                                <th>Mes_VCode</th>
+                                <th>DE</th>
+                                <th>CE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="LOIPSequence1">0</td>
+                                <td id="LOIPMesVcode1">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence2">0</td>
+                                <td id="LOIPMesVcode2">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence3">0</td>
+                                <td id="LOIPMesVcode3">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence4">0</td>
+                                <td id="LOIPMesVcode4">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence5">0</td>
+                                <td id="LOIPMesVcode5">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence6">0</td>
+                                <td id="LOIPMesVcode6">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence7">0</td>
+                                <td id="LOIPMesVcode7">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence8">0</td>
+                                <td id="LOIPMesVcode8">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence9">0</td>
+                                <td id="LOIPMesVcode9">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence10">0</td>
+                                <td id="LOIPMesVcode10">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence11">0</td>
+                                <td id="LOIPMesVcode11">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence12">0</td>
+                                <td id="LOIPMesVcode12">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence13">0</td>
+                                <td id="LOIPMesVcode13">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence14">0</td>
+                                <td id="LOIPMesVcode14">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence15">0</td>
+                                <td id="LOIPMesVcode15">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence16">0</td>
+                                <td id="LOIPMesVcode16">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence17">0</td>
+                                <td id="LOIPMesVcode17">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence18">0</td>
+                                <td id="LOIPMesVcode18">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence19">0</td>
+                                <td id="LOIPMesVcode19">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence20">0</td>
+                                <td id="LOIPMesVcode20">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence21">0</td>
+                                <td id="LOIPMesVcode21">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence22">0</td>
+                                <td id="LOIPMesVcode22">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence23">0</td>
+                                <td id="LOIPMesVcode23">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence24">0</td>
+                                <td id="LOIPMesVcode24">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence25">0</td>
+                                <td id="LOIPMesVcode25">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence26">0</td>
+                                <td id="LOIPMesVcode26">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            <tr>
+                                <td id="LOIPSequence27">0</td>
+                                <td id="LOIPMesVcode27">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td id="LOIPSequence28">0</td>
+                                <td id="LOIPMesVcode28">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td id="LOIPSequence29">0</td>
+                                <td id="LOIPMesVcode29">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td id="LOIPSequence30">0</td>
+                                <td id="LOIPMesVcode30">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            TestOPCSession();
+            updateLineDetails();
+           // GetLineStatus();
+
+            setInterval(TestOPCSession, 60000);
+            // Define the change event handler
+           
+
+            // Bind the change event to the dropdown
+            $("#LineListId").change(function () {
+                updateLineDetails();
+                //GetLineStatus();
+
+            });
+           
+        });
+
+
+        function updateLineDetails() {
+            var lineId = $("#LineListId").val();
+            $('#loading').show();
+            $.ajax({
+                type: 'GET',
+                url: '/OPCUA/LinemgmtDetails',
+                data: {
+                    "ID": lineId,
+                },
+                success: function (result) {
+                    $("#LOTSequence").html(result.loT_Sequence);
+                    $("#LOTMesVcode").html(result.loT_Mes_Vcode);
+
+                    $("#LOSSequence").html(result.loS_Sequence);
+                    $("#LOSMesVcode").html(result.loS_Mes_Vcode);
+
+                    $("#PRGSequence1").html(result.prG_Sequence1);
+                    $("#PRGMesVcode1").html(result.prG_Mes_Vcode1);
+                    $("#PRGSequence2").html(result.prG_Sequence2);
+                    $("#PRGMesVcode2").html(result.prG_Mes_Vcode2);
+                    $("#PRGSequence3").html(result.prG_Sequence3);
+                    $("#PRGMesVcode3").html(result.prG_Mes_Vcode3);
+                    $("#PRGSequence4").html(result.prG_Sequence4);
+                    $("#PRGMesVcode4").html(result.prG_Mes_Vcode4);
+                    $("#PRGSequence5").html(result.prG_Sequence5);
+                    $("#PRGMesVcode5").html(result.prG_Mes_Vcode5);
+
+                    $("#LOPSequence").html(result.loP_Sequence);
+                    $("#LOPMesVcode").html(result.loP_Mes_Vcode);
+
+                    for (let i = 1; i <= 30; i++) {
+                        $("#LOIPSequence" + i).html(result[`loiP_Sequence${i}`]);
+                        $("#LOIPMesVcode" + i).html(result[`loiP_Mes_Vcode${i}`]);
+                    }
+                    var rowCount = $(".PRGTable tbody tr").filter(function () {
+                        return $(this).find("td:first").text() !== "0";
+                    }).length;
+
+                    $("#PRGCount").text(`${rowCount}/5`);
+
+                    var rowCount = $(".LOIPTable tbody tr").filter(function () {
+                        return $(this).find("td:first").text() !== "0";
+                    }).length;
+
+                    $("#LOIPCount").text(`${rowCount}/30`);
+                    $('#loading').hide();
+                    // var totalRows = $(".PRGTable tbody tr").length; // Total rows
+                    // var count = $(".PRGTable tbody tr").map(function () {
+                    //     var sequenceValue = $(this).find("td:eq(0)").text();
+                    //     return sequenceValue != "0" ? 1 : 0;
+                    // }).get();
+
+                    // var rowCount = count.reduce((a, b) => a + b, 0); // Rows where "Sequence" != 0
+                    //  console.log(`Valid Rows: ${rowCount}, Total Rows: ${totalRows}`);
+                },
+                error: function () {
+                    console.error("Failed to fetch line Details.");
+                }
+            });
+        }
+
+        function GetLineStatus() {
+            var lineId = $("#LineListId").val();
+            $.ajax({
+                url: '/LineMaster/GetLine',
+                type: 'GET',
+                data: {
+                    "LineId": lineId
+                },
+                success: function (Line) {
+                    $("#Status").empty();
+                    if (Line.isactive === true) {
+                        $("#Status")
+                            .html('Start')
+                            .css('background-color', 'green'); // Set text color to green
+                    } else {
+                        $("#Status")
+                            .html('Stop')
+                            .css('background-color', 'red'); // Set text color to red
+                    }
+                },
+                error: function () {
+                    console.error("Failed to fetch line status.");
+                }
+            });
+        }
+        function TestOPCSession() {
+
+            $.ajax({
+                url: "/opcua/TestOPCSession",
+                type: 'get',
+                dataType: 'JSON',
+                contentType: 'application/json;charset=utf-8',
+                success: function (result, status, xhr) {
+                    
+                    $("#Status").empty();
+                    if (result === true) {
+                        $("#Status")
+                            .html('OK')
+                            .css('background-color', 'green'); // Set text color to green
+                    } else {
+                        $("#Status")
+                            .html('NOK')
+                            .css('background-color', 'red'); // Set text color to red
+                    }
+                    // // debugger;
+                    // $("#spn1").empty();
+                    // $('#spn1').removeClass();
+                    // result == true ? $('#spn1').addClass('dot-PLC-Green') : $('#spn1').addClass('dot-PLC-Red');
+                    // if (result == false) {
+                    //     $('#FF_Mlot').html(0);
+                    //     $('#FE_Mlot').html(0);
+                    //     $('#RF_Mlot').html(0);
+                    //     $('#BSRH_Mlot').html(0);
+                    //     $('#BSLH_Mlot').html(0);
+                    // }
+                },
+                error: function () {
+
+                }
+
+            });
+        }
+    </script>
+
+    @*  <script>
+          $(document).ready(function () {
+            $("#LineListId").change(function () {
+              var lineId = $("#LineListId").val();
+
+              $.ajax({
+                type: 'GET',
+                url: '/OPCUA/LinemgmtDetails',
+                data: {
+                  "ID": lineId,
+                },
+                success: function (result) {
+                  $("#LOTSequence").html(result.loT_Sequence);
+                  $("#LOTMesVcode").html(result.loT_Mes_Vcode);
+
+                  $("#LOSSequence").html(result.loS_Sequence);
+                  $("#LOSMesVcode").html(result.loS_Mes_Vcode);
+
+                  $("#PRGSequence1").html(result.prG_Sequence1);
+                  $("#PRGMesVcode1").html(result.prG_Mes_Vcode1);
+                  $("#PRGSequence2").html(result.prG_Sequence2);
+                  $("#PRGMesVcode2").html(result.prG_Mes_Vcode2);
+                  $("#PRGSequence3").html(result.prG_Sequence3);
+                  $("#PRGMesVcode3").html(result.prG_Mes_Vcode3);
+                  $("#PRGSequence4").html(result.prG_Sequence4);
+                  $("#PRGMesVcode4").html(result.prG_Mes_Vcode4);
+                  $("#PRGSequence5").html(result.prG_Sequence5);
+                  $("#PRGMesVcode5").html(result.prG_Mes_Vcode5);
+
+                  $("#LOPSequence").html(result.loP_Sequence);
+                  $("#LOPMesVcode").html(result.loP_Mes_Vcode);
+
+                  $("#LOIPSequence1").html(result.loiP_Sequence1);
+                  $("#LOIPMesVcode1").html(result.loiP_Mes_Vcode1);
+                  $("#LOIPSequence2").html(result.loiP_Sequence2);
+                  $("#LOIPMesVcode2").html(result.loiP_Mes_Vcode2);
+                  $("#LOIPSequence3").html(result.loiP_Sequence3);
+                  $("#LOIPMesVcode3").html(result.loiP_Mes_Vcode3);
+                  $("#LOIPSequence4").html(result.loiP_Sequence4);
+                  $("#LOIPMesVcode4").html(result.loiP_Mes_Vcode4);
+                  $("#LOIPSequence5").html(result.loiP_Sequence5);
+                  $("#LOIPMesVcode5").html(result.loiP_Mes_Vcode5);
+                  $("#LOIPSequence6").html(result.loiP_Sequence6);
+                  $("#LOIPMesVcode6").html(result.loiP_Mes_Vcode6);
+                  $("#LOIPSequence7").html(result.loiP_Sequence7);
+                  $("#LOIPMesVcode7").html(result.loiP_Mes_Vcode7);
+                  $("#LOIPSequence8").html(result.loiP_Sequence8);
+                  $("#LOIPMesVcode8").html(result.loiP_Mes_Vcode8);
+                  $("#LOIPSequence9").html(result.loiP_Sequence9);
+                  $("#LOIPMesVcode9").html(result.loiP_Mes_Vcode9);
+                  $("#LOIPSequence10").html(result.loiP_Sequence10);
+                  $("#LOIPMesVcode10").html(result.loiP_Mes_Vcode10);
+                  $("#LOIPSequence11").html(result.loiP_Sequence11);
+                  $("#LOIPMesVcode11").html(result.loiP_Mes_Vcode11);
+                  $("#LOIPSequence12").html(result.loiP_Sequence12);
+                  $("#LOIPMesVcode12").html(result.loiP_Mes_Vcode12);
+                  $("#LOIPSequence13").html(result.loiP_Sequence13);
+                  $("#LOIPMesVcode13").html(result.loiP_Mes_Vcode13);
+                  $("#LOIPSequence14").html(result.loiP_Sequence14);
+                  $("#LOIPMesVcode14").html(result.loiP_Mes_Vcode14);
+                  $("#LOIPSequence15").html(result.loiP_Sequence15);
+                  $("#LOIPMesVcode15").html(result.loiP_Mes_Vcode15);
+                  $("#LOIPSequence16").html(result.loiP_Sequence16);
+                  $("#LOIPMesVcode16").html(result.loiP_Mes_Vcode16);
+                  $("#LOIPSequence17").html(result.loiP_Sequence17);
+                  $("#LOIPMesVcode17").html(result.loiP_Mes_Vcode17);
+                  $("#LOIPSequence18").html(result.loiP_Sequence18);
+                  $("#LOIPMesVcode18").html(result.loiP_Mes_Vcode18);
+                  $("#LOIPSequence19").html(result.loiP_Sequence19);
+                  $("#LOIPMesVcode19").html(result.loiP_Mes_Vcode19);
+                  $("#LOIPSequence20").html(result.loiP_Sequence20);
+                  $("#LOIPMesVcode20").html(result.loiP_Mes_Vcode20);
+                  $("#LOIPSequence21").html(result.loiP_Sequence21);
+                  $("#LOIPMesVcode21").html(result.loiP_Mes_Vcode21);
+                  $("#LOIPSequence22").html(result.loiP_Sequence22);
+                  $("#LOIPMesVcode22").html(result.loiP_Mes_Vcode22);
+                  $("#LOIPSequence23").html(result.loiP_Sequence23);
+                  $("#LOIPMesVcode23").html(result.loiP_Mes_Vcode23);
+                  $("#LOIPSequence24").html(result.loiP_Sequence24);
+                  $("#LOIPMesVcode24").html(result.loiP_Mes_Vcode24);
+                  $("#LOIPSequence25").html(result.loiP_Sequence25);
+                  $("#LOIPMesVcode25").html(result.loiP_Mes_Vcode25);
+                  $("#LOIPSequence26").html(result.loiP_Sequence26);
+                  $("#LOIPMesVcode26").html(result.loiP_Mes_Vcode26);
+                  $("#LOIPSequence27").html(result.loiP_Sequence27);
+                  $("#LOIPMesVcode27").html(result.loiP_Mes_Vcode27);
+                  $("#LOIPSequence28").html(result.loiP_Sequence28);
+                  $("#LOIPMesVcode28").html(result.loiP_Mes_Vcode28);
+                  $("#LOIPSequence29").html(result.loiP_Sequence29);
+                  $("#LOIPMesVcode29").html(result.loiP_Mes_Vcode29);
+                  $("#LOIPSequence30").html(result.loiP_Sequence30);
+                  $("#LOIPMesVcode30").html(result.loiP_Mes_Vcode30);
+                },
+              });
+            });
+          });
+          </script>
+ *@
+}

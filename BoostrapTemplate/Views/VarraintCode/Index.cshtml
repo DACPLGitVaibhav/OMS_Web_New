@@ -1,0 +1,91 @@
+﻿@model OMS_Template.ViewModels.VarraintCode.VarraintCode_List_ViewModel
+@{
+    ViewData["Title"] = "Variant List";
+    ViewData["Heading"] = "Variant Code";
+}
+<style>
+    th {
+        background-color: skyblue;
+    }
+
+    .dataTables_length {
+        margin-bottom: 10px;
+    }
+</style>
+<div>
+
+    <input type="button" class="btn btn-info m-1" style="float:right" id="btn12" value="Add variant" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/VarraintCode/Create','Add Variant','gl')" />
+
+    <div>
+        <table class="display compact" id="tabledata">
+            <thead style="text-align:center;">
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Erp Vcode</th>                  
+                    <th>Mes Vcode</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    var srno = 1;
+                    @foreach (var item in Model.VcList)
+                    {
+                        <tr>
+                            <td>@srno</td>
+                            <td>@item.Erp_Vcode</td>                           
+                            <td>@item.Mes_Vcode</td>
+                            <td>@item.Description</td>
+                            <td>
+                                <a class="btn btn-primary" data-bs-target="#divModal" data-bs-toggle="modal" onclick="ShowModal('/VarraintCode/Edit?id=@item.Id','Edit Variant','gl')"><i class="bi-pencil" title="Edit"></i></a>
+                                @* <a class="btn btn-danger" onclick="return CustConfirm(@item.Id)"><i class="bi-trash" title="Remove"></i></a> *@
+                            </td>
+                        </tr>
+                        srno++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Global.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tabledata').DataTable({
+                "ordering": false,
+                "pageLength": 10,
+            });
+
+        });
+             function CustConfirm(Id) {
+            var resp;
+                swal.fire({
+                    title: "Are you sure to Delete This Record?",
+                    type: "error",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((result) => {
+                    debugger;
+                    if (result.value) {
+
+                        resp = true;
+                        window.location.href = '@Url.Action("Delete", "account")' + '/' + Id;
+                    }
+                    else {
+                        resp = false;
+                    }
+                });
+            return resp;
+        }
+    </script>
+}

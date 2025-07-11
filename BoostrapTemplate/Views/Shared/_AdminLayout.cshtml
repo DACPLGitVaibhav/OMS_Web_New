@@ -61,6 +61,10 @@
 
     @*SweetAlert*@
     <link href="~/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    @*SweetAlert*@
+    <link href="~/fontawesome-free-6.4.0-web/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/loader.css" rel="stylesheet" />
+
     <!-- =======================================================
     * Template Name: NiceAdmin
     * Updated: Nov 17 2023 with Bootstrap v5.3.2
@@ -128,7 +132,7 @@
     </style>
 </head>
 
-<body>
+<body>@* class="toggle-sidebar" *@
     <!-- #region Modal -->
     @*<button type="button" id="btnmodal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#divModal">
             Basic Modal
@@ -307,7 +311,7 @@
                     </li>
 
                     <li>
-                        <a asp-action="StatusData" asp-controller="LineMaster">
+                        <a asp-action="StatusData" asp-controller="OPCUA">
                             <i class="bi bi-circle"></i><span>Line Order mgmt Status</span>
                         </a>
                     </li>
@@ -347,21 +351,10 @@
                     </li>
                 </ul>
             </li><!-- End User Management Nav -->
+           
+           
+           
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-navBaretail" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-file-earmark-bar-graph"></i><span>Baretail</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="components-navBaretail" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-action="Baretail_Log" asp-controller="LineMaster">
-                            <i class="bi bi-circle"></i><span>Baretail Log</span>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li><!-- End Baretail Log Nav -->
             <!-- #region Old Menus -->
             <!--<li class="nav-heading">Pages</li>
 
@@ -482,8 +475,8 @@
     <!-- #endregion -->
     <script>
         $(function () {
-              debugger;
-
+              //debugger;
+            reload();
            var strStatus ='@message';
            if (strStatus!="" &&strStatus != null ) {
            ShowToaster(strStatus);
@@ -529,11 +522,11 @@
                       success: function (data) {
                           $('#AutoManualStatus').empty(); 
                           if (data === true) {
-                              $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-auto" title="Auto">Auto</span></div>');
+                               $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-auto" title="Auto">Auto</span></div>');
                           }
-                          if (data === false) {
-                              $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-manual" title="Manual">Manual</span></div>');
-                          }
+                          // if (data === false) {
+                          //     $('#AutoManualStatus').append('<div class="float-right pr-5 col-1" style="margin-left: 20px;"><span class="status-manual" title="Manual">Manual</span></div>');
+                          // }
                       }
                   });
               }
