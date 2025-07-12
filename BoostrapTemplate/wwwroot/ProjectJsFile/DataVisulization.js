@@ -307,9 +307,11 @@ $(document).ready(function () {
                                             window.location.href = '/DataVisulization/PreProductionOrders';
                                         }
                                         if (data.status === "error") {
+                                            alert('Order Already Executed You Can Not Revert Back');
                                             alert('Refresh Page ');
                                             location.reload();
                                         }
+
                                         if (data.status === "Unauthorized") {
                                             alert(data.message);
                                             location.reload();

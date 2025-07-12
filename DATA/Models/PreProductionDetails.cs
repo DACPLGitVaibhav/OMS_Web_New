@@ -17,7 +17,10 @@ namespace DATA.Models
         public string ModelCode { get; set; }
         public DateTime DateIimport { get; set; }
         public string FileName { get; set; }
-        public bool IsProduction { get; set; }
+        public bool IsProduction { get; set; } 
+        public int Status { get; set; }
+        [Display(Name ="Deleted Timestamp")]
+        public Nullable<DateTime> StatusTimestamp  { get; set; }
         public Nullable<DateTime> TImestamp { get; set; }
       
     }

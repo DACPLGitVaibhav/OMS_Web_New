@@ -1,0 +1,111 @@
+﻿@model IEnumerable<DATA.Models.PreProductionDetails>
+
+@{
+    ViewData["Title"] = "Deleted Orders";
+}
+
+<link href="~/Datatable/css/jquery.datatables.min.css" rel="stylesheet" />
+<link href="~/fontawesome-free-6.4.0-web/css/all.css" rel="stylesheet" />
+
+<link href="~/Datatable/css/datatables.min.css" rel="stylesheet" />
+<link href="~/Datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+
+
+
+<table id="deletedOrdersTable" class="table table-bordered table-striped">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PPSeqNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BiwNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vcode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModelCode)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.DateIimport)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.FileName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StatusTimestamp)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PPSeqNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BiwNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vcode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModelCode)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.DateIimport)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusTimestamp)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+    <script src="~/Datatable/js/datatables.min.js"></script>
+    <script src="~/Datatable/js/buttons.html5.js"></script>
+    <script src="~/Datatable/js/buttons.print.min.js"></script>
+    <script src="~/Datatable/js/pdfmake.min.js"></script>
+    <script src="~/Datatable/js/vfs_fonts.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#deletedOrdersTable').DataTable({
+                dom:
+                    "<'row mb-3'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +  // length | buttons | filter (search)
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row mt-2'<'col-sm-5'i><'col-sm-7'p>>",
+                buttons: [
+                    'excelHtml5',
+                    'pdfHtml5',
+
+                ],
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+               
+            });
+        });
+    </script>
+
+
+}
+

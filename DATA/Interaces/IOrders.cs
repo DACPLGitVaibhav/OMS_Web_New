@@ -10,7 +10,7 @@ namespace DATA.Interfaces
     {
         //OrdersServices GetData();
         List<PreProductionDetails> GetPreOrders();
-
+        List<PreProductionDetails> GetDeletedOrders();
         List<VariantCode> GetVariantCodes();
     }
 }

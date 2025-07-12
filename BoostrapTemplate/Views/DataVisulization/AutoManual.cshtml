@@ -26,13 +26,13 @@
 
 <form asp-action="AutoManual" enctype="multipart/form-data" class="row g-3">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="col-md-6">
-        <label>Enter PPSeqNo</label>
-        <input asp-for="PPSeqNo" type="number" min="0" class="form-control" placeholder="Set Break Point" id="IdppSeqNo">
-        <span asp-validation-for="PPSeqNo" class="text-danger"></span>
-    </div>
+    <!--<div class="col-md-6">-->
+        @*<label>Enter PPSeqNo</label>*@
+        <!--<input asp-for="PPSeqNo" type="number" min="0" class="form-control" placeholder="Set Break Point" id="IdppSeqNo">-->
+        @*<span asp-validation-for="PPSeqNo" class="text-danger"></span>*@
+    <!--</div>-->
 
-    <div class="col-md-6" style="    display: inline-block;    align-self: flex-end;">
+    <div class="col-md-6" style="display: inline-block;align-self: flex-end;">
         @*<div class="form-check">
             <input type="checkbox" checked data-toggle="toggle">
             <input class="form-check-input" type="checkbox" asp-for="IsAutoMode" id="flexCheckDefault">
@@ -67,16 +67,18 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    //$(document).ready(function () {
 
-       $('#flexCheckDefault').click(function(){
-                if ($(this).is(':checked')) {
-                     $('#IdppSeqNo').prop('disabled', false);
-                } else {
+    //   $('#flexCheckDefault').click(function(){
+    //       if ($(this).is(':checked')) {
+                  
+    //           $('#IdppSeqNo').prop('disabled', false);
+    //          
+    //            } else {
                     
-                     $('#IdppSeqNo').val(0);
-                    $('#IdppSeqNo').prop('disabled', true);
-                }
-            });
-    });
+    //                 $('#IdppSeqNo').val(0);
+    //                $('#IdppSeqNo').prop('disabled', true);
+    //            }
+    //        });
+    //});
 </script>
