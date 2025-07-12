@@ -281,9 +281,9 @@ $(document).ready(function () {
 
         btnTRFToPreproduction = $('<button/>', {
             class: 'btn btn-primary',
-            text: 'TRF PreProduction',
+            text: 'Transfer To PreProduction',
             click: function () {
-                var confirmed = confirm('Are you sure you want to Transfer to PreProduction this orders?');
+                var confirmed = confirm('Are you sure you want to Transfer to PreProduction these orders?');
                 if (confirmed) {
                     $.ajax({
                         type: 'GET',

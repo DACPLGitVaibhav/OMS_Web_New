@@ -102,9 +102,9 @@ $(document).ready(function () {
            
                  btntrfProdcuction = $('<button>', {
                     class: 'btn btn-primary',
-                    text: 'TRF Production',
+                    text: 'Transfer To Production',
                     click: function () {
-                        var confirmed = confirm('Are you sure you want to Transfer to Production this orders?');
+                        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
                         if (confirmed) {
                             $.ajax({
                                 type: 'POST',
@@ -139,7 +139,8 @@ $(document).ready(function () {
 
                  btnIsDeleted = $('<button>', {
                     class: 'btnAbound',
-                    html: '<i class="fa fa-trash fa-lg"></i>',
+                     html: '<i class="fa fa-trash fa-lg"></i>',
+                     title: 'Delete the orders',
                     click: function () {
                         var confirmed = confirm('Are you sure you want to Delete this orders?');
                         if (confirmed) {
@@ -175,10 +176,11 @@ $(document).ready(function () {
                 });
 
                  btnHold = $('<button>', {
-                    class: 'btnAbound',
-                    html: '<i class="bi bi-stop-circle fs-3"></i>',
+                    class: 'btnAbound btn btn-danger',
+                     html: '<i class="bi bi-stop-circle fs-3"></i>',
+                    title:'Hold the orders', 
                     click: function () {
-                        var confirmed = confirm('Are you sure you want to Hold this orders?');
+                        var confirmed = confirm('Are you sure you want to Hold these orders?');
                         if (confirmed) {
                             $.ajax({
                                 type: 'POST',
@@ -277,7 +279,7 @@ $(document).ready(function () {
         } else if (isAllHold) {
             const btnRelease = $('<button>', {
                 class: 'btn btn-success',
-                text: 'Release',
+                text: 'Release Orders',
                 click: function () {
                     const confirmed = confirm('Are you sure you want to Release these Hold orders?');
                     if (confirmed) {
@@ -351,9 +353,9 @@ $(document).ready(function () {
            
                  btntrfProdcuction = $('<button>', {
                     class: 'btn btn-primary',
-                    text: 'TRF Production',
+                    text: 'Transfer To Production',
                     click: function () {
-                        var confirmed = confirm('Are you sure you want to Transfer to Production this orders?');
+                        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
                         if (confirmed) {
                             $.ajax({
                                 type: 'POST',
@@ -387,7 +389,8 @@ $(document).ready(function () {
                 });
                  btnIsDeleted = $('<button>', {
                     class: 'btnAbound',
-                    html: '<i class="fa fa-trash fa-lg"></i>',
+                     html: '<i class="fa fa-trash fa-lg"></i>',
+                    title:'Delete the orders',
                     click: function () {
                         var confirmed = confirm('Are you sure you want to Delete this orders?');
                         if (confirmed) {
@@ -423,10 +426,11 @@ $(document).ready(function () {
                     },
                 });
                  btnHold = $('<button>', {
-                    class: 'btnAbound',
-                    html: '<i class="bi bi-stop-circle fs-3"></i>',
+                     class: 'btnAbound btn btn-danger',
+                     html: '<i class="bi bi-stop-circle fs-3"></i>',
+                     title: 'Hold the orders',
                     click: function () {
-                        var confirmed = confirm('Are you sure you want to Hold this orders?');
+                        var confirmed = confirm('Are you sure you want to Hold these orders?');
                         if (confirmed) {
                             $.ajax({
                                 type: 'POST',
