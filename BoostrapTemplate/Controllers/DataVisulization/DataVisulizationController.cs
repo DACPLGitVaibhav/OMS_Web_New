@@ -138,7 +138,7 @@ namespace OMS_Web.Controllers.DataVisulization
                         }
                         else
                         {
-                            var result = new { status = "Unauthorized", message = "Order Already Hold." };
+                            var result = new { status = "Unauthorized", message = "Order Already Hold/Deleted." };
                             return Json(result);
 
                         }
@@ -296,6 +296,11 @@ namespace OMS_Web.Controllers.DataVisulization
 
                             if (isHold)
                                 message += "Order(s) already Hold .";
+
+                            if (isDeleted)
+                            {
+                                message += "Order(s) already Deleted .";
+                            }
 
                             return Json(new { status = "error", message });
                         }

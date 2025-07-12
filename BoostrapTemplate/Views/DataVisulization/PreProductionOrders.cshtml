@@ -30,6 +30,7 @@
         border: none;
         border-radius: 5px;
     }
+
 </style>
 @if (TempData["PPseqNotFound"] != null)
 {
@@ -70,13 +71,13 @@
 
     </div>
 
-    <div class="col-5" style="display:flex;">
+    <div class="col-4" style="display:flex;">
         &nbsp; <label style="color:#337ab7;display: flex;align-items: center;" class="form-label">Enter No</label>
         <input type="number" id="fromPpseq" min="1" value="0" class="form-control" style="    height: 40px;    width: 100px;    margin: 6px;" />
         <input type="number" id="toPpseq" min="1" value="0" class="form-control" style="    height: 40px;    width: 100px;    margin: 6px;" />
         <input type="button" id="btnselect" value="Select Rows" class="btn btn-primary" />
     </div>
-    <div class="col-2 d-flex justify-content-between align-items-center gap-2" id="buttonContainer">
+    <div class="col-3 d-flex justify-content: center  gap-2" id="buttonContainer">
     </div>
 
     <div class="col-2" style="align-content:flex-end"> <h6 id="RowcountDisplay" style="color:#337ab7"></h6></div>
@@ -101,7 +102,9 @@
     .col-status {
         display: none;
     }
-
+    table#Table{
+        width:100% !important;
+    }
 </style>
 
 
