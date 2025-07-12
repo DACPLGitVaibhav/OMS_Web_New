@@ -178,7 +178,7 @@ $(document).ready(function () {
                  btnHold = $('<button>', {
                     class: 'btnAbound btn btn-danger',
                      html: '<i class="bi bi-stop-circle fs-3"></i>',
-                    title:'Hold the orders',
+                    title:'Hold the orders', 
                     click: function () {
                         var confirmed = confirm('Are you sure you want to Hold these orders?');
                         if (confirmed) {
