@@ -245,8 +245,8 @@ namespace OMS_Web.Controllers.DataVisulization
 
             catch (Exception ex)
             {
-
-                throw;
+                var result = new { status = "Unauthorized", message = ex.Message.ToString() };
+                return Json(result);
             }
 
         }
@@ -328,8 +328,8 @@ namespace OMS_Web.Controllers.DataVisulization
 
             catch (Exception ex)
             {
-
-                throw;
+                var result = new { status = "Unauthorized", message = ex.Message.ToString() };
+                return Json(result);
             }
 
         }
@@ -404,8 +404,8 @@ namespace OMS_Web.Controllers.DataVisulization
 
             catch (Exception ex)
             {
-
-                throw;
+                var result = new { status = "Unauthorized", message = ex.Message.ToString() };
+                return Json(result);
             }
 
         }
@@ -548,7 +548,7 @@ namespace OMS_Web.Controllers.DataVisulization
             {
                 var result = new { status = "error" };
                 return Json(result);
-                throw;
+                //throw;
             }
             // return View();
         }
@@ -686,8 +686,8 @@ namespace OMS_Web.Controllers.DataVisulization
             }
             catch (Exception ex)
             {
-
-                throw;
+                var result = new { status = "Unauthorized", message = ex.Message.ToString()};
+                return Json(result);
             }
             return View();
         }
@@ -774,7 +774,7 @@ namespace OMS_Web.Controllers.DataVisulization
             {
                 var result = new { status = "error" };
                 return Json(result);
-                throw;
+                //throw;
             }
         }
 
