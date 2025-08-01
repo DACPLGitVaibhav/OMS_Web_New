@@ -879,7 +879,7 @@ namespace OMS_Web.Controllers.DataVisulization
                     if (model.IsAutoMode == true)
                     {
                         var ppseqno = _context.PreOrders.Where(x => x.PPSeqNo == model.PPSeqNo && x.IsProduction == false).ToList();
-                        if (ppseqno.Any(x=>x.Status==0))
+                        if (ppseqno.Any(x => x.Status == 0 || x.Status == 100))
                         {
                             //model.PPSeqNo = 0;
                             _context.Database.ExecuteSqlRaw
@@ -889,12 +889,12 @@ namespace OMS_Web.Controllers.DataVisulization
                                          new SqlParameter("@IsAutoMode", model.IsAutoMode)
                                         );
                             TempData["PPseqNotFound"] = $"Auto mode is on.";
-                            TempData["PPseqNotFound"] = $"Auto mode is on from PPseqNo: {model.PPSeqNo}.";
+                            TempData["PPseqNotFound"] = $"Auto mode is on before PPseqNo: {model.PPSeqNo}.";
                         }
-                        else if(ppseqno.Any(x=>x.Status == 100))
-                        {
-                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} is already in Auto mode.Please release the set point first.";
-                        }
+                        //else if(ppseqno.Any(x=>x.Status == 100))
+                        //{
+                        //    TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} is already in Auto mode.Please release the set point first.";
+                        //}
                         else
                         {
                             TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} is either on Hold, Deleted, or not found in Auto mode.";
