@@ -23,7 +23,7 @@ namespace Services.Services
 
         public List<PreProductionDetails> GetPreOrders()
         {
-            var obj = _context.PreOrders.OrderBy(x => x.PPSeqNo).Where(x=>x.IsProduction==false && (x.Status == 0 || x.Status == 1)).ToList();
+            var obj = _context.PreOrders.OrderBy(x => x.PPSeqNo).Where(x=>x.IsProduction==false && (x.Status == 0 || x.Status == 1 || x.Status == 100)).ToList();
             return obj;
         }
         public List<PreProductionDetails> GetDeletedOrders()
