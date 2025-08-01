@@ -26,26 +26,26 @@
         border-radius: 5px;
         border: 1px solid #0056b3;
     }
+
     .btnAbound {
         border: none;
         border-radius: 5px;
     }
-
 </style>
 @if (TempData["PPseqNotFound"] != null)
 {
     <div class="alert alert-danger" role="alert">
-        <i class="fa-solid fa-triangle-exclamation"></i>&nbsp; &nbsp;  @TempData["PPseqNotFound"]
+        <i class="fa-solid fa-triangle-exclamation"></i>&nbsp; &nbsp; <strong>@TempData["PPseqNotFound"]</strong>
     </div>
 
 }
 @*@if (TempData["PPSeqNo"] != null)
-{
-<div class="alert alert-info" role="alert" style="margin-bottom: 20px;">
-    <strong>Auto Mode Breakpoint PPSeqNo:</strong>
-    <span class="breakpoint-ppseqno">@TempData["PPSeqNo"]</span>
-</div>
-}*@
+    {
+    <div class="alert alert-info" role="alert" style="margin-bottom: 20px;">
+        <strong>Auto Mode Breakpoint PPSeqNo:</strong>
+        <span class="breakpoint-ppseqno">@TempData["PPSeqNo"]</span>
+    </div>
+    }*@
 
 <div class="row" id="divFilter">
 
@@ -95,15 +95,26 @@
     .dataTables_length {
         margin-bottom: 10px;
     }
+
     .status-red {
-        color: red;
-        font-weight: bold;
+        color: red !important;
+        font-weight: bold !important;
+        /* background-color: black !important;*/
     }
+
+    .status-blue {
+        color: #5bc0de !important; /* Text color for status 100 */
+        font-weight: bold !important;
+        /* background-color: #5bc0de !important;*/
+    }
+
+
     .col-status {
         display: none;
     }
-    table#Table{
-        width:100% !important;
+
+    table#Table {
+        width: 100% !important;
     }
 </style>
 
@@ -149,38 +160,38 @@
         @foreach (var item in Model)
         {
             var rowClass = item.Status == 1 ? "status-red" : "";
-        <tr class="@rowClass">
-            <td> </td>
+            <tr class="@rowClass">
+                <td> </td>
 
-            <td id="PPSeqNo">
-                @Html.DisplayFor(modelItem => item.PPSeqNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BiwNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vcode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModelCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FileName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateIimport)
+                <td id="PPSeqNo">
+                    @Html.DisplayFor(modelItem => item.PPSeqNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BiwNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vcode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModelCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateIimport)
 
-            </td>
-            <td class="col-status">
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+                </td>
+                <td class="col-status"  id="Status">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
 
 
 
-        </tr>
+            </tr>
             //i++;
         }
     </tbody>
@@ -191,5 +202,6 @@
     <script src="~/Datatable/js/jquery.datatables.js"></script>
     <script src="~/Datatable/js/dataTables.select.js"></script>
     <script src="~/Datatable/js/dataTables.select.min.js"></script>
-    <script src="~/ProjectJsFile/PreProduction.min.js"></script>
+    @*<script src="~/ProjectJsFile/PreProduction.min.js"></script>*@
+    <script src="~/ProjectJsFile/PreProduction.js"></script>
 }

@@ -878,23 +878,27 @@ namespace OMS_Web.Controllers.DataVisulization
                 {
                     if (model.IsAutoMode == true)
                     {
-                        //int ppseqno = _context.PreOrders.Where(x => x.PPSeqNo == model.PPSeqNo && x.IsProduction == false).Select(x => x.PPSeqNo).Count();
-                        //if (ppseqno != 0)
-                        //{
-                        model.PPSeqNo = 0;
+                        var ppseqno = _context.PreOrders.Where(x => x.PPSeqNo == model.PPSeqNo && x.IsProduction == false).ToList();
+                        if (ppseqno.Any(x=>x.Status==0))
+                        {
+                            //model.PPSeqNo = 0;
                             _context.Database.ExecuteSqlRaw
                                         (
                                          "EXEC SP_AutoManualConfg @PPSeqNo, @IsAutoMode",
                                          new SqlParameter("@PPSeqNo", model.PPSeqNo),
                                          new SqlParameter("@IsAutoMode", model.IsAutoMode)
                                         );
-                        TempData["PPseqNotFound"] = $"Auto mode is on.";
-                        //    TempData["PPseqNotFound"] = $"Auto mode is on from PPseqNo: {model.PPSeqNo}.";
-                        //}
-                        //else
-                        //{
-                        //    TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} Is not Found for Auto mode.";
-                        //}
+                            TempData["PPseqNotFound"] = $"Auto mode is on.";
+                            TempData["PPseqNotFound"] = $"Auto mode is on from PPseqNo: {model.PPSeqNo}.";
+                        }
+                        else if(ppseqno.Any(x=>x.Status == 100))
+                        {
+                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} is already in Auto mode.Please release the set point first.";
+                        }
+                        else
+                        {
+                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} is either on Hold, Deleted, or not found in Auto mode.";
+                        }
                     }
                     else
                     {
