@@ -307,7 +307,7 @@ $(document).ready(function () {
                                             window.location.href = '/DataVisulization/PreProductionOrders';
                                         }
                                         if (data.status === "error") {
-                                            alert('Order Already Executed You Can Not Revert Back');
+                                            alert('Order should be on scheduled stage!');
                                             alert('Refresh Page ');
                                             location.reload();
                                         }

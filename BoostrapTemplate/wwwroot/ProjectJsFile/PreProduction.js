@@ -34,15 +34,33 @@ $(document).ready(function () {
 
     });
 
+    //$('#select-all-checkbox').on('click', function () {
+    //    if ($(this).is(':checked')) {
+
+    //        table.rows({ page: 'current' }).select();
+    //    } else {
+
+    //        table.rows().deselect();
+    //    }
+    //});
     $('#select-all-checkbox').on('click', function () {
         if ($(this).is(':checked')) {
+            
+            table.rows({ page: 'current' }).deselect();
 
-            table.rows({ page: 'current' }).select();
+           
+            table.rows({ page: 'current' }).every(function () {
+                var data = this.data();
+                if (data[8] !== "1") {
+                    this.select(); //////////////// select rows with status not equal to 1
+                }
+            });
         } else {
-
-            table.rows().deselect();
+           
+            table.rows({ page: 'current' }).deselect();
         }
     });
+
 
     var selectedData = [];
     var customDataArray = [];
@@ -70,16 +88,16 @@ $(document).ready(function () {
         let startSRNo = $('#fromPpseq').val();
         let endSRNo = $('#toPpseq').val();
 
-        $('#Table tbody tr').each(function (index, item) {   
-            $(this).removeClass('selected');
+        $('#Table tbody tr').each(function () {
+            let $row = $(this);
+            $row.removeClass('selected'); // reset all
 
+            let ppSeq = parseInt($row.find('#PPSeqNo').text());
+            let status = $row.find('#Status').text().trim(); // assuming <td id="Status"> exists
 
-            let x = parseInt($(this).find('#PPSeqNo').text());
-            //debugger;
-            if (x >= startSRNo && x <= endSRNo) {
-                $(this).addClass('selected').data();               
+            if (ppSeq >= startSRNo && ppSeq <= endSRNo && status !== '1') {
+                $row.addClass('selected');
             }
-
         });
 
         SelectedRowCountToDisplay();
@@ -600,31 +618,32 @@ function reloadTable() {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-
             if (data == true) {
                 $('#divFilter').hide();
-
-                
-
 
                 $.ajax({
                     url: '/DataVisulization/ReloadPreProOrder',
                     type: 'GET',
                     dataType: 'json',
                     success: function (dataToDisplay) {
-                        //debugger;
-
-                        totalData = dataToDisplay
-                        //renderTable();
+                        totalData = dataToDisplay;
 
                         const tableBody = $('#Table tbody');
                         tableBody.empty();
 
-                        var dataToDisplay = totalData
-                        dataToDisplay.forEach(function (item) {
-                            const rowClass = item.status === 1 ? "status-red" : "";
+                       
+                        const rowClass = (item) => {
+                            const status = parseInt(item.status);
+                            if (status === 1) return "status-red";
+                            if (status === 100) return "status-blue";
+                           
+                            return "";
+                        };
 
-                            tableBody.append("<tr class='" + rowClass + "'><td></td>" +
+                       
+                        totalData.forEach(function (item) {
+                            const className = rowClass(item); // call function with item
+                            tableBody.append("<tr class='" + className + "'><td></td>" +
                                 "<td id='PPSeqNo'>" + item.ppSeqNo + "</td>" +
                                 "<td>" + item.itemId + "</td>" +
                                 "<td>" + item.biwNo + "</td>" +
@@ -633,53 +652,17 @@ function reloadTable() {
                                 "<td>" + item.fileName + "</td>" +
                                 "<td>" + forDateTime(item.dateIimport) + "</td>" +
                                 "</tr>");
-
-                            //if (item.ppSeqNo > 20) {
-                            //    tableBody.append("<tr style='background-color:red;'><td></td>" +
-                            //        "<td id='PPSeqNo'>" + item.ppSeqNo + "</td>" +
-                            //        "<td>" + item.itemId + "</td>" +
-                            //        "<td>" + item.biwNo + "</td>" +
-                            //        "<td>" + item.vcode + "</td>" +
-                            //        "<td>" + item.modelCode + "</td>" +
-                            //        "<td>" + item.fileName + "</td>" +
-                            //        "<td>" + forDateTime(item.dateIimport) + "</td>" +
-
-                            //        "</tr>");
-                            //} else {
-                            //    tableBody.append("<tr><td></td>" +
-                            //        "<td id='PPSeqNo'>" + item.ppSeqNo + "</td>" +
-                            //        "<td>" + item.itemId + "</td>" +
-                            //        "<td>" + item.biwNo + "</td>" +
-                            //        "<td>" + item.vcode + "</td>" +
-                            //        "<td>" + item.modelCode + "</td>" +
-                            //        "<td>" + item.fileName + "</td>" +
-                            //        "<td>" + forDateTime(item.dateIimport) + "</td>" +
-
-                            //        "</tr>");
-                            //}
-
-                          
-
                         });
-                    },
-
-                    error: function (error) {
-                       // console.error('Error fetching data:', error);
                     }
                 });
-
-
             } else {
                 $('#divFilter').show();
                 clearInterval(reloadInterval);
             }
-        },
-
-        error: function (error) {
-           // console.error('Error fetching data:', error);
         }
     });
 }
+
 
 function forDateTime(date) {
     var fromorTodate;
