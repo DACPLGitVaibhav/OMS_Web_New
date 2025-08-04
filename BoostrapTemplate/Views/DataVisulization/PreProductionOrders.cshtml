@@ -13,6 +13,13 @@
 <link href="~/Datatable/css/select.dataTables.css" rel="stylesheet" />
 <link href="~/Datatable/css/select.dataTables.min.css" rel="stylesheet" />
 
+<link href="~/css/jquery-ui.css" rel="stylesheet" /> @*-----------RowDrag---------*@
+
+
+
+
+
+
 @*<h2 style="color:skyblue">Preproduction Orders</h2>*@
 
 @* New Code Added From Vaibhav *@
@@ -31,7 +38,40 @@
         border: none;
         border-radius: 5px;
     }
+
+    #Table tbody tr.selected { /* -------Row Drag----------*/
+        cursor: move;
+    }
 </style>
+<style>
+    #Table tbody tr td {
+        position: relative;
+    }
+
+    .row-arrow-btn {
+        position: absolute;
+        right: 0px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 2px 6px;
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 10;
+        width: 35px;
+    }
+
+        .row-arrow-btn.up {
+            top: 30%;
+            transform: translateY(-50%);
+        }
+
+        .row-arrow-btn.down {
+            top: 70%;
+            transform: translateY(-50%);
+        }
+</style>  @**  ----------------- Row shffel in Database-----------------*/*@
+
 @if (TempData["PPseqNotFound"] != null)
 {
     <div class="alert alert-danger" role="alert">
@@ -185,7 +225,7 @@
                     @Html.DisplayFor(modelItem => item.DateIimport)
 
                 </td>
-                <td class="col-status"  id="Status">
+                <td class="col-status" id="Status">
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
 
@@ -202,6 +242,14 @@
     <script src="~/Datatable/js/jquery.datatables.js"></script>
     <script src="~/Datatable/js/dataTables.select.js"></script>
     <script src="~/Datatable/js/dataTables.select.min.js"></script>
-    @*<script src="~/ProjectJsFile/PreProduction.min.js"></script>*@
-    <script src="~/ProjectJsFile/PreProduction.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>    @*-----------RowDrag---------*@
+
+    <script src="~/ProjectJsFile/PreProduction.min.js"></script>
+
+ 
+
+    @*<script src="~/ProjectJsFile/PreProduction.js"></script>*@
+
+
+
 }

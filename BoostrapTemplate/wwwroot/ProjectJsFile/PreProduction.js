@@ -115,160 +115,10 @@ $(document).ready(function () {
                 }
             });
 
-              updateCustomDataArray();
-            
-           
-                 btntrfProdcuction = $('<button>', {
-                    class: 'btn btn-primary',
-                    text: 'Transfer To Production',
-                    click: function () {
-                        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
-                        if (confirmed) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/DataVisulization/TRFtoProduction',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                data: JSON.stringify(customDataArray),
-                                success: function (data) {
-                                    if (data.status === "DataRecived") {
-                                        alert('Production Start');
-                                        /*table.rows().deselect();*/
-                                        window.location.reload();
-                                        window.location.href = '/DataVisulization/Index';
-                                    }
-                                    if (data.status === "error") {
-                                        alert('Refresh Page ');
-                                        location.reload();
-                                    }
-                                    if (data.status === "Unauthorized") {
-                                        alert(data.message);
-                                        location.reload();
-                                    }
-
-                                },
-                            });
-                        } else {
-                            alert('Order Transfer to Production canceled.');
-                            location.reload();
-                        }
-                    },
-                });
-
-                 btnIsDeleted = $('<button>', {
-                    class: 'btnAbound',
-                     html: '<i class="fa fa-trash fa-lg"></i>',
-                     title: 'Delete the orders',
-                    click: function () {
-                        var confirmed = confirm('Are you sure you want to Delete this orders?');
-                        if (confirmed) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/DataVisulization/IsDeleted',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                data: JSON.stringify(customDataArray),
-                                success: function (data) {
-                                    if (data.status === "DataDeleted") {
-                                        alert('Order Abandoned Successfully.');
-                                        /*table.rows().deselect();*/
-                                        window.location.reload();
-                                        //window.location.href = '/DataVisulization/Index';
-                                    }
-                                    if (data.status === "error") {
-                                        alert('Refresh Page ');
-                                        location.reload();
-                                    }
-                                    if (data.status === "Unauthorized") {
-                                        alert(data.message);
-                                        location.reload();
-                                    }
-
-                                },
-                            });
-                        } else {
-                            alert('Order abandonment canceled.');
-                            location.reload();
-                        }
-                    },
-                });
-
-                 btnHold = $('<button>', {
-                    class: 'btnAbound btn btn-danger',
-                     html: '<i class="bi bi-stop-circle fs-3"></i>',
-                    title:'Hold the orders', 
-                    click: function () {
-                        var confirmed = confirm('Are you sure you want to Hold these orders?');
-                        if (confirmed) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/DataVisulization/Hold',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                data: JSON.stringify(customDataArray),
-                                success: function (data) {
-                                    if (data.status === "DataHold") {
-                                        alert('Order Hold Successfully.');
-                                        /*table.rows().deselect();*/
-                                        window.location.reload();
-                                        //window.location.href = '/DataVisulization/Index';
-                                    }
-                                    if (data.status === "error") {
-                                        alert(data.message);
-                                        alert('Refresh Page ');
-                                        location.reload();
-                                    }
-                                    if (data.status === "Unauthorized") {
-                                        alert(data.message);
-                                        location.reload();
-                                    }
-
-                                },
-                            });
-                        } else {
-                            alert('Order abandonment canceled.');
-                            location.reload();
-                        }
-                    },
-                });
-
+                 updateCustomDataArray();
+                 createActionButtons();
                  updateButtonsBasedOnStatus();
 
-               // buttonContainer.empty().append(btnHold, btntrfProdcuction, btnIsDeleted);
-                           
-                //const btnRelease = $('<button>', {
-                //    class: 'btn btn-success',
-                //    text: 'Release',
-                //    click: function () {
-                //        const confirmed = confirm('Are you sure you want to Release these Hold orders?');
-                //        if (confirmed) {
-                //            $.ajax({
-                //                type: 'POST',
-                //                url: '/DataVisulization/ReleaseHold',
-                //                dataType: 'json',
-                //                contentType: 'application/json',
-                //                data: JSON.stringify(customDataArray),
-                //                success: function (data) {
-                //                    if (data.status === "Released") {
-                //                        alert('Hold Released Successfully.');
-                //                        window.location.reload();
-                //                    } else {
-                //                        alert(data.message || 'Unexpected error.');
-                //                        location.reload();
-                //                    }
-                //                },
-                //                error: function () {
-                //                    alert('Failed to release Hold orders.');
-                //                }
-                //            });
-                //        }
-                //    }
-                //});
-
-               
-                //buttonContainer.empty().append(btnRelease);
-
-          
 
 
         } else {
@@ -345,9 +195,11 @@ $(document).ready(function () {
         if (type === 'row') {
 
             SelectedRowCountToDisplay();
-
-            var selectedRows = table.rows('.selected').data(); // Get selected rows data
+            enableSortingForSelectedRows();
+            
+            var selectedRows = table.rows('.selected').data(); // Get selected rows data          
             selectedData = [];
+
             // Iterate through the selected rows and add them to the selectedData array
             selectedRows.each(function (index, data) {
                 // Check if the data is not already in the selectedData array
@@ -367,157 +219,130 @@ $(document).ready(function () {
             console.log(customDataArray);
         }
 
+       
+
         if (selectedData.length > 0) {
-           
-                 btntrfProdcuction = $('<button>', {
-                    class: 'btn btn-primary',
-                    text: 'Transfer To Production',
-                    click: function () {
-                        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
-                        if (confirmed) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/DataVisulization/TRFtoProduction',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                data: JSON.stringify(customDataArray),
-                                success: function (data) {
-                                    if (data.status === "DataRecived") {
-                                        alert('Production Start');
-                                        /*table.rows().deselect();*/
-                                        window.location.reload();
-                                        window.location.href = '/DataVisulization/Index';
-                                    }
-                                    if (data.status === "error") {
-                                        alert('Error Refresh Page ');
-                                        location.reload();
-                                    }
-                                    if (data.status === "Unauthorized") {
-                                        alert(data.message);
-                                        location.reload();
-                                    }
 
-                                },
-                            });
-                        } else {
-                            alert('Order Transfer to Production canceled.');
-                            location.reload();
-                        }
-                    },
-                });
-                 btnIsDeleted = $('<button>', {
-                    class: 'btnAbound',
-                     html: '<i class="fa fa-trash fa-lg"></i>',
-                    title:'Delete the orders',
-                    click: function () {
-                        var confirmed = confirm('Are you sure you want to Delete this orders?');
-                        if (confirmed) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/DataVisulization/IsDeleted',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                data: JSON.stringify(customDataArray),
-                                success: function (data) {
-                                    if (data.status === "DataDeleted") {
-                                        alert('Order Abandoned Successfully.');
-                                        /*table.rows().deselect();*/
-                                        window.location.reload();
-                                        //window.location.href = '/DataVisulization/Index';
-                                    }
-                                    if (data.status === "error") {
-                                        alert(data.message);
-                                        alert('Refresh Page ');
-                                        location.reload();
-                                    }
-                                    if (data.status === "Unauthorized") {
-                                        alert(data.message);
-                                        location.reload();
-                                    }
+            // #region Old Btn
+                // btntrfProdcuction = $('<button>', {
+                //    class: 'btn btn-primary',
+                //    text: 'Transfer To Production',
+                //    click: function () {
+                //        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
+                //        if (confirmed) {
+                //            $.ajax({
+                //                type: 'POST',
+                //                url: '/DataVisulization/TRFtoProduction',
+                //                dataType: 'json',
+                //                contentType: 'application/json',
+                //                data: JSON.stringify(customDataArray),
+                //                success: function (data) {
+                //                    if (data.status === "DataRecived") {
+                //                        alert('Production Start');
+                //                        /*table.rows().deselect();*/
+                //                        window.location.reload();
+                //                        window.location.href = '/DataVisulization/Index';
+                //                    }
+                //                    if (data.status === "error") {
+                //                        alert('Error Refresh Page ');
+                //                        location.reload();
+                //                    }
+                //                    if (data.status === "Unauthorized") {
+                //                        alert(data.message);
+                //                        location.reload();
+                //                    }
 
-                                },
-                            });
-                        } else {
-                            alert('Order abandonment canceled.');
-                            location.reload();
-                        }
-                    },
-                });
-                 btnHold = $('<button>', {
-                     class: 'btnAbound btn btn-danger',
-                     html: '<i class="bi bi-stop-circle fs-3"></i>',
-                     title: 'Hold the orders',
-                    click: function () {
-                        var confirmed = confirm('Are you sure you want to Hold these orders?');
-                        if (confirmed) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/DataVisulization/Hold',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                data: JSON.stringify(customDataArray),
-                                success: function (data) {
-                                    if (data.status === "DataHold") {
-                                        alert('Order Hold Successfully.');
-                                        /*table.rows().deselect();*/
-                                        window.location.reload();
-                                        //window.location.href = '/DataVisulization/Index';
-                                    }
-                                    if (data.status === "error") {
-                                        alert(data.message);
-                                        alert('Refresh Page ');
-                                        location.reload();
-                                    }
-                                    if (data.status === "Unauthorized") {
-                                        alert(data.message);
-                                        location.reload();
-                                    }
+                //                },
+                //            });
+                //        } else {
+                //            alert('Order Transfer to Production canceled.');
+                //            location.reload();
+                //        }
+                //    },
+                //});
+                // btnIsDeleted = $('<button>', {
+                //    class: 'btnAbound',
+                //     html: '<i class="fa fa-trash fa-lg"></i>',
+                //    title:'Delete the orders',
+                //    click: function () {
+                //        var confirmed = confirm('Are you sure you want to Delete this orders?');
+                //        if (confirmed) {
+                //            $.ajax({
+                //                type: 'POST',
+                //                url: '/DataVisulization/IsDeleted',
+                //                dataType: 'json',
+                //                contentType: 'application/json',
+                //                data: JSON.stringify(customDataArray),
+                //                success: function (data) {
+                //                    if (data.status === "DataDeleted") {
+                //                        alert('Order Abandoned Successfully.');
+                //                        /*table.rows().deselect();*/
+                //                        window.location.reload();
+                //                        //window.location.href = '/DataVisulization/Index';
+                //                    }
+                //                    if (data.status === "error") {
+                //                        alert(data.message);
+                //                        alert('Refresh Page ');
+                //                        location.reload();
+                //                    }
+                //                    if (data.status === "Unauthorized") {
+                //                        alert(data.message);
+                //                        location.reload();
+                //                    }
 
-                                },
-                            });
-                        } else {
-                            alert('Order abandonment canceled.');
-                            location.reload();
-                        }
-                    },
-                });
-              //  buttonContainer.empty().append(btnHold, btntrfProdcuction, btnIsDeleted);
-            
+                //                },
+                //            });
+                //        } else {
+                //            alert('Order abandonment canceled.');
+                //            location.reload();
+                //        }
+                //    },
+                //});
+                // btnHold = $('<button>', {
+                //     class: 'btnAbound btn btn-danger',
+                //     html: '<i class="bi bi-stop-circle fs-3"></i>',
+                //     title: 'Hold the orders',
+                //    click: function () {
+                //        var confirmed = confirm('Are you sure you want to Hold these orders?');
+                //        if (confirmed) {
+                //            $.ajax({
+                //                type: 'POST',
+                //                url: '/DataVisulization/Hold',
+                //                dataType: 'json',
+                //                contentType: 'application/json',
+                //                data: JSON.stringify(customDataArray),
+                //                success: function (data) {
+                //                    if (data.status === "DataHold") {
+                //                        alert('Order Hold Successfully.');
+                //                        /*table.rows().deselect();*/
+                //                        window.location.reload();
+                //                        //window.location.href = '/DataVisulization/Index';
+                //                    }
+                //                    if (data.status === "error") {
+                //                        alert(data.message);
+                //                        alert('Refresh Page ');
+                //                        location.reload();
+                //                    }
+                //                    if (data.status === "Unauthorized") {
+                //                        alert(data.message);
+                //                        location.reload();
+                //                    }
+
+                //                },
+                //            });
+                //        } else {
+                //            alert('Order abandonment canceled.');
+                //            location.reload();
+                //        }
+                //    },
+                //});
+           //  buttonContainer.empty().append(btnHold, btntrfProdcuction, btnIsDeleted);
+            //#endregion
+
+            createActionButtons();
             updateButtonsBasedOnStatus();
-            //const anyHoldSelected = table.rows('.selected').data().toArray().every(row => parseInt(row[8]) === 1);
-            //if (anyHoldSelected) {
-            //    const btnRelease = $('<button>', {
-            //        class: 'btn btn-success',
-            //        text: 'Release',
-            //        click: function () {
-            //            const confirmed = confirm('Are you sure you want to Release these Hold orders?');
-            //            if (confirmed) {
-            //                $.ajax({
-            //                    type: 'POST',
-            //                    url: '/DataVisulization/ReleaseHold',
-            //                    dataType: 'json',
-            //                    contentType: 'application/json',
-            //                    data: JSON.stringify(customDataArray),
-            //                    success: function (data) {
-            //                        if (data.status === "Released") {
-            //                            alert('Hold Released Successfully.');
-            //                            window.location.reload();
-            //                        } else {
-            //                            alert(data.message || 'Unexpected error.');
-            //                            location.reload();
-            //                        }
-            //                    },
-            //                    error: function () {
-            //                        alert('Failed to release Hold orders.');
-            //                    }
-            //                });
-            //            }
-            //        }
-            //    });
 
-
-            //    buttonContainer.empty().append(btnRelease);
-            //}
+            
         }
 
         // #region Abonded Button
@@ -563,7 +388,9 @@ $(document).ready(function () {
 
         if (type === 'row') {
             SelectedRowCountToDisplay();
+
             var unselectedRows = table.rows('.selected').data();
+          
             selectedData = [];
             unselectedRows.each(function (index, data) {
 
@@ -573,16 +400,182 @@ $(document).ready(function () {
                     selectedData.push(index);
                 }
             });
+
            // console.log(selectedData);
             updateCustomDataArray();
+            createActionButtons();
             updateButtonsBasedOnStatus();
+
             if (selectedData.length === 0) {
                 buttonContainer.empty();
+               // $('#Table tbody .row-arrow-btn').remove();
             }
+
+          
+
+            console.log(selectedData);
+            console.log(customDataArray);
         }
     });
 
+    function enableSortingForSelectedRows() {
+        const $tbody = $('#Table tbody');
+        const $selectedRows = $tbody.find('tr.selected');
 
+        if ($selectedRows.length < 1) {
+            // Only destroy if already initialized
+            if ($tbody.hasClass('ui-sortable')) {
+                $tbody.sortable('destroy');
+            }
+            return;
+        }
+
+        // If already initialized, destroy before re-initializing
+        if ($tbody.hasClass('ui-sortable')) {
+            $tbody.sortable('destroy');
+        }
+
+        // Enable sorting only on selected rows
+        $tbody.sortable({
+            items: 'tr',
+            axis: 'y',
+            cancel: 'tr:not(.selected)',
+            helper: function (e, tr) {
+                const $originals = tr.children();
+                const $helper = tr.clone();
+                $helper.children().each(function (index) {
+                    $(this).width($originals.eq(index).width());
+                });
+                return $helper;
+            },
+            start: function (e, ui) {
+                ui.item.addClass('dragging');
+            },
+            stop: function (e, ui) {
+                ui.item.removeClass('dragging');
+                
+            }
+        });
+    }
+
+
+
+ 
+
+    function createActionButtons() {
+        btntrfProdcuction = $('<button>', {
+            class: 'btn btn-primary',
+            text: 'Transfer To Production',
+            click: function () {
+                var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
+                if (confirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/DataVisulization/TRFtoProduction',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(customDataArray),
+                        success: function (data) {
+                            if (data.status === "DataRecived") {
+                                alert('Production Start');
+                                /*table.rows().deselect();*/
+                                window.location.reload();
+                                window.location.href = '/DataVisulization/Index';
+                            }
+                            if (data.status === "error") {
+                                alert('Error Refresh Page ');
+                                location.reload();
+                            }
+                            if (data.status === "Unauthorized") {
+                                alert(data.message);
+                                location.reload();
+                            }
+
+                        },
+                    });
+                } else {
+                    alert('Order Transfer to Production canceled.');
+                    location.reload();
+                }
+            },
+        });
+        btnIsDeleted = $('<button>', {
+            class: 'btnAbound',
+            html: '<i class="fa fa-trash fa-lg"></i>',
+            title: 'Delete the orders',
+            click: function () {
+                var confirmed = confirm('Are you sure you want to Delete this orders?');
+                if (confirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/DataVisulization/IsDeleted',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(customDataArray),
+                        success: function (data) {
+                            if (data.status === "DataDeleted") {
+                                alert('Order Abandoned Successfully.');
+                                /*table.rows().deselect();*/
+                                window.location.reload();
+                                //window.location.href = '/DataVisulization/Index';
+                            }
+                            if (data.status === "error") {
+                                alert(data.message);
+                                alert('Refresh Page ');
+                                location.reload();
+                            }
+                            if (data.status === "Unauthorized") {
+                                alert(data.message);
+                                location.reload();
+                            }
+
+                        },
+                    });
+                } else {
+                    alert('Order abandonment canceled.');
+                    location.reload();
+                }
+            },
+        });
+        btnHold = $('<button>', {
+            class: 'btnAbound btn btn-danger',
+            html: '<i class="bi bi-stop-circle fs-3"></i>',
+            title: 'Hold the orders',
+            click: function () {
+                var confirmed = confirm('Are you sure you want to Hold these orders?');
+                if (confirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/DataVisulization/Hold',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(customDataArray),
+                        success: function (data) {
+                            if (data.status === "DataHold") {
+                                alert('Order Hold Successfully.');
+                                /*table.rows().deselect();*/
+                                window.location.reload();
+                                //window.location.href = '/DataVisulization/Index';
+                            }
+                            if (data.status === "error") {
+                                alert(data.message);
+                                alert('Refresh Page ');
+                                location.reload();
+                            }
+                            if (data.status === "Unauthorized") {
+                                alert(data.message);
+                                location.reload();
+                            }
+
+                        },
+                    });
+                } else {
+                    alert('Order abandonment canceled.');
+                    location.reload();
+                }
+            },
+        });
+    }
 
     function isSelected(data) {
         for (var i = 0; i < selectedData.length; i++) {
@@ -599,9 +592,7 @@ $(document).ready(function () {
     }
     preback();
 
-
-
-   
+    
 
 });
 
