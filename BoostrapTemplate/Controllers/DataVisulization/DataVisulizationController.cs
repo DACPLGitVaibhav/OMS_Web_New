@@ -35,18 +35,21 @@ namespace OMS_Web.Controllers.DataVisulization
            
         }
 
-        public IActionResult PreProductionOrders(string erpCode)
+        public IActionResult PreProductionOrders(List<string> erpCode)
         {
             if (HttpContext.Session.GetString("Username") != null)
             {
 
                 var obj = _orders.GetPreOrders();
 
-                if (!string.IsNullOrEmpty(erpCode) && erpCode != "--Select All--")
+                //if (!string.IsNullOrEmpty(erpCode) && erpCode != "--Select All--")
+                //{
+                //    obj = obj.Where(x => x.Vcode == erpCode).ToList();
+                //}
+                if (erpCode != null && erpCode.Count > 0 && !erpCode.Contains("--Select All--"))
                 {
-                    obj = obj.Where(x => x.Vcode == erpCode).ToList();
+                    obj = obj.Where(x => erpCode.Contains(x.Vcode)).ToList();
                 }
-
                 var variantCodes = _orders.GetVariantCodes();
                 ViewBag.V_list = new SelectList(variantCodes, "Erp_Vcode", "Erp_Vcode");
 
@@ -888,8 +891,8 @@ namespace OMS_Web.Controllers.DataVisulization
                                          new SqlParameter("@PPSeqNo", model.PPSeqNo),
                                          new SqlParameter("@IsAutoMode", model.IsAutoMode)
                                         );
-                            TempData["PPseqNotFound"] = $"Auto mode is on.";
-                            TempData["PPseqNotFound"] = $"Auto mode is on before PPseqNo: {model.PPSeqNo}.";
+                            TempData["PPseqNotFound"] = $"Auto mode is active.";
+                            TempData["PPseqNotFound"] = $"Auto mode is active  before PPseqNo: {model.PPSeqNo}.";
                         }
                         //else if(ppseqno.Any(x=>x.Status == 100))
                         //{
@@ -897,7 +900,7 @@ namespace OMS_Web.Controllers.DataVisulization
                         //}
                         else
                         {
-                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} is either on Hold, Deleted, or not found in Auto mode.";
+                            TempData["PPseqNotFound"] = $"PPSeqNo: {model.PPSeqNo} could not be processed because it is either on hold, deleted, or not available.";
                         }
                     }
                     else
@@ -910,7 +913,7 @@ namespace OMS_Web.Controllers.DataVisulization
                                         new SqlParameter("@IsAutoMode", model.IsAutoMode)
                                        );
 
-                        TempData["PPseqNotFound"] = $"Auto mode is off.";
+                        TempData["PPseqNotFound"] = $"Auto mode is deactive.";
                     }
 
                     return RedirectToAction("PreProductionOrders", "DataVisulization");
@@ -948,5 +951,7 @@ namespace OMS_Web.Controllers.DataVisulization
         {
             return Json(_orders.GetPreOrders());
         }
+
+       
     }
 }

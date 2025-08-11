@@ -1,7 +1,7 @@
 ﻿var reloadInterval;
 var totalData = [];
 $(document).ready(function () {
-   
+
     startReload()
     var btntrfProdcuction;
     var btnIsDeleted;
@@ -18,7 +18,7 @@ $(document).ready(function () {
         //    [100, 200, 500, -1],
         //    [100, 200, 500, 'All']
         //],
-       
+
         columnDefs: [{
             orderable: false,
             className: 'select-checkbox',
@@ -27,7 +27,7 @@ $(document).ready(function () {
         select: {
             style: 'multi',
             selector: 'td:first-child'
-            /* selector: 'td:first-child input[type="checkbox"]'*/
+            /*selector: 'td:first-child input[type="checkbox"]'*/
         },
 
         "paging": false
@@ -45,10 +45,10 @@ $(document).ready(function () {
     //});
     $('#select-all-checkbox').on('click', function () {
         if ($(this).is(':checked')) {
-            
+
             table.rows({ page: 'current' }).deselect();
 
-           
+
             table.rows({ page: 'current' }).every(function () {
                 var data = this.data();
                 if (data[8] !== "1") {
@@ -56,7 +56,7 @@ $(document).ready(function () {
                 }
             });
         } else {
-           
+
             table.rows({ page: 'current' }).deselect();
         }
     });
@@ -70,7 +70,7 @@ $(document).ready(function () {
 
 
     // #region Code update by Vaibhav 27/12/2024  as per after Demo
-    
+
 
     $('#btnselect').click(function () {
 
@@ -101,10 +101,10 @@ $(document).ready(function () {
         });
 
         SelectedRowCountToDisplay();
-        
+
         if (table.rows('.selected').count() > 0) {
             debugger;
-           
+
             var selectedRows = table.rows('.selected').data(); // Get selected rows data
             selectedData = [];
             // Iterate through the selected rows and add them to the selectedData array
@@ -115,9 +115,9 @@ $(document).ready(function () {
                 }
             });
 
-                 updateCustomDataArray();
-                 createActionButtons();
-                 updateButtonsBasedOnStatus();
+            updateCustomDataArray();
+            createActionButtons();
+            updateButtonsBasedOnStatus();
 
 
 
@@ -177,7 +177,7 @@ $(document).ready(function () {
             buttonContainer.append(btnRelease);
         }
     }
-    
+
     function updateCustomDataArray() {
 
         customDataArray = selectedData.map(function (rowData) {
@@ -196,7 +196,7 @@ $(document).ready(function () {
 
             SelectedRowCountToDisplay();
             enableSortingForSelectedRows();
-            
+
             var selectedRows = table.rows('.selected').data(); // Get selected rows data          
             selectedData = [];
 
@@ -224,125 +224,125 @@ $(document).ready(function () {
         if (selectedData.length > 0) {
 
             // #region Old Btn
-                // btntrfProdcuction = $('<button>', {
-                //    class: 'btn btn-primary',
-                //    text: 'Transfer To Production',
-                //    click: function () {
-                //        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
-                //        if (confirmed) {
-                //            $.ajax({
-                //                type: 'POST',
-                //                url: '/DataVisulization/TRFtoProduction',
-                //                dataType: 'json',
-                //                contentType: 'application/json',
-                //                data: JSON.stringify(customDataArray),
-                //                success: function (data) {
-                //                    if (data.status === "DataRecived") {
-                //                        alert('Production Start');
-                //                        /*table.rows().deselect();*/
-                //                        window.location.reload();
-                //                        window.location.href = '/DataVisulization/Index';
-                //                    }
-                //                    if (data.status === "error") {
-                //                        alert('Error Refresh Page ');
-                //                        location.reload();
-                //                    }
-                //                    if (data.status === "Unauthorized") {
-                //                        alert(data.message);
-                //                        location.reload();
-                //                    }
+            // btntrfProdcuction = $('<button>', {
+            //    class: 'btn btn-primary',
+            //    text: 'Transfer To Production',
+            //    click: function () {
+            //        var confirmed = confirm('Are you sure you want to Transfer to Production these orders?');
+            //        if (confirmed) {
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: '/DataVisulization/TRFtoProduction',
+            //                dataType: 'json',
+            //                contentType: 'application/json',
+            //                data: JSON.stringify(customDataArray),
+            //                success: function (data) {
+            //                    if (data.status === "DataRecived") {
+            //                        alert('Production Start');
+            //                        /*table.rows().deselect();*/
+            //                        window.location.reload();
+            //                        window.location.href = '/DataVisulization/Index';
+            //                    }
+            //                    if (data.status === "error") {
+            //                        alert('Error Refresh Page ');
+            //                        location.reload();
+            //                    }
+            //                    if (data.status === "Unauthorized") {
+            //                        alert(data.message);
+            //                        location.reload();
+            //                    }
 
-                //                },
-                //            });
-                //        } else {
-                //            alert('Order Transfer to Production canceled.');
-                //            location.reload();
-                //        }
-                //    },
-                //});
-                // btnIsDeleted = $('<button>', {
-                //    class: 'btnAbound',
-                //     html: '<i class="fa fa-trash fa-lg"></i>',
-                //    title:'Delete the orders',
-                //    click: function () {
-                //        var confirmed = confirm('Are you sure you want to Delete this orders?');
-                //        if (confirmed) {
-                //            $.ajax({
-                //                type: 'POST',
-                //                url: '/DataVisulization/IsDeleted',
-                //                dataType: 'json',
-                //                contentType: 'application/json',
-                //                data: JSON.stringify(customDataArray),
-                //                success: function (data) {
-                //                    if (data.status === "DataDeleted") {
-                //                        alert('Order Abandoned Successfully.');
-                //                        /*table.rows().deselect();*/
-                //                        window.location.reload();
-                //                        //window.location.href = '/DataVisulization/Index';
-                //                    }
-                //                    if (data.status === "error") {
-                //                        alert(data.message);
-                //                        alert('Refresh Page ');
-                //                        location.reload();
-                //                    }
-                //                    if (data.status === "Unauthorized") {
-                //                        alert(data.message);
-                //                        location.reload();
-                //                    }
+            //                },
+            //            });
+            //        } else {
+            //            alert('Order Transfer to Production canceled.');
+            //            location.reload();
+            //        }
+            //    },
+            //});
+            // btnIsDeleted = $('<button>', {
+            //    class: 'btnAbound',
+            //     html: '<i class="fa fa-trash fa-lg"></i>',
+            //    title:'Delete the orders',
+            //    click: function () {
+            //        var confirmed = confirm('Are you sure you want to Delete this orders?');
+            //        if (confirmed) {
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: '/DataVisulization/IsDeleted',
+            //                dataType: 'json',
+            //                contentType: 'application/json',
+            //                data: JSON.stringify(customDataArray),
+            //                success: function (data) {
+            //                    if (data.status === "DataDeleted") {
+            //                        alert('Order Abandoned Successfully.');
+            //                        /*table.rows().deselect();*/
+            //                        window.location.reload();
+            //                        //window.location.href = '/DataVisulization/Index';
+            //                    }
+            //                    if (data.status === "error") {
+            //                        alert(data.message);
+            //                        alert('Refresh Page ');
+            //                        location.reload();
+            //                    }
+            //                    if (data.status === "Unauthorized") {
+            //                        alert(data.message);
+            //                        location.reload();
+            //                    }
 
-                //                },
-                //            });
-                //        } else {
-                //            alert('Order abandonment canceled.');
-                //            location.reload();
-                //        }
-                //    },
-                //});
-                // btnHold = $('<button>', {
-                //     class: 'btnAbound btn btn-danger',
-                //     html: '<i class="bi bi-stop-circle fs-3"></i>',
-                //     title: 'Hold the orders',
-                //    click: function () {
-                //        var confirmed = confirm('Are you sure you want to Hold these orders?');
-                //        if (confirmed) {
-                //            $.ajax({
-                //                type: 'POST',
-                //                url: '/DataVisulization/Hold',
-                //                dataType: 'json',
-                //                contentType: 'application/json',
-                //                data: JSON.stringify(customDataArray),
-                //                success: function (data) {
-                //                    if (data.status === "DataHold") {
-                //                        alert('Order Hold Successfully.');
-                //                        /*table.rows().deselect();*/
-                //                        window.location.reload();
-                //                        //window.location.href = '/DataVisulization/Index';
-                //                    }
-                //                    if (data.status === "error") {
-                //                        alert(data.message);
-                //                        alert('Refresh Page ');
-                //                        location.reload();
-                //                    }
-                //                    if (data.status === "Unauthorized") {
-                //                        alert(data.message);
-                //                        location.reload();
-                //                    }
+            //                },
+            //            });
+            //        } else {
+            //            alert('Order abandonment canceled.');
+            //            location.reload();
+            //        }
+            //    },
+            //});
+            // btnHold = $('<button>', {
+            //     class: 'btnAbound btn btn-danger',
+            //     html: '<i class="bi bi-stop-circle fs-3"></i>',
+            //     title: 'Hold the orders',
+            //    click: function () {
+            //        var confirmed = confirm('Are you sure you want to Hold these orders?');
+            //        if (confirmed) {
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: '/DataVisulization/Hold',
+            //                dataType: 'json',
+            //                contentType: 'application/json',
+            //                data: JSON.stringify(customDataArray),
+            //                success: function (data) {
+            //                    if (data.status === "DataHold") {
+            //                        alert('Order Hold Successfully.');
+            //                        /*table.rows().deselect();*/
+            //                        window.location.reload();
+            //                        //window.location.href = '/DataVisulization/Index';
+            //                    }
+            //                    if (data.status === "error") {
+            //                        alert(data.message);
+            //                        alert('Refresh Page ');
+            //                        location.reload();
+            //                    }
+            //                    if (data.status === "Unauthorized") {
+            //                        alert(data.message);
+            //                        location.reload();
+            //                    }
 
-                //                },
-                //            });
-                //        } else {
-                //            alert('Order abandonment canceled.');
-                //            location.reload();
-                //        }
-                //    },
-                //});
-           //  buttonContainer.empty().append(btnHold, btntrfProdcuction, btnIsDeleted);
+            //                },
+            //            });
+            //        } else {
+            //            alert('Order abandonment canceled.');
+            //            location.reload();
+            //        }
+            //    },
+            //});
+            //  buttonContainer.empty().append(btnHold, btntrfProdcuction, btnIsDeleted);
             //#endregion
 
             createActionButtons();
             updateButtonsBasedOnStatus();
 
-            
+
         }
 
         // #region Abonded Button
@@ -390,7 +390,7 @@ $(document).ready(function () {
             SelectedRowCountToDisplay();
 
             var unselectedRows = table.rows('.selected').data();
-          
+
             selectedData = [];
             unselectedRows.each(function (index, data) {
 
@@ -401,17 +401,17 @@ $(document).ready(function () {
                 }
             });
 
-           // console.log(selectedData);
+            // console.log(selectedData);
             updateCustomDataArray();
             createActionButtons();
             updateButtonsBasedOnStatus();
 
             if (selectedData.length === 0) {
                 buttonContainer.empty();
-               // $('#Table tbody .row-arrow-btn').remove();
+                // $('#Table tbody .row-arrow-btn').remove();
             }
 
-          
+            
 
             console.log(selectedData);
             console.log(customDataArray);
@@ -453,14 +453,14 @@ $(document).ready(function () {
             },
             stop: function (e, ui) {
                 ui.item.removeClass('dragging');
-                
+
             }
         });
     }
 
 
 
- 
+
 
     function createActionButtons() {
         btntrfProdcuction = $('<button>', {
@@ -588,7 +588,7 @@ $(document).ready(function () {
 
     function SelectedRowCountToDisplay() {
         var selectedRowCount = table.rows('.selected').count();
-        $("#RowcountDisplay").text(`Selected ${selectedRowCount}`).append(' of total '+ $('#Table tbody tr').length);
+        $("#RowcountDisplay").text(`Selected ${selectedRowCount}`).append(' of total ' + $('#Table tbody tr').length);
     }
     preback();
 
@@ -622,16 +622,16 @@ function reloadTable() {
                         const tableBody = $('#Table tbody');
                         tableBody.empty();
 
-                       
+
                         const rowClass = (item) => {
                             const status = parseInt(item.status);
                             if (status === 1) return "status-red";
                             if (status === 100) return "status-blue";
-                           
+
                             return "";
                         };
 
-                       
+
                         totalData.forEach(function (item) {
                             const className = rowClass(item); // call function with item
                             tableBody.append("<tr class='" + className + "'><td></td>" +
@@ -654,6 +654,68 @@ function reloadTable() {
     });
 }
 
+function reloadTableWithoutInterval() {
+    $.ajax({
+        url: '/DataVisulization/ReloadPreProOrder',
+        type: 'GET',
+        dataType: 'json',
+        success: function (dataToDisplay) {
+            totalData = dataToDisplay;
+
+            const tableBody = $('#Table tbody');
+            tableBody.empty();
+
+            const rowClass = (item) => {
+                const status = parseInt(item.status);
+                if (status === 1) return "status-red";
+                if (status === 100) return "status-blue";
+                return "";
+            };
+
+            totalData.forEach(function (item) {
+                const status = parseInt(item.status);
+                let className = "";
+                if (status === 1) className = "status-red";
+                if (status === 100) className = "status-blue";
+
+                const importDate = forDateTime(item.dateIimport);
+
+                const row = `<tr class="${className}">
+                              <td><input type="checkbox" class="select-checkbox" /></td>
+                              <td id="PPSeqNo">${item.ppSeqNo}</td>
+                              <td>${item.itemId}</td>
+                              <td>${item.biwNo}</td>
+                              <td>${item.vcode}</td>
+                              <td>${item.modelCode}</td>
+                              <td>${item.fileName}</td>
+                              <td>${importDate}</td>
+                              <td class="col-status" id="Status">${item.status}</td>
+                              </tr> `;
+                tableBody.append(row);
+            });
+
+
+            // Optional: Restore selected row
+            const selectedPPSeqNo = sessionStorage.getItem("lastSelectedPPSeqNo");
+            if (selectedPPSeqNo) {
+                let $targetRow = null;
+                $('#Table tbody tr').each(function () {
+                    const currentPPSeq = $(this).find('td').eq(1).text().trim();
+                    if (currentPPSeq === selectedPPSeqNo) {
+                        $targetRow = $(this);
+                        return false;
+                    }
+                });
+
+                if ($targetRow) {
+                    $('#Table tbody tr').removeClass('selected');
+                    $targetRow.addClass('selected');
+                }
+                sessionStorage.removeItem("lastSelectedPPSeqNo");
+            }
+        }
+    });
+}
 
 function forDateTime(date) {
     var fromorTodate;

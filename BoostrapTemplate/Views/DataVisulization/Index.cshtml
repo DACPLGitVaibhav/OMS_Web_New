@@ -80,9 +80,9 @@
 </style>
 <div class="alert alert-danger" role="alert">
     <i class="fa-solid fa-triangle-exclamation"></i>  Problem while transferring an order, Make sure line's are in start mode, click here  @Html.ActionLink(" to Start Lines ", // <-- Link text
-    "LineOrder", // <-- Action Method Name
-    "LineMaster"// <-- Coontroller Name
-    )
+"LineOrder", // <-- Action Method Name
+"LineMaster"// <-- Coontroller Name
+)
 </div>
 
 <div style="margin-bottom:20px; justify-content:space-between;display:flex">
@@ -112,8 +112,8 @@
             Abandoned
         </button>
         @* <button class="" style="background-color:#660033;border:none;color:white">
-            Hold
-        </button> *@
+                Hold
+            </button> *@
     </div>
     <div id="buttonContainer" align="right" style="justify-content:space-between;display:flex;"> </div>
 
@@ -124,7 +124,7 @@
     <div align="left" style="margin-left:5px;align-items:end;justify-content:space-between;display:flex;margin-bottom:10px;"> <h6 id="RowcountDisplay" style="color:#337ab7"></h6></div>
 
     @*<div id="MultswpBtnContainer" align="left" style="justify-content:space-between;display:flex;margin-bottom:10px;">
-    </div>*@
+        </div>*@
 
 </div>
 <div style="margin-bottom:0px;float:right;"> <h3 id="countDisplay" style="color:#337ab7">Pending Orders:</h3></div>
@@ -144,7 +144,7 @@
             <tr>
                 <th></th>
                 <th>
-                     @Html.DisplayNameFor(model => model.ErpSeqNo)
+                    @Html.DisplayNameFor(model => model.ErpSeqNo)
                 </th>
                 <th>
                     Item Id
