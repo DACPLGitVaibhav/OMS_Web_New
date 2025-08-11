@@ -14,15 +14,11 @@
 <link href="~/Datatable/css/select.dataTables.min.css" rel="stylesheet" />
 
 <link href="~/css/jquery-ui.css" rel="stylesheet" /> @*-----------RowDrag---------*@
-
-
-
-
-
+<link href="~/css/select2.min.css" rel="stylesheet" />@*---------------------- Multiselect CSS -----------*@
 
 @*<h2 style="color:skyblue">Preproduction Orders</h2>*@
 
-@* New Code Added From Vaibhav *@
+
 <style>
     .breakpoint-ppseqno {
         font-size: 1.5rem;
@@ -72,6 +68,31 @@
         }
 </style>  @**  ----------------- Row shffel in Database-----------------*/*@
 
+<style>
+    /* Keep the select2 selection box single-line, fixed height */
+    .select2-container .select2-selection--multiple {
+        min-height: 38px; /* match Bootstrap input height */
+        height: 38px; /* fixed height */
+        overflow: hidden; /* hide extra tags */
+        white-space: nowrap;
+    }
+
+        /* Prevent wrapping of selected items */
+        .select2-container .select2-selection--multiple .select2-selection__rendered {
+            display: flex;
+            flex-wrap: nowrap; /* no wrapping */
+            overflow-x: hidden; /* hide horizontal scroll */
+            overflow-y: hidden; /* hide vertical overflow */
+        }
+
+        /* Optional: show ellipsis when overflow */
+        .select2-container .select2-selection--multiple .select2-selection__choice {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 100px; /* limit each tag width */
+        }
+</style> @*---------------------- Multiselect CSS -----------*@
 @if (TempData["PPseqNotFound"] != null)
 {
     <div class="alert alert-danger" role="alert">
@@ -97,13 +118,11 @@
             <div class="col-7">
                 <form method="get">
 
-
-                    @Html.DropDownList(
-                             "erpCode",
-                             ViewBag.V_list as SelectList,
-
-                             new { @class = "form-control", id = "ErpVcodeDropdown", onchange = "this.form.submit();" }
-                             )
+                    @Html.ListBox(
+                        "erpCode",
+                        ViewBag.V_list as SelectList,
+                        new { @class = "form-control", id = "ErpVcodeDropdown", multiple = "multiple" }
+                    )
 
                 </form>
             </div>
@@ -118,6 +137,11 @@
         <input type="button" id="btnselect" value="Select Rows" class="btn btn-primary" />
     </div>
     <div class="col-3 d-flex justify-content: center  gap-2" id="buttonContainer">
+        @*<label>Sorting</label>
+            <label class="switch">
+                <input type="checkbox" id="sortingToggle">
+                <span class="slider"></span>
+            </label>*@
     </div>
 
     <div class="col-2" style="align-content:flex-end"> <h6 id="RowcountDisplay" style="color:#337ab7"></h6></div>
@@ -201,7 +225,7 @@
         {
             var rowClass = item.Status == 1 ? "status-red" : "";
             <tr class="@rowClass">
-                <td> </td>
+                <td class="select-checkbox"></td>
 
                 <td id="PPSeqNo">
                     @Html.DisplayFor(modelItem => item.PPSeqNo)
@@ -244,12 +268,32 @@
     <script src="~/Datatable/js/dataTables.select.min.js"></script>
     <script src="~/js/jquery-ui.min.js"></script>    @*-----------RowDrag---------*@
 
-    <script src="~/ProjectJsFile/PreProduction.min.js"></script>
+    <!-- Bootstrap Multiselect JS -->
+    <script src="~/js/select2.min.js"></script>
 
- 
+    @*<script src="~/ProjectJsFile/PreProduction.min.js"></script>*@
+
+
 
     @*<script src="~/ProjectJsFile/PreProduction.js"></script>*@
 
+  
+  
+    <script>
+        $(document).ready(function () {
+            $('#ErpVcodeDropdown').select2({
+                placeholder: "Select Vcodes",
+                allowClear: true
+            }).on('change', function () {
+                $(this).closest('form').submit();
+            });
+
+            // Detect hard reload
+            if (performance.navigation.type === 1) { // 1 = Reload
+                $('#ErpVcodeDropdown').val(null).trigger('change');
+            }
+        });
+    </script>
 
 
 }

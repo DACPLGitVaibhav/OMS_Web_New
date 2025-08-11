@@ -35,18 +35,21 @@ namespace OMS_Web.Controllers.DataVisulization
            
         }
 
-        public IActionResult PreProductionOrders(string erpCode)
+        public IActionResult PreProductionOrders(List<string> erpCode)
         {
             if (HttpContext.Session.GetString("Username") != null)
             {
 
                 var obj = _orders.GetPreOrders();
 
-                if (!string.IsNullOrEmpty(erpCode) && erpCode != "--Select All--")
+                //if (!string.IsNullOrEmpty(erpCode) && erpCode != "--Select All--")
+                //{
+                //    obj = obj.Where(x => x.Vcode == erpCode).ToList();
+                //}
+                if (erpCode != null && erpCode.Count > 0 && !erpCode.Contains("--Select All--"))
                 {
-                    obj = obj.Where(x => x.Vcode == erpCode).ToList();
+                    obj = obj.Where(x => erpCode.Contains(x.Vcode)).ToList();
                 }
-
                 var variantCodes = _orders.GetVariantCodes();
                 ViewBag.V_list = new SelectList(variantCodes, "Erp_Vcode", "Erp_Vcode");
 
@@ -948,5 +951,7 @@ namespace OMS_Web.Controllers.DataVisulization
         {
             return Json(_orders.GetPreOrders());
         }
+
+       
     }
 }
