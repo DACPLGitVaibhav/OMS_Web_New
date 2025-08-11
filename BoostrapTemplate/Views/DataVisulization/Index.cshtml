@@ -232,5 +232,22 @@
     <script src="~/ProjectJsFile/DataVisulization.min.js"></script>
 
 
+    <script>
+        const prodKey = 'omsProdTab';
+        const tabId = Date.now().toString();
+
+        if (localStorage.getItem(prodKey) && localStorage.getItem(prodKey) !== tabId) {
+            alert('Order Plan Visualization is already open in another tab.');
+            window.location.href = "/already-open.html";
+        } else {
+            localStorage.setItem(prodKey, tabId);
+        }
+
+        window.addEventListener('beforeunload', () => {
+            if (localStorage.getItem(prodKey) === tabId) {
+                localStorage.removeItem(prodKey);
+            }
+        });
+    </script>
 
 }

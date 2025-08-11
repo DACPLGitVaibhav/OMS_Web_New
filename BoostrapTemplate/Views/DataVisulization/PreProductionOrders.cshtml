@@ -296,4 +296,26 @@
     </script>
 
 
+    ----------------------------------------------------------------
+    <script>
+        const tabId = Date.now().toString(); // Unique ID for this tab
+
+        // Check if another tab is open
+        if (localStorage.getItem('appTabOpen') && localStorage.getItem('appTabOpen') !== tabId) {
+            alert('Pre-Production Orders Plan is already open in another tab.');
+            window.location.href = "/already-open.html"; // Or redirect to a warning page
+        } else {
+            localStorage.setItem('appTabOpen', tabId);
+        }
+
+        // Remove the lock when this tab is closed or refreshed
+        window.addEventListener('beforeunload', () => {
+            if (localStorage.getItem('appTabOpen') === tabId) {
+                localStorage.removeItem('appTabOpen');
+            }
+        });
+
+    </script>
+
+
 }
