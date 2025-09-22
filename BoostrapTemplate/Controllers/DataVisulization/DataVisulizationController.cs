@@ -188,9 +188,9 @@ namespace OMS_Web.Controllers.DataVisulization
                         bool isAuto = _context.autoManualConfgs.Any(x => x.IsAutoMode == true);
                         bool isProduction = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.IsProduction == true);
                         bool isDeleted = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 2);
-                        bool isHold = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 1);
+                       // bool isHold = _context.PreOrders.Where(x => ppSeqNos.Contains(x.PPSeqNo)).Any(x => x.Status == 1);
 
-                        if (!isProduction && !isAuto && !isDeleted && !isHold)
+                        if (!isProduction && !isAuto && !isDeleted)
                         {
                             foreach (var item in customDataArray)
                             {
@@ -219,8 +219,8 @@ namespace OMS_Web.Controllers.DataVisulization
 
                             if (isDeleted)
                                 message += "Order(s) already Deleted.";
-                            if (isHold)
-                                message += "Please Released Order(s) first.";
+                            //if (isHold)
+                            //    message += "Please Released Order(s) first.";
 
                             return Json(new { status = "error", message });
                         }

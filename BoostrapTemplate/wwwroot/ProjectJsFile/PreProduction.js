@@ -174,7 +174,7 @@ $(document).ready(function () {
                 }
             });
 
-            buttonContainer.append(btnRelease);
+            buttonContainer.append(btnRelease, btnIsDeleted);
         }
     }
 
