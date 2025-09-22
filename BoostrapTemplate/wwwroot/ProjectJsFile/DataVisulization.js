@@ -128,14 +128,14 @@ function CheckLineStatus() {
 }
 // #endregion
 function startReload() {
-
+    stopReload();
     reloadTable(rowsPerPage);
     reloadInterval = setInterval(function () {
         reloadTable(rowsPerPage);
     }, 5000);
 }
-function stopReload() {
-    clearInterval(reloadInterval);
+function stopReload() {   
+        clearInterval(reloadInterval);
 }
 function reloadTable(rowsPerPage) {
     $.ajax({
@@ -229,17 +229,46 @@ function generatePageButtons() {
     $('#TRFBtnContainer').empty();
     $('#buttonContainer').empty();
     $('#RowcountDisplay').empty();
+    //const pageButtons = $('#pageButtons');
+    //pageButtons.empty();
+
+    //var totalPages = Math.ceil(totalData.length / rowsPerPage);
+
+    //for (var i = 0; i < totalPages; i++) {
+    //    var page = i;
+    //    var button = $('<li><a href="#" class="page-button" data-page="' + page + '">' + (page + 1) + '</a></li>');
+    //    pageButtons.append(button);
+    //}
+    //pageButtons.find('a[data-page="' + currentPage + '"]').addClass('current-page');
     const pageButtons = $('#pageButtons');
     pageButtons.empty();
 
     var totalPages = Math.ceil(totalData.length / rowsPerPage);
+    var maxVisible = 10; // how many page numbers you want visible
+    var startPage = Math.max(0, currentPage - Math.floor(maxVisible / 2));
+    var endPage = Math.min(totalPages - 1, startPage + maxVisible - 1);
 
-    for (var i = 0; i < totalPages; i++) {
-        var page = i;
-        var button = $('<li><a href="#" class="page-button" data-page="' + page + '">' + (page + 1) + '</a></li>');
-        pageButtons.append(button);
+    if (endPage - startPage < maxVisible - 1) {
+        startPage = Math.max(0, endPage - maxVisible + 1);
     }
-    pageButtons.find('a[data-page="' + currentPage + '"]').addClass('current-page');
+
+    // First + Prev
+    if (currentPage > 0) {
+        pageButtons.append('<li><a href="#" class="page-button" data-page="0">First</a></li>');
+        pageButtons.append('<li><a href="#" class="page-button" data-page="' + (currentPage - 1) + '">Prev</a></li>');
+    }
+
+    // Page numbers
+    for (var i = startPage; i <= endPage; i++) {
+        var activeClass = (i === currentPage) ? 'current-page' : '';
+        pageButtons.append('<li><a href="#" class="page-button ' + activeClass + '" data-page="' + i + '">' + (i + 1) + '</a></li>');
+    }
+
+    // Next + Last
+    if (currentPage < totalPages - 1) {
+        pageButtons.append('<li><a href="#" class="page-button" data-page="' + (currentPage + 1) + '">Next</a></li>');
+        pageButtons.append('<li><a href="#" class="page-button" data-page="' + (totalPages - 1) + '">Last</a></li>');
+    }
 }
 ////#endregion//
 ///
