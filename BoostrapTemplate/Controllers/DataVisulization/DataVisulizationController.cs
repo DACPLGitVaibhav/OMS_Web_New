@@ -468,7 +468,7 @@ namespace OMS_Web.Controllers.DataVisulization
                             BSRH = g.FirstOrDefault(x => x.LineName == "BSRH").MaxStatus,
                             BSLH = g.FirstOrDefault(x => x.LineName == "BSLH").MaxStatus
                         })
-                        .OrderByDescending(x => x.ErpSeqNo).Take(1500).ToList();
+                        .OrderByDescending(x => x.ErpSeqNo).Take(5000).ToList();
 
 
                     //var model = new OrdersViewModel()
@@ -623,7 +623,7 @@ namespace OMS_Web.Controllers.DataVisulization
                         BSRH = g.FirstOrDefault(x => x.LineName == "BSRH").MaxStatus,
                         BSLH = g.FirstOrDefault(x => x.LineName == "BSLH").MaxStatus
                     })
-                    .OrderByDescending(x => x.ErpSeqNo).Take(1500).ToList();
+                    .OrderByDescending(x => x.ErpSeqNo).Take(5000).ToList();
 
                 return Json(finalorder);
             }
