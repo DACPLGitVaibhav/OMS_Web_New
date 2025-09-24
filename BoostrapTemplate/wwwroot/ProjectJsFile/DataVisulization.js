@@ -3,7 +3,7 @@
 var reloadInterval;
 var currentPage = 0;
 var rowsPerPage = 100; // Set the number of rows per page
-var totalData = [];
+var totalData = []; var IsstopInt = false;
 $(document).ready(function () {
    $('#Table').DataTable({
         dom: 'Blfrtip',
@@ -128,13 +128,14 @@ function CheckLineStatus() {
 }
 // #endregion
 function startReload() {
-    stopReload();
-    reloadTable(rowsPerPage);
-    reloadInterval = setInterval(function () {
+    IsstopInt = false;
         reloadTable(rowsPerPage);
-    }, 5000);
+        reloadInterval = setInterval(function () {
+            reloadTable(rowsPerPage);
+        }, 5000);  
 }
-function stopReload() {   
+function stopReload() { 
+    IsstopInt = true;
         clearInterval(reloadInterval);
 }
 function reloadTable(rowsPerPage) {
@@ -153,76 +154,78 @@ function reloadTable(rowsPerPage) {
     });
 }
 function renderTable() {
-    const tableBody = $('#Table tbody');
-    tableBody.empty();
+    if (IsstopInt == false) {
+        const tableBody = $('#Table tbody');
+        tableBody.empty();
 
-    var startIndex = currentPage * rowsPerPage;
-    var endIndex = startIndex + rowsPerPage;
-    var dataToDisplay = totalData.slice(startIndex, endIndex);
-    var totalCountFromTotalData = 0;
-    ///Append Row/////
-    dataToDisplay.forEach(function (item) {
-        var ErpSeqNo = item.erpSeqNo;
-        var ItemId = item.itemId;
-        var BiwNo = item.biwNo;
-        var Vcode = item.vcode;
-        var LineID = item.lineID;
-        var Status = item.status;
-        var FF = item.ff;
-        var FE = item.fe;
-        var RF = item.rf;
-        var BSLH = item.bslh;
-        var BSRH = item.bsrh;
-        tableBody.append("<tr class='data-row'>" +
-            "<td><input type='checkbox' class='checkbox'></td>" +
-            "<td>" + ErpSeqNo + "</td>" +
-            "<td>" + ItemId + "</td>" +
-            "<td>" + BiwNo + "</td>" +
-            "<td>" + Vcode + "</td>" +
-            "<td> <button class='Chenge' data-id='" + FF + "' style='color: white; border:none'>0</button> </td>" +
-            "<td><button class='Chenge' data-id='" + FE + "' style='color: white; border:none'>0</button> </td>" +
-            "<td><button class='Chenge' data-id='" + RF + "' style='color: white; border:none'>0</button> </td>" +
-            "<td> <button class='Chenge' data-id='" + BSRH + "' style='color: white; border:none'>0</button></td>" +
-            "<td> <button class='Chenge' data-id='" + BSLH + "' style='color: white; border:none'>0</button></td>" +
-            "</tr>");
+        var startIndex = currentPage * rowsPerPage;
+        var endIndex = startIndex + rowsPerPage;
+        var dataToDisplay = totalData.slice(startIndex, endIndex);
+        var totalCountFromTotalData = 0;
+        ///Append Row/////
+        dataToDisplay.forEach(function (item) {
+            var ErpSeqNo = item.erpSeqNo;
+            var ItemId = item.itemId;
+            var BiwNo = item.biwNo;
+            var Vcode = item.vcode;
+            var LineID = item.lineID;
+            var Status = item.status;
+            var FF = item.ff;
+            var FE = item.fe;
+            var RF = item.rf;
+            var BSLH = item.bslh;
+            var BSRH = item.bsrh;
+            tableBody.append("<tr class='data-row'>" +
+                "<td><input type='checkbox' class='checkbox'></td>" +
+                "<td>" + ErpSeqNo + "</td>" +
+                "<td>" + ItemId + "</td>" +
+                "<td>" + BiwNo + "</td>" +
+                "<td>" + Vcode + "</td>" +
+                "<td> <button class='Chenge' data-id='" + FF + "' style='color: white; border:none'>0</button> </td>" +
+                "<td><button class='Chenge' data-id='" + FE + "' style='color: white; border:none'>0</button> </td>" +
+                "<td><button class='Chenge' data-id='" + RF + "' style='color: white; border:none'>0</button> </td>" +
+                "<td> <button class='Chenge' data-id='" + BSRH + "' style='color: white; border:none'>0</button></td>" +
+                "<td> <button class='Chenge' data-id='" + BSLH + "' style='color: white; border:none'>0</button></td>" +
+                "</tr>");
 
-        $(".Chenge").each(function () {
-            if ($(this).attr("data-id") == 0) {
-                $(this).css('background-color', '#337ab7'); // blue Schedule
-            }
-            if ($(this).attr("data-id") == 1) {
-                $(this).css('background-color', '#999966'); // militry Received
-            }
-            if ($(this).attr("data-id") == 2) {
-                $(this).css('background-color', '#777777'); // gray started
-            }
-            if ($(this).attr("data-id") == 3) {
-                $(this).css('background-color', '#f0ad4e'); // orange process
-            }
-            if ($(this).attr("data-id") == 4) {
-                $(this).css('background-color', '#5cb85c'); // green Transmitted
-            }
-            if ($(this).attr("data-id") == 100) {
-                $(this).css('background-color', '#5bc0de'); // skyblue Breakpoint
-            }
-            if ($(this).attr("data-id") == 101) {
-                $(this).css('background-color', '#d9534f'); // red Suspended
-            }
-            if ($(this).attr("data-id") == 102) {
-                $(this).css('background-color', '#000000'); // Black Abounded
-            }
+            $(".Chenge").each(function () {
+                if ($(this).attr("data-id") == 0) {
+                    $(this).css('background-color', '#337ab7'); // blue Schedule
+                }
+                if ($(this).attr("data-id") == 1) {
+                    $(this).css('background-color', '#999966'); // militry Received
+                }
+                if ($(this).attr("data-id") == 2) {
+                    $(this).css('background-color', '#777777'); // gray started
+                }
+                if ($(this).attr("data-id") == 3) {
+                    $(this).css('background-color', '#f0ad4e'); // orange process
+                }
+                if ($(this).attr("data-id") == 4) {
+                    $(this).css('background-color', '#5cb85c'); // green Transmitted
+                }
+                if ($(this).attr("data-id") == 100) {
+                    $(this).css('background-color', '#5bc0de'); // skyblue Breakpoint
+                }
+                if ($(this).attr("data-id") == 101) {
+                    $(this).css('background-color', '#d9534f'); // red Suspended
+                }
+                if ($(this).attr("data-id") == 102) {
+                    $(this).css('background-color', '#000000'); // Black Abounded
+                }
+            });
+
+            totalCountFromTotalData = totalData.reduce(function (count, item) {
+                if (item.ff === 0 && item.fe === 0 && item.rf === 0 && item.bslh === 0 && item.bsrh === 0) {
+                    return count + 1;
+                }
+                return count;
+            }, 0);
         });
-
-        totalCountFromTotalData = totalData.reduce(function (count, item) {
-            if (item.ff === 0 && item.fe === 0 && item.rf === 0 && item.bslh === 0 && item.bsrh === 0) {
-                return count + 1;
-            }
-            return count;
-        }, 0);
-    });
-   // debugger;
-    $("#countDisplay").text(`Pending Orders: ${totalCountFromTotalData}`);
-    generatePageButtons();
+        // debugger;
+        $("#countDisplay").text(`Pending Orders: ${totalCountFromTotalData}`);
+        generatePageButtons();
+    }
 }
 
 function generatePageButtons() {
