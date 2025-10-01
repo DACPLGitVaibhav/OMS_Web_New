@@ -67,7 +67,7 @@ public class OpcUaClientService
                 };
 
                 // Create a new session with the OPC UA server asynchronously
-                _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.1.65:4840")), true, "", 15000, new UserIdentity(), null);
+                _session = await Session.Create(config, new ConfiguredEndpoint(null, new EndpointDescription("opc.tcp://192.168.196.1:4840")), true, "", 15000, new UserIdentity(), null);
 
                 
             }
