@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Security.Claims;
 using System.Text;
 
@@ -51,57 +53,69 @@ namespace BoostrapTemplate.Controllers
             {
                 try
                 {
-                    var data = _user.getbyName(model.Username);
-                    if (data != null)
+                   
+                    string motherboardSerial = GetMotherboardSerial();
+
+                    string StaticNumber = "L2HF82802X1";
+                    if (StaticNumber == motherboardSerial)
                     {
-                        bool b = (model.Username == data.UserName && model.Password == DecryptPassword(data.Password));
-                        if (b)
+
+
+                        var data = _user.getbyName(model.Username);
+                        if (data != null)
                         {
-                            bool isAuthentication = false;
-                            ClaimsIdentity identity = null;
-                            if (data.UserName == "Admin")
+                            bool b = (model.Username == data.UserName && model.Password == DecryptPassword(data.Password));
+                            if (b)
                             {
-                                identity = new ClaimsIdentity(new[] {
+                                bool isAuthentication = false;
+                                ClaimsIdentity identity = null;
+                                if (data.UserName == "Admin")
+                                {
+                                    identity = new ClaimsIdentity(new[] {
                                     new Claim(ClaimTypes.Name, data.UserName),//For Claim Identity
                                     new Claim(ClaimTypes.Role,"Admin")//For Role Based Authentication
                                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                                HttpContext.Session.SetString("Username", data.UserName);
-                                isAuthentication = true;
+                                    HttpContext.Session.SetString("Username", data.UserName);
+                                    isAuthentication = true;
 
-                            }
-                            else
-                            {
-                                identity = new ClaimsIdentity(new[] {
+                                }
+                                else
+                                {
+                                    identity = new ClaimsIdentity(new[] {
                                     new Claim(ClaimTypes.Name, data.UserName),//For Claim Identity
                                     new Claim(ClaimTypes.Role,"User")//For Role Based Authentication
                                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                                HttpContext.Session.SetString("Username", data.UserName);
-                                isAuthentication = true;
+                                    HttpContext.Session.SetString("Username", data.UserName);
+                                    isAuthentication = true;
+
+                                }
+
+                                if (isAuthentication)
+                                {
+                                    var principle = new ClaimsPrincipal(identity);
+                                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principle);
+
+                                    //string str = HttpContext.Session.GetString("Username");
+                                    return RedirectToAction("Welcome", "DataVisulization");
+                                }
 
                             }
-
-                            if (isAuthentication)
+                            else
                             {
-                                var principle = new ClaimsPrincipal(identity);
-                                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principle);
-
-                                //string str = HttpContext.Session.GetString("Username");
-                                return RedirectToAction("Welcome", "DataVisulization");
+                                ModelState.AddModelError(string.Empty, "Enter Valid credentials");
                             }
-
                         }
                         else
                         {
-                            ModelState.AddModelError(string.Empty, "Enter Valid credentials");
+                            ModelState.AddModelError(string.Empty, "Record not found,contact to admin.");
                         }
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Record not found,contact to admin.");
+                        ModelState.AddModelError(string.Empty, "Unauthorized device Invalide License key"+" Access Denied");
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -334,6 +348,40 @@ namespace BoostrapTemplate.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        public static string GetMotherboardSerial()
+        {
+            try
+            {
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = "/c wmic baseboard get serialnumber",
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+
+                process.Start();
+                string output = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+
+                // Clean output
+                var lines = output.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                return lines.Length > 1 ? lines[1].Trim() : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while getting motherboard serial:");
+                Console.WriteLine(ex.ToString());
+
+                return string.Empty;
+            }
+
         }
     }
 }
