@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OMS_Template.Middleware;
 using OMS_Template.ViewModels.OPCUA;
 using Opc.Ua.Client;
 using Services.Services;
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Services.Services.LicenseValidator;
 
 namespace BoostrapTemplate
 {
@@ -77,9 +79,14 @@ namespace BoostrapTemplate
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            LicenseState.IsValid = LicenseValidator.IsValid(out string msg);
+
+            LicenseState.Message = msg;
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseMiddleware<LicenseMiddleware>();
             app.UseRouting();
             app.UseSession();
             app.UseAuthentication();

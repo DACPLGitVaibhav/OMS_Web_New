@@ -15,6 +15,7 @@ using System.Linq;
 using System.Management;
 using System.Security.Claims;
 using System.Text;
+using static Services.Services.LicenseValidator;
 
 namespace BoostrapTemplate.Controllers
 {
@@ -42,6 +43,7 @@ namespace BoostrapTemplate.Controllers
         [AllowAnonymous]
         public IActionResult LoginPage()
         {
+            ViewBag.Message = LicenseState.Message;
             return View();
         }
         [AllowAnonymous]

@@ -194,7 +194,14 @@
 
                             <img src="~/images/bd8dae39-2906-4b92-a751-ef7126147f6c_png-user-icon.png" alt="Profile" class="rounded-circle">
 
-                            <span class="d-none d-md-block dropdown-toggle ps-2"> @User.Identity.Name.ToUpper()</span>
+                            @*<span class="d-none d-md-block dropdown-toggle ps-2"> @User.Identity.Name.ToUpper()</span>*@
+                            @if (!string.IsNullOrEmpty(User?.Identity?.Name))
+                            {
+                                <span class="d-none d-md-block dropdown-toggle ps-2">
+                                    @User.Identity.Name.ToUpper()
+                                </span>
+                            }
+
                         </a><!-- End Profile Iamge Icon -->
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
