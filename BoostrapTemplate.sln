@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DATA", "DATA\DATA.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{1B36B9C2-A6EB-43F9-8171-9F518CAE92BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encrypted_licensefile_Create", "..\Encrypted_licensefile_Create\Encrypted_licensefile_Create.csproj", "{D8A63146-7742-4DC3-A0D2-8CB2F0461A42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encrypted_licensefile_Create", "Encrypted_licensefile_Create\Encrypted_licensefile_Create.csproj", "{D8A63146-7742-4DC3-A0D2-8CB2F0461A42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
