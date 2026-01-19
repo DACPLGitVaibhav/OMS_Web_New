@@ -11,23 +11,34 @@
                 <img src="~/images/DhruvaLogo2.png" class="cen" />
             </div>
             @*<h3 class="text-center mb-4">Sign In</h3>*@
-            <form asp-action="LoginPage" class="login-form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input type="text" asp-for="Username" class="form-control" placeholder="Username">
-                    <span asp-validation-for="Username" class="text-danger"></span>
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <!-- LICENSE ERROR -->
+                <div class="text-center mt-4">
+                    <h2 class="text-danger">License Error</h2>
+                    <p class="text-danger">@ViewBag.Message</p>
                 </div>
-                <div class="form-group">
-                    <input type="password" asp-for="Password" class="form-control" placeholder="Password" id="password">
-                    <i class="bi bi-eye-slash" id="togglePassword" style="float: right;margin-right: 10px;margin-top: -38px; cursor:pointer"></i>
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
+            }
+            else
+            {
+                <form asp-action="LoginPage" class="login-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input type="text" asp-for="Username" class="form-control" placeholder="Username">
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Password" id="password">
+                        <i class="bi bi-eye-slash" id="togglePassword" style="float: right;margin-right: 10px;margin-top: -38px; cursor:pointer"></i>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
 
-                <div class="form-group">
-                    <button type="submit" class="form-control btn btn-primary rounded submit px-3">Login</button>
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="form-control btn btn-primary rounded submit px-3">Login</button>
+                    </div>
 
-            </form>
+                </form>
+            }
         </div>
     </div>
 </div>
