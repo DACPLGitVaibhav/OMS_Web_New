@@ -56,11 +56,11 @@ namespace BoostrapTemplate.Controllers
                 try
                 {
                    
-                    string motherboardSerial = GetMotherboardSerial();
+                    //string motherboardSerial = GetMotherboardSerial();
 
-                    string StaticNumber = "L2HF82802X1";
-                    if (StaticNumber == motherboardSerial)
-                    {
+                    //string StaticNumber = "L2HF82802X1";
+                    //if (StaticNumber == motherboardSerial)
+                    //{
 
 
                         var data = _user.getbyName(model.Username);
@@ -113,11 +113,11 @@ namespace BoostrapTemplate.Controllers
                         {
                             ModelState.AddModelError(string.Empty, "Record not found,contact to admin.");
                         }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Unauthorized device Invalide License key"+" Access Denied");
-                    }
+                    //}
+                    //else
+                    //{
+                    //    ModelState.AddModelError(string.Empty, "Unauthorized device Invalide License key"+" Access Denied");
+                    //}
                 }
                 catch (Exception ex)
                 {
